@@ -106,8 +106,10 @@ export const getHeroContent = async (): Promise<HeroContent> => {
 export const updateHeroContent = async (content: HeroContent): Promise<void> => {
   const docRef = doc(db, CONTENT_COLLECTION_ID, HERO_CONTENT_DOC_ID);
    try {
-    // Use setDoc without merge and handle the merge logic in code to ensure deep merge
-    await setDoc(docRef, content);
+    const existingDoc = await getDoc(docRef);
+    const existingData = existingDoc.exists() ? existingDoc.data() : {};
+    const mergedContent = deepMerge(existingData, content);
+    await setDoc(docRef, mergedContent);
   } catch (error) {
     console.error("Error updating document: ", error);
     throw new Error("Could not update hero content.");
@@ -115,7 +117,10 @@ export const updateHeroContent = async (content: HeroContent): Promise<void> => 
 };
 
 // Function to upload an image and get URL
-export const uploadImageAndGetURL = async (imageFile: File): Promise<string> => {
+export const uploadImageAndGetURL = async (imageFile: File): Promise<{
+  url: string;
+  path: string; // Storage path
+}> => {
   if (!imageFile) {
     throw new Error("No image file provided.");
   }
@@ -125,7 +130,10 @@ export const uploadImageAndGetURL = async (imageFile: File): Promise<string> => 
   try {
     const snapshot = await uploadBytes(storageRef, imageFile);
     const downloadURL = await getDownloadURL(snapshot.ref);
-    return downloadURL;
+    return {
+      url: downloadURL,
+      path: snapshot.ref.fullPath
+    };
   } catch (error) {
     console.error("Error uploading image: ", error);
     throw new Error("Could not upload image.");

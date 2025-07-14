@@ -59,12 +59,16 @@ export default function AdminHomePage() {
       const file = e.target.files[0];
       setIsUploading(true);
       try {
-        const url = await uploadImageAndGetURL(file);
+        const { url } = await uploadImageAndGetURL(file);
         const updatedUrls = [...(heroContent.imageUrls || []), url];
-        setHeroContent({ ...heroContent, imageUrls: updatedUrls });
+        const updatedContent = { ...heroContent, imageUrls: updatedUrls };
+        setHeroContent(updatedContent);
+        
+        await updateHeroContent(updatedContent);
+        
         toast({
             title: "Success!",
-            description: "Image uploaded successfully.",
+            description: "Image uploaded and saved successfully.",
         });
       } catch (error) {
         toast({
@@ -98,11 +102,17 @@ export default function AdminHomePage() {
       const file = e.target.files[0];
       setIsUploading(true);
       try {
-        const url = await uploadImageAndGetURL(file);
-        handleServiceSlideChange(index, 'image', url);
+        const { url } = await uploadImageAndGetURL(file);
+        const updatedSlides = [...heroContent.serviceSlides];
+        updatedSlides[index] = { ...updatedSlides[index], image: url };
+        const updatedContent = { ...heroContent, serviceSlides: updatedSlides };
+        setHeroContent(updatedContent);
+        
+        await updateHeroContent(updatedContent);
+        
         toast({
           title: "Success!",
-          description: "Service slide image uploaded successfully.",
+          description: "Service slide image uploaded and saved.",
         });
       } catch (error) {
         toast({
@@ -151,11 +161,24 @@ export default function AdminHomePage() {
       const file = e.target.files[0];
       setIsUploading(true);
       try {
-        const url = await uploadImageAndGetURL(file);
-        handleStoryNewsChange(section, 'imageUrl', url);
+        const { url } = await uploadImageAndGetURL(file);
+        const updatedContent = {
+          ...heroContent,
+          storiesAndNews: {
+            ...heroContent.storiesAndNews,
+            [section]: {
+              ...heroContent.storiesAndNews[section],
+              imageUrl: url,
+            },
+          },
+        };
+        setHeroContent(updatedContent);
+        
+        await updateHeroContent(updatedContent);
+        
         toast({
           title: "Success!",
-          description: "Image uploaded successfully.",
+          description: "Image uploaded and saved successfully.",
         });
       } catch (error) {
         toast({
