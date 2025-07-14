@@ -98,13 +98,13 @@ const HeroSection = () => {
                     }}
                     className="h-full w-full"
                 >
-                    <SwiperSlide>
+                    <SwiperSlide className="relative">
                         <Image src="https://placehold.co/800x1200.png" alt="Creative work 1" layout="fill" objectFit="cover" data-ai-hint="creative work" />
                     </SwiperSlide>
-                    <SwiperSlide>
+                    <SwiperSlide className="relative">
                         <Image src="https://placehold.co/800x1200.png" alt="Creative work 2" layout="fill" objectFit="cover" data-ai-hint="digital agency" />
                     </SwiperSlide>
-                    <SwiperSlide>
+                    <SwiperSlide className="relative">
                         <Image src="https://placehold.co/800x1200.png" alt="Creative work 3" layout="fill" objectFit="cover" data-ai-hint="design studio" />
                     </SwiperSlide>
                 </Swiper>
