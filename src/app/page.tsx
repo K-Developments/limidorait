@@ -40,6 +40,7 @@ const HeroSection = () => {
         setContent(heroContent);
       } catch (error) {
         console.error("Failed to fetch hero content:", error);
+        // Fallback content
         setContent({
           title: "We Create Digital Experiences That Matter",
           subtitle: "Award-winning creative agency focused on branding, web design and development",
@@ -208,6 +209,7 @@ const HeroSection = () => {
                           alt={slide.text} 
                           fill 
                           className="object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                          data-ai-hint={slide.hint}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-center justify-center p-4">
                           {Icon && (
@@ -226,62 +228,53 @@ const HeroSection = () => {
           </div>
         )}
       </div>
-      <div className="hero-background">
-          <div className="shape-1"></div>
-          <div className="shape-2"></div>
-      </div>
     </section>
   );
 };
 
 const StoriesAndNewsSection = () => {
-    return (
-      <section className="w-full">
-        <div className="flex flex-col md:flex-row gap-2">
-            <Link href="#" className="relative group h-[300px] md:h-[400px] overflow-hidden flex-1">
-                <Image
-                    src="https://placehold.co/800x600.png"
-                    alt="Limidora Stories"
-                    fill
-                    className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
-                    data-ai-hint="team working office"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                <div className="absolute bottom-0 left-0 p-8">
-                    <h3 className="text-3xl font-bold text-white mb-2">Limidora Stories</h3>
-                    <p className="text-white/90">Discover the projects and people behind our success.</p>
-                </div>
-                <div className="absolute top-4 right-4 bg-background/80 p-3 rounded-full translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                    <ArrowUpRight className="w-6 h-6 text-foreground" />
-                </div>
-            </Link>
-            <Link href="#" className="relative group h-[300px] md:h-[400px] overflow-hidden flex-1">
-                <Image
-                    src="https://placehold.co/800x600.png"
-                    alt="Limidora News and Blog"
-                    fill
-                    className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
-                    data-ai-hint="person writing blog"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                <div className="absolute bottom-0 left-0 p-8">
-                    <h3 className="text-3xl font-bold text-white mb-2">News & Blog</h3>
-                    <p className="text-white/90">Insights, trends, and thoughts from our team.</p>
-                </div>
-                 <div className="absolute top-4 right-4 bg-background/80 p-3 rounded-full translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                    <ArrowUpRight className="w-6 h-6 text-foreground" />
-                </div>
-            </Link>
-        </div>
-      </section>
-    );
+  return (
+    <section className="w-full">
+      <div className="flex flex-col md:flex-row gap-2">
+        {/* Card 1: Stories */}
+        <Link href="/stories" className="relative group overflow-hidden h-[300px] md:h-[400px]">
+          <Image
+            src="https://placehold.co/800x400.png"
+            alt="Limidora Stories"
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            data-ai-hint="people working"
+          />
+          <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center p-6 text-white text-center">
+            <h3 className="text-3xl font-bold">Limidora Stories</h3>
+            <p>Discover the projects and people behind our success.</p>
+          </div>
+        </Link>
+        {/* Card 2: News & Blog */}
+        <Link href="/blog" className="relative group overflow-hidden h-[300px] md:h-[400px]">
+          <Image
+            src="https://placehold.co/800x400.png"
+            alt="Limidora News & Blog"
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            data-ai-hint="desk flatlay"
+          />
+          <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center p-6 text-white text-center">
+            <h3 className="text-3xl font-bold">News & Blog</h3>
+            <p>Insights, trends, and thoughts from our team.</p>
+          </div>
+        </Link>
+      </div>
+    </section>
+  );
 };
 
-export default function Home() {
+
+export default function HomePage() {
   return (
-    <>
+    <div>
       <HeroSection />
       <StoriesAndNewsSection />
-    </>
-  );
+    </div>
+  )
 }
