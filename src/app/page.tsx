@@ -159,15 +159,15 @@ const HeroSection = () => {
               ))}
             </Swiper>
           )}
-           <div className="w-full p-4">
+           <div className="w-full">
               <Swiper
                   modules={[Autoplay]}
-                  spaceBetween={10}
+                  spaceBetween={0}
                   slidesPerView={2}
                   breakpoints={{
                       768: {
                           slidesPerView: 4,
-                          spaceBetween: 10
+                          spaceBetween: 0
                       },
                   }}
                   loop={true}
