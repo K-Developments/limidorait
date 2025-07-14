@@ -184,7 +184,7 @@ export default function AdminHomePage() {
   }
 
   return (
-    <div className="w-full space-y-8">
+    <div className="space-y-8">
       <h1 className="text-3xl font-bold">Content Management</h1>
       <form onSubmit={handleSubmit} className="space-y-8">
         <Card>
@@ -278,6 +278,10 @@ export default function AdminHomePage() {
                     <div className="space-y-2">
                       <Label htmlFor={`slide-image-upload-${index}`}>Or Upload New Image</Label>
                       <Input id={`slide-image-upload-${index}`} type="file" onChange={(e) => handleServiceSlideImageUpload(e, index)} accept="image/*" disabled={isUploading} />
+                    </div>
+                     <div className="space-y-2">
+                      <Label htmlFor={`slide-hint-${index}`}>AI Hint</Label>
+                      <Input id={`slide-hint-${index}`} value={slide.hint} onChange={(e) => handleServiceSlideChange(index, 'hint', e.target.value)} />
                     </div>
                   </div>
                 </Card>
