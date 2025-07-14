@@ -207,7 +207,7 @@ const HeroSection = () => {
                           src={slide.image} 
                           alt={slide.text} 
                           fill 
-                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                          className="object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-center justify-center p-4">
                           {Icon && (
