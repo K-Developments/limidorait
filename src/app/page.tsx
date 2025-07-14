@@ -29,27 +29,22 @@ const HeroSection = () => {
   useEffect(() => {
     if (!heroRef.current || !heroImageRef.current || !heroContentRef.current) return;
 
+    const tl = gsap.timeline({delay: 0.5});
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
     gsap.set(heroContentRef.current, { opacity: 0, x: -50 });
-    
-    if (isMobile) {
-      gsap.set(heroImageRef.current, { opacity: 0, y: 50 });
-    } else {
-      gsap.set(heroImageRef.current, { width: "0%" });
-    }
-
-    const tl = gsap.timeline({ delay: 0.5 });
 
     if (isMobile) {
+        gsap.set(heroImageRef.current, { height: "0%"});
         tl.to(heroImageRef.current, {
-            opacity: 1,
-            y: 0,
+            height: "60%",
             duration: 1.2,
-            ease: "power3.out",
-        }, "+=0.2");
+            ease: "power3.inOut",
+        });
     } else {
+        gsap.set(heroImageRef.current, { width: "0%" });
         tl.to(heroImageRef.current, {
-            width: "50%",
+            width: "50vw",
             duration: 1.2,
             ease: "power3.inOut",
         });
@@ -70,8 +65,8 @@ const HeroSection = () => {
 
   return (
     <section ref={heroRef} className="hero-section relative min-h-screen flex items-center bg-gray-50 overflow-hidden">
-        <div className="container mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center">
-            <div ref={heroContentRef} className="max-w-3xl hero-content-container md:w-1/2">
+        <div className="container mx-auto px-6 relative z-10">
+            <div ref={heroContentRef} className="max-w-3xl hero-content-container">
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 font-headline text-foreground">
                     We Create Digital Experiences That Matter
                 </h1>
@@ -87,28 +82,6 @@ const HeroSection = () => {
                     </Button>
                 </div>
             </div>
-             <div ref={heroImageRef} className="hero-image absolute right-0 bottom-0 h-full w-full md:w-1/2">
-                <Swiper
-                    modules={[EffectFade, Autoplay]}
-                    effect="fade"
-                    loop={true}
-                    autoplay={{
-                        delay: 4000,
-                        disableOnInteraction: false,
-                    }}
-                    className="h-full w-full"
-                >
-                    <SwiperSlide className="relative">
-                        <Image src="https://placehold.co/800x1200.png" alt="Creative work 1" layout="fill" objectFit="cover" data-ai-hint="creative work" />
-                    </SwiperSlide>
-                    <SwiperSlide className="relative">
-                        <Image src="https://placehold.co/800x1200.png" alt="Creative work 2" layout="fill" objectFit="cover" data-ai-hint="digital agency" />
-                    </SwiperSlide>
-                    <SwiperSlide className="relative">
-                        <Image src="https://placehold.co/800x1200.png" alt="Creative work 3" layout="fill" objectFit="cover" data-ai-hint="design studio" />
-                    </SwiperSlide>
-                </Swiper>
-            </div>
         </div>
 
         <div className="hero-background absolute inset-0 z-0">
@@ -116,7 +89,28 @@ const HeroSection = () => {
             <div className="shape-2"></div>
         </div>
 
-       
+        <div ref={heroImageRef} className="hero-image absolute right-0 bottom-0 h-full" style={{ width: '50vw' }}>
+            <Swiper
+                modules={[EffectFade, Autoplay]}
+                effect="fade"
+                loop={true}
+                autoplay={{
+                    delay: 4000,
+                    disableOnInteraction: false,
+                }}
+                className="h-full w-full"
+            >
+                <SwiperSlide className="relative">
+                    <Image src="https://placehold.co/800x1200.png" alt="Creative work 1" layout="fill" objectFit="cover" data-ai-hint="creative work" />
+                </SwiperSlide>
+                <SwiperSlide className="relative">
+                    <Image src="https://placehold.co/800x1200.png" alt="Creative work 2" layout="fill" objectFit="cover" data-ai-hint="digital agency" />
+                </SwiperSlide>
+                <SwiperSlide className="relative">
+                    <Image src="https://placehold.co/800x1200.png" alt="Creative work 3" layout="fill" objectFit="cover" data-ai-hint="design studio" />
+                </SwiperSlide>
+            </Swiper>
+        </div>
     </section>
   );
 };
@@ -168,7 +162,7 @@ export default function Home() {
                   className="text-center p-6 border-2 border-transparent hover:border-primary transition-colors duration-300"
                 >
                   <CardHeader className="items-center">
-                    <div className="p-4 bg-primary/10 mb-4">
+                    <div className="p-4 bg-primary/10">
                       {service.icon}
                     </div>
                     <CardTitle className="font-headline text-2xl">
