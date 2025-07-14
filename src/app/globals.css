@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -128,11 +129,11 @@ body {
         .hero-image {
           position: relative !important;
           width: 100% !important;
-          height: auto !important; /* Changed from 300px to auto */
+          height: auto !important; 
           margin-top: 2rem;
           bottom: auto !important;
           right: auto !important;
-          display: block !important; /* Ensure it's not a flex container on mobile */
+          display: block !important;
         }
     }
 }
