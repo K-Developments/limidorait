@@ -203,7 +203,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
 const StoriesAndNewsSection = ({ content, isLoading }: { content: HeroContent | null, isLoading: boolean }) => {
   if (isLoading || !content?.storiesAndNews) {
     return (
-       <section className="w-full">
+       <section className="w-full md:mt-2">
         <div className="flex flex-col md:flex-row gap-4 md:gap-2">
             <Skeleton className="h-[300px] md:h-[400px] w-full" />
             <Skeleton className="h-[300px] md:h-[400px] w-full" />
@@ -215,9 +215,9 @@ const StoriesAndNewsSection = ({ content, isLoading }: { content: HeroContent | 
   const { story, news } = content.storiesAndNews;
 
   return (
-    <section className="w-full">
-      <div className="flex flex-col md:flex-row gap-4 md:gap-2">
-          <Link href={story.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full md:flex-1">
+    <section className="w-full md:mt-2">
+      <div className="flex flex-col md:flex-row gap-2">
+          <Link href={story.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full">
               <Image
                   src={story.imageUrl}
                   alt={story.title}
@@ -234,7 +234,7 @@ const StoriesAndNewsSection = ({ content, isLoading }: { content: HeroContent | 
                   <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-foreground" />
               </div>
           </Link>
-          <Link href={news.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full md:flex-1">
+          <Link href={news.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full">
               <Image
                   src={news.imageUrl}
                   alt={news.title}
