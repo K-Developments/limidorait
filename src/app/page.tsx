@@ -204,7 +204,7 @@ const StoriesAndNewsSection = ({ content, isLoading }: { content: HeroContent | 
   if (isLoading || !content?.storiesAndNews) {
     return (
        <section className="w-full md:mt-2">
-        <div className="flex flex-col md:flex-row gap-4 md:gap-2">
+        <div className="flex flex-col md:flex-row gap-2">
             <Skeleton className="h-[300px] md:h-[400px] w-full" />
             <Skeleton className="h-[300px] md:h-[400px] w-full" />
         </div>
