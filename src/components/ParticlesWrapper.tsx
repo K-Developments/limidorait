@@ -39,7 +39,7 @@ const ParticlesWrapper = () => {
       (window as any).particlesJS('particles-js', {
         particles: {
           number: {
-            value: 120,
+            value: 200,
             density: {
               enable: true,
               value_area: 800,
