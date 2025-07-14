@@ -4,8 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import Link from 'next/link';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
 
 
 const blogPosts = [
@@ -41,8 +39,6 @@ const blogPosts = [
 
 export default function BlogPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <Header />
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container mx-auto px-4 md:px-6">
@@ -91,7 +87,5 @@ export default function BlogPage() {
           </div>
         </section>
       </main>
-      <Footer />
-    </div>
   );
 }

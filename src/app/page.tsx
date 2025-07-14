@@ -180,8 +180,7 @@ export default function Home() {
   const featuredProjects = projects.slice(0, 3);
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <main className="flex-1">
+    <>
         <HeroSection />
         
         <section id="services" className="py-20 md:py-28">
@@ -243,7 +242,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-      </main>
-    </div>
+    </>
   );
 }

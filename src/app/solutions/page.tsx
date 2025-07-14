@@ -6,8 +6,6 @@ import { PortfolioCard } from '@/components/PortfolioCard';
 import { projects, Project } from '@/lib/portfolio-data';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
 
 const categories = ["All", ...Array.from(new Set(projects.map(p => p.category)))];
 
@@ -19,8 +17,6 @@ export default function SolutionsPage() {
     : projects.filter(p => p.category === selectedCategory);
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <Header />
       <main className="flex-1 pt-20">
         <section className="py-20 md:py-28">
           <div className="container mx-auto px-4">
@@ -63,7 +59,5 @@ export default function SolutionsPage() {
           </div>
         </section>
       </main>
-      <Footer />
-    </div>
   );
 }
