@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -6,6 +7,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { MobileNav } from './mobile-nav';
+import { User } from 'lucide-react';
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -64,10 +66,13 @@ export function Header() {
               </Link>
             ))}
           </nav>
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center gap-4">
             <Button asChild>
               <Link href="/contact">Get in Touch</Link>
             </Button>
+            <Link href="/admin" aria-label="Admin Page">
+                <User className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors" />
+            </Link>
           </div>
           <div className="md:hidden">
             <button
