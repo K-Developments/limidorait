@@ -39,7 +39,7 @@ const ParticlesWrapper = () => {
       (window as any).particlesJS('particles-js', {
         particles: {
           number: {
-            value: 60,
+            value: 80,
             density: {
               enable: true,
               value_area: 800,
@@ -52,7 +52,7 @@ const ParticlesWrapper = () => {
             type: 'circle',
           },
           opacity: {
-            value: 0.4,
+            value: 0.5,
             random: true,
             anim: {
               enable: true,
@@ -72,7 +72,7 @@ const ParticlesWrapper = () => {
             enable: true,
             distance: 150,
             color: primaryColor,
-            opacity: 0.2,
+            opacity: 0.3,
             width: 1,
           },
           move: {
