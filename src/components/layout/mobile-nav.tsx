@@ -62,7 +62,7 @@ export function MobileNav({ navItems, isOpen, onClose }: MobileNavProps) {
                 ))}
               </ul>
               <Button asChild size="lg" className="mt-12" onClick={onClose}>
-                <Link href="/#contact">Get in Touch</Link>
+                <Link href="/contact">Get in Touch</Link>
               </Button>
             </nav>
           </motion.div>

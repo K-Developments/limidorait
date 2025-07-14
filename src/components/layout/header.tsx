@@ -35,9 +35,8 @@ export function Header() {
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   const navItems = [
-    { name: 'Services', href: '/#services' },
-    { name: 'Portfolio', href: '/#portfolio' },
-    { name: 'About', href: '/#about' },
+    { name: 'Portfolio', href: '/portfolio' },
+    { name: 'About', href: '/about' },
   ];
 
   return (
@@ -68,7 +67,7 @@ export function Header() {
           </nav>
           <div className="hidden md:flex items-center gap-4">
             <Button asChild>
-              <Link href="/#contact">Get in Touch</Link>
+              <Link href="/contact">Get in Touch</Link>
             </Button>
             <Link href="/admin" aria-label="Admin Page">
                 <User className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors" />

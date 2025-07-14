@@ -8,17 +8,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade, Autoplay } from "swiper/modules";
 import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { projects } from "@/lib/portfolio-data";
-import { ArrowRight, Lightbulb, Palette, PenTool } from "lucide-react";
-import { PortfolioCard } from "@/components/PortfolioCard";
 import { getHeroContent, HeroContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
 import ParticlesWrapper from "@/components/ParticlesWrapper";
-import { About } from "@/components/sections/about";
-import { Contact } from "@/components/sections/contact";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -137,10 +130,10 @@ const HeroSection = () => {
                 className="flex flex-wrap gap-4"
               >
                 <Button asChild size="lg">
-                  <Link href="/#portfolio">View Our Work</Link>
+                  <Link href="/portfolio">View Our Work</Link>
                 </Button>
                 <Button asChild variant="secondary" size="lg">
-                  <Link href="/#contact">Get in Touch</Link>
+                  <Link href="/contact">Get in Touch</Link>
                 </Button>
               </motion.div>
             </>
@@ -225,124 +218,10 @@ const HeroSection = () => {
   );
 };
 
-const ServiceCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => {
-  return (
-    <motion.div 
-      whileHover={{ y: -5 }}
-      transition={{ type: "spring", stiffness: 300 }}
-      className="h-full"
-    >
-      <Card className="h-full text-center">
-        <CardHeader className="items-center">
-          <div className="p-4 bg-primary/10 inline-flex">
-            {icon}
-          </div>
-          <CardTitle className="text-xl">
-            {title}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">
-            {description}
-          </p>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
-};
-
 export default function Home() {
-  const services = [
-    {
-      icon: <Palette className="h-8 w-8 text-primary" />,
-      title: "Brand Identity",
-      description: "Crafting unique visual identities that tell your story and resonate with your audience.",
-    },
-    {
-      icon: <PenTool className="h-8 w-8 text-primary" />,
-      title: "Web Design",
-      description: "Designing beautiful, intuitive, and responsive websites that provide a seamless user experience.",
-    },
-    {
-      icon: <Lightbulb className="h-8 w-8 text-primary" />,
-      title: "Creative Strategy",
-      description: "Developing innovative strategies to elevate your brand and engage your target market.",
-    },
-  ];
-
   return (
     <>
       <HeroSection />
-      
-      <section id="services" className="py-20 md:py-28 bg-card">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <Badge variant="outline" className="mb-4">Our Services</Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              What We Do
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our services are designed to help your business stand out in the digital landscape.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <motion.div
-                key={service.title}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <ServiceCard {...service} />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="portfolio" className="py-20 md:py-28 bg-background">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <Badge variant="outline" className="mb-4">Our Work</Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Our Portfolio
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              A glimpse into our creative world and the impact we deliver.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <PortfolioCard project={project} />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <About />
-
-      <Contact />
     </>
   );
 }
