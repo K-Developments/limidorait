@@ -26,42 +26,10 @@ const iconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
 };
 
 
-const HeroSection = () => {
+const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLoading: boolean }) => {
   const heroRef = useRef<HTMLDivElement>(null);
   const heroImageRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
-  const [content, setContent] = useState<HeroContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const heroContent = await getHeroContent();
-        setContent(heroContent);
-      } catch (error) {
-        console.error("Failed to fetch hero content:", error);
-        // Fallback content
-        setContent({
-          title: "We Create Digital Experiences That Matter",
-          subtitle: "Award-winning creative agency focused on branding, web design and development",
-          imageUrls: [
-            "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=2670&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2672&auto=format&fit=crop"
-          ],
-          serviceSlides: [
-            { text: "Web", image: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=2564&auto=format&fit=crop", hint: "modern website" },
-            { text: "Mobile App", image: "https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?q=80&w=2670&auto=format&fit=crop", hint: "app interface" },
-            { text: "Web Application", image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=2669&auto=format&fit=crop", hint: "saas dashboard" },
-            { text: "Software", image: "https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?q=80&w=2671&auto=format&fit=crop", hint: "custom software" },
-          ]
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchContent();
-  }, []);
 
   useEffect(() => {
     if (isLoading || !heroRef.current || !heroImageRef.current || !heroContentRef.current) return;
@@ -232,39 +200,52 @@ const HeroSection = () => {
   );
 };
 
-const StoriesAndNewsSection = () => {
+const StoriesAndNewsSection = ({ content, isLoading }: { content: HeroContent | null, isLoading: boolean }) => {
+  if (isLoading || !content?.storiesAndNews) {
+    return (
+       <section className="w-full">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-2">
+            <Skeleton className="h-[300px] md:h-[400px] w-full" />
+            <Skeleton className="h-[300px] md:h-[400px] w-full" />
+        </div>
+      </section>
+    );
+  }
+  
+  const { story, news } = content.storiesAndNews;
+
   return (
     <section className="w-full">
       <div className="flex flex-col md:flex-row gap-4 md:gap-2">
-          <Link href="#" className="relative group h-[250px] md:h-[400px] overflow-hidden w-full md:flex-1">
+          <Link href={story.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full md:flex-1">
               <Image
-                  src="https://placehold.co/800x600.png"
-                  alt="Limidora Stories"
+                  src={story.imageUrl}
+                  alt={story.title}
                   fill
                   className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
-                  data-ai-hint="team working office"
+                  data-ai-hint={story.imageHint}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
               <div className="absolute bottom-0 left-0 p-6 md:p-8">
-                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">Limidora Stories</h3>
-                  <p className="text-white/90 text-sm md:text-base">Discover the projects and people behind our success.</p>
+                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">{story.title}</h3>
+                  <p className="text-white/90 text-sm md:text-base">{story.description}</p>
               </div>
               <div className="absolute top-4 right-4 bg-background/80 p-2 md:p-3 rounded-full translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
                   <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-foreground" />
               </div>
           </Link>
-          <Link href="#" className="relative group h-[250px] md:h-[400px] overflow-hidden w-full md:flex-1">
+          <Link href={news.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full md:flex-1">
               <Image
-                  src="https://placehold.co/800x600.png"
-                  alt="Limidora News and Blog"
+                  src={news.imageUrl}
+                  alt={news.title}
                   fill
                   className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
-                  data-ai-hint="person writing blog"
+                  data-ai-hint={news.imageHint}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
               <div className="absolute bottom-0 left-0 p-6 md:p-8">
-                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">News & Blog</h3>
-                  <p className="text-white/90 text-sm md:text-base">Insights, trends, and thoughts from our team.</p>
+                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">{news.title}</h3>
+                  <p className="text-white/90 text-sm md:text-base">{news.description}</p>
               </div>
                <div className="absolute top-4 right-4 bg-background/80 p-2 md:p-3 rounded-full translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
                   <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-foreground" />
@@ -276,10 +257,27 @@ const StoriesAndNewsSection = () => {
 };
 
 export default function HomePage() {
+  const [content, setContent] = useState<HeroContent | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const heroContent = await getHeroContent();
+        setContent(heroContent);
+      } catch (error) {
+        console.error("Failed to fetch hero content:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchContent();
+  }, []);
+
   return (
     <div>
-      <HeroSection />
-      <StoriesAndNewsSection />
+      <HeroSection content={content} isLoading={isLoading} />
+      <StoriesAndNewsSection content={content} isLoading={isLoading} />
     </div>
   )
 }

@@ -9,11 +9,23 @@ export interface ServiceSlide {
   hint: string;
 }
 
+export interface StoryNewsItem {
+  title: string;
+  description: string;
+  imageUrl: string;
+  imageHint: string;
+  link: string;
+}
+
 export interface HeroContent {
   title: string;
   subtitle: string;
   imageUrls: string[];
   serviceSlides: ServiceSlide[];
+  storiesAndNews: {
+    story: StoryNewsItem;
+    news: StoryNewsItem;
+  };
 }
 
 const HERO_CONTENT_DOC_ID = 'heroContent';
@@ -24,42 +36,52 @@ export const getHeroContent = async (): Promise<HeroContent> => {
   const docRef = doc(db, CONTENT_COLLECTION_ID, HERO_CONTENT_DOC_ID);
   const docSnap = await getDoc(docRef);
 
+  const defaultContent: HeroContent = {
+    title: "We Create Digital Experiences That Matter",
+    subtitle: "Award-winning creative agency focused on branding, web design and development",
+    imageUrls: [
+      "https://placehold.co/800x1200.png",
+      "https://placehold.co/800x1200.png",
+      "https://placehold.co/800x1200.png",
+    ],
+    serviceSlides: [
+      { text: "Web", image: "https://placehold.co/400x400.png", hint: "modern website" },
+      { text: "Mobile App", image: "https://placehold.co/400x400.png", hint: "app interface" },
+      { text: "Web Application", image: "https://placehold.co/400x400.png", hint: "saas dashboard" },
+      { text: "Software", image: "https://placehold.co/400x400.png", hint: "custom software" },
+    ],
+    storiesAndNews: {
+      story: {
+        title: "Limidora Stories",
+        description: "Discover the projects and people behind our success.",
+        imageUrl: "https://placehold.co/800x600.png",
+        imageHint: "team working office",
+        link: "#"
+      },
+      news: {
+        title: "News & Blog",
+        description: "Insights, trends, and thoughts from our team.",
+        imageUrl: "https://placehold.co/800x600.png",
+        imageHint: "person writing blog",
+        link: "#"
+      }
+    }
+  };
+  
   if (docSnap.exists()) {
     // Merge existing data with defaults to prevent errors if new fields are added
     const data = docSnap.data();
     return {
-      title: "We Create Digital Experiences That Matter",
-      subtitle: "Award-winning creative agency focused on branding, web design and development",
-      imageUrls: [
-        "https://placehold.co/800x1200.png",
-        "https://placehold.co/800x1200.png",
-        "https://placehold.co/800x1200.png",
-      ],
-      serviceSlides: [
-        { text: "Web", image: "https://placehold.co/400x400.png", hint: "modern website" },
-        { text: "Mobile App", image: "https://placehold.co/400x400.png", hint: "app interface" },
-        { text: "Web Application", image: "https://placehold.co/400x400.png", hint: "saas dashboard" },
-        { text: "Software", image: "https://placehold.co/400x400.png", hint: "custom software" },
-      ],
+      ...defaultContent,
       ...data,
+      storiesAndNews: {
+        ...defaultContent.storiesAndNews,
+        ...(data.storiesAndNews || {}),
+      },
     } as HeroContent;
   } else {
     // Return default content if document doesn't exist
-    return {
-      title: "We Create Digital Experiences That Matter",
-      subtitle: "Award-winning creative agency focused on branding, web design and development",
-      imageUrls: [
-        "https://placehold.co/800x1200.png",
-        "https://placehold.co/800x1200.png",
-        "https://placehold.co/800x1200.png",
-      ],
-      serviceSlides: [
-        { text: "Web", image: "https://placehold.co/400x400.png", hint: "modern website" },
-        { text: "Mobile App", image: "https://placehold.co/400x400.png", hint: "app interface" },
-        { text: "Web Application", image: "https://placehold.co/400x400.png", hint: "saas dashboard" },
-        { text: "Software", image: "https://placehold.co/400x400.png", hint: "custom software" },
-      ]
-    };
+    return defaultContent;
   }
 };
 
