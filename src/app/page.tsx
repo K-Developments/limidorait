@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade, Autoplay } from "swiper/modules";
 import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
-import { getHeroContent, HeroContent } from "@/services/firestore";
+import { getHeroContent, HeroContent, ServiceSlide, StoryNewsItem } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import ParticlesWrapper from "@/components/ParticlesWrapper";
@@ -219,7 +219,7 @@ const StoriesAndNewsSection = ({ content, isLoading }: { content: HeroContent | 
       <div className="flex flex-col md:flex-row gap-2">
           <Link href={story.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full">
               <Image
-                  src={story.imageUrl}
+                  src={story.imageUrl || "https://placehold.co/800x600.png"}
                   alt={story.title}
                   fill
                   className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
@@ -236,7 +236,7 @@ const StoriesAndNewsSection = ({ content, isLoading }: { content: HeroContent | 
           </Link>
           <Link href={news.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full">
               <Image
-                  src={news.imageUrl}
+                  src={news.imageUrl || "https://placehold.co/800x600.png"}
                   alt={news.title}
                   fill
                   className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
