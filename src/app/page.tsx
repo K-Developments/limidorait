@@ -12,7 +12,7 @@ import { getHeroContent, HeroContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import ParticlesWrapper from "@/components/ParticlesWrapper";
-import { Globe, Smartphone, Code, LayoutGrid } from 'lucide-react';
+import { Globe, Smartphone, Code, LayoutGrid, ArrowUpRight } from 'lucide-react';
 
 
 import "swiper/css";
@@ -234,10 +234,54 @@ const HeroSection = () => {
   );
 };
 
+const StoriesAndNewsSection = () => {
+    return (
+      <section className="container mx-auto px-4 py-8">
+        <div className="flex flex-col md:flex-row gap-8">
+            <Link href="#" className="relative group flex-1 h-[300px] md:h-[400px] overflow-hidden rounded-lg">
+                <Image
+                    src="https://placehold.co/800x600.png"
+                    alt="Limidora Stories"
+                    fill
+                    className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
+                    data-ai-hint="team working office"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-8">
+                    <h3 className="text-3xl font-bold text-white mb-2">Limidora Stories</h3>
+                    <p className="text-white/90">Discover the projects and people behind our success.</p>
+                </div>
+                <div className="absolute top-4 right-4 bg-background/80 p-3 rounded-full translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                    <ArrowUpRight className="w-6 h-6 text-foreground" />
+                </div>
+            </Link>
+            <Link href="#" className="relative group flex-1 h-[300px] md:h-[400px] overflow-hidden rounded-lg">
+                <Image
+                    src="https://placehold.co/800x600.png"
+                    alt="Limidora News and Blog"
+                    fill
+                    className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
+                    data-ai-hint="person writing blog"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-8">
+                    <h3 className="text-3xl font-bold text-white mb-2">News & Blog</h3>
+                    <p className="text-white/90">Insights, trends, and thoughts from our team.</p>
+                </div>
+                 <div className="absolute top-4 right-4 bg-background/80 p-3 rounded-full translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                    <ArrowUpRight className="w-6 h-6 text-foreground" />
+                </div>
+            </Link>
+        </div>
+      </section>
+    );
+};
+
 export default function Home() {
   return (
     <>
       <HeroSection />
+      <StoriesAndNewsSection />
     </>
   );
 }
