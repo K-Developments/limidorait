@@ -237,8 +237,8 @@ const HeroSection = () => {
 const StoriesAndNewsSection = () => {
     return (
       <section className="w-full py-8">
-        <div className="flex flex-col md:flex-row gap-2">
-            <Link href="#" className="relative group flex-1 h-[300px] md:h-[400px] overflow-hidden">
+        <div className="flex flex-col gap-2">
+            <Link href="#" className="relative group h-[300px] md:h-[400px] overflow-hidden">
                 <Image
                     src="https://placehold.co/800x600.png"
                     alt="Limidora Stories"
@@ -255,7 +255,7 @@ const StoriesAndNewsSection = () => {
                     <ArrowUpRight className="w-6 h-6 text-foreground" />
                 </div>
             </Link>
-            <Link href="#" className="relative group flex-1 h-[300px] md:h-[400px] overflow-hidden">
+            <Link href="#" className="relative group h-[300px] md:h-[400px] overflow-hidden">
                 <Image
                     src="https://placehold.co/800x600.png"
                     alt="Limidora News and Blog"
