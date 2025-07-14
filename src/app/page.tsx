@@ -40,7 +40,12 @@ const HeroSection = () => {
         // Fallback content in case of error
         setContent({
           title: "We Create Digital Experiences That Matter",
-          subtitle: "Award-winning creative agency focused on branding, web design and development"
+          subtitle: "Award-winning creative agency focused on branding, web design and development",
+          imageUrls: [
+            "https://placehold.co/800x1200.png",
+            "https://placehold.co/800x1200.png",
+            "https://placehold.co/800x1200.png"
+          ]
         });
       } finally {
         setIsLoading(false);
@@ -73,14 +78,13 @@ const HeroSection = () => {
             });
         }
         
+        gsap.set(heroContentRef.current, { opacity: 0, x: -50 });
         tl.to(heroContentRef.current, {
             opacity: 1,
             x: 0,
             duration: 1,
             ease: "power3.out",
         }, "-=0.8");
-
-        gsap.set(heroContentRef.current, { opacity: 0, x: -50 });
 
     }, heroRef);
 
@@ -129,6 +133,9 @@ const HeroSection = () => {
         </div>
 
         <div ref={heroImageRef} className="hero-image absolute right-0 bottom-0 h-full" style={{ width: '50vw' }}>
+          {isLoading ? (
+            <Skeleton className="w-full h-full"/>
+          ) : (
             <Swiper
                 modules={[EffectFade, Autoplay]}
                 effect="fade"
@@ -139,16 +146,13 @@ const HeroSection = () => {
                 }}
                 className="h-full w-full"
             >
-                <SwiperSlide className="relative">
-                    <Image src="https://placehold.co/800x1200.png" alt="Creative work 1" layout="fill" objectFit="cover" data-ai-hint="creative work" />
+              {(content?.imageUrls || []).map((url, index) => (
+                <SwiperSlide key={index} className="relative">
+                    <Image src={url} alt={`Creative work ${index + 1}`} layout="fill" objectFit="cover" />
                 </SwiperSlide>
-                <SwiperSlide className="relative">
-                    <Image src="https://placehold.co/800x1200.png" alt="Creative work 2" layout="fill" objectFit="cover" data-ai-hint="digital agency" />
-                </SwiperSlide>
-                <SwiperSlide className="relative">
-                    <Image src="https://placehold.co/800x1200.png" alt="Creative work 3" layout="fill" objectFit="cover" data-ai-hint="design studio" />
-                </SwiperSlide>
+              ))}
             </Swiper>
+          )}
         </div>
     </section>
   );

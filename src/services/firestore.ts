@@ -1,10 +1,12 @@
 
-import { db } from '@/lib/firebase';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { db, storage } from '@/lib/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export interface HeroContent {
   title: string;
   subtitle: string;
+  imageUrls: string[];
 }
 
 const HERO_CONTENT_DOC_ID = 'heroContent';
@@ -21,7 +23,12 @@ export const getHeroContent = async (): Promise<HeroContent> => {
     // Return default content if document doesn't exist
     return {
       title: "We Create Digital Experiences That Matter",
-      subtitle: "Award-winning creative agency focused on branding, web design and development"
+      subtitle: "Award-winning creative agency focused on branding, web design and development",
+      imageUrls: [
+        "https://placehold.co/800x1200.png",
+        "https://placehold.co/800x1200.png",
+        "https://placehold.co/800x1200.png",
+      ]
     };
   }
 };
@@ -35,5 +42,23 @@ export const updateHeroContent = async (content: HeroContent): Promise<void> => 
   } catch (error) {
     console.error("Error updating document: ", error);
     throw new Error("Could not update hero content.");
+  }
+};
+
+// Function to upload an image and get URL
+export const uploadImageAndGetURL = async (imageFile: File): Promise<string> => {
+  if (!imageFile) {
+    throw new Error("No image file provided.");
+  }
+
+  const storageRef = ref(storage, `hero-images/${Date.now()}_${imageFile.name}`);
+  
+  try {
+    const snapshot = await uploadBytes(storageRef, imageFile);
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    return downloadURL;
+  } catch (error) {
+    console.error("Error uploading image: ", error);
+    throw new Error("Could not upload image.");
   }
 };
