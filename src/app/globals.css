@@ -129,7 +129,7 @@ body {
         .hero-image {
           position: relative !important;
           width: 100% !important;
-          height: auto !important; 
+          aspect-ratio: 4/5;
           margin-top: 2rem;
           bottom: auto !important;
           right: auto !important;
