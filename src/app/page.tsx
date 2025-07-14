@@ -142,53 +142,55 @@ const HeroSection = () => {
           {isLoading ? (
             <Skeleton className="w-full h-full"/>
           ) : (
-            <Swiper
-                modules={[EffectFade, Autoplay]}
-                effect="fade"
-                loop={true}
-                autoplay={{
-                    delay: 4000,
-                    disableOnInteraction: false,
-                }}
-                className="h-full w-full"
-            >
-              {(content?.imageUrls || []).map((url, index) => (
-                <SwiperSlide key={index} className="relative">
-                    <Image src={url} alt={`Creative work ${index + 1}`} layout="fill" objectFit="cover" />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            <div className="relative h-full w-full">
+                <Swiper
+                    modules={[EffectFade, Autoplay]}
+                    effect="fade"
+                    loop={true}
+                    autoplay={{
+                        delay: 4000,
+                        disableOnInteraction: false,
+                    }}
+                    className="h-full w-full"
+                >
+                {(content?.imageUrls || []).map((url, index) => (
+                    <SwiperSlide key={index} className="relative">
+                        <Image src={url} alt={`Creative work ${index + 1}`} fill objectFit="cover" />
+                    </SwiperSlide>
+                ))}
+                </Swiper>
+                 <div className="absolute bottom-0 left-0 w-full z-10">
+                    <Swiper
+                        modules={[Autoplay]}
+                        spaceBetween={0}
+                        slidesPerView={2}
+                        breakpoints={{
+                            768: {
+                                slidesPerView: 4,
+                                spaceBetween: 0
+                            },
+                        }}
+                        loop={true}
+                        autoplay={{
+                            delay: 2500,
+                            disableOnInteraction: false,
+                        }}
+                        className="w-full"
+                    >
+                        {serviceSlides.map((slide, index) => (
+                            <SwiperSlide key={index}>
+                                <div className="aspect-square relative group">
+                                    <Image src={slide.image} alt={slide.text} fill objectFit="cover" data-ai-hint={slide.hint} />
+                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <h3 className="text-white text-lg font-bold">{slide.text}</h3>
+                                    </div>
+                                </div>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </div>
+            </div>
           )}
-           <div className="w-full">
-              <Swiper
-                  modules={[Autoplay]}
-                  spaceBetween={0}
-                  slidesPerView={2}
-                  breakpoints={{
-                      768: {
-                          slidesPerView: 4,
-                          spaceBetween: 0
-                      },
-                  }}
-                  loop={true}
-                  autoplay={{
-                      delay: 2500,
-                      disableOnInteraction: false,
-                  }}
-                  className="w-full"
-              >
-                  {serviceSlides.map((slide, index) => (
-                      <SwiperSlide key={index}>
-                          <div className="aspect-square relative group">
-                              <Image src={slide.image} alt={slide.text} layout="fill" objectFit="cover" data-ai-hint={slide.hint} />
-                              <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                  <h3 className="text-white text-lg font-bold">{slide.text}</h3>
-                              </div>
-                          </div>
-                      </SwiperSlide>
-                  ))}
-              </Swiper>
-          </div>
         </div>
     </section>
   );
@@ -285,5 +287,3 @@ export default function Home() {
     </>
   );
 }
-
-    
