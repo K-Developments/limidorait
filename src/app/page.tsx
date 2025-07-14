@@ -177,7 +177,7 @@ const HeroSection = () => {
                         className="w-full"
                     >
                         {(content?.serviceSlides || []).map((slide, index) => (
-                            <SwiperSlide key={index}>
+                            <SwiperSlide key={index} className="border-r border-white/10 last:border-r-0">
                                 <div className="aspect-square relative group">
                                     <Image src={slide.image} alt={slide.text} fill objectFit="cover" data-ai-hint={slide.hint} />
                                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
