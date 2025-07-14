@@ -37,7 +37,6 @@ export function Header() {
   const navItems = [
     { name: 'Solutions', href: '/solutions' },
     { name: 'About', href: '/about' },
-    { name: 'Blog', href: '/blog' },
   ];
 
   return (
@@ -68,7 +67,7 @@ export function Header() {
           </nav>
           <div className="hidden md:flex items-center gap-4">
             <Button asChild>
-              <Link href="/contact">Get in Touch</Link>
+              <Link href="/solutions">Get in Touch</Link>
             </Button>
             <Link href="/admin" aria-label="Admin Page">
                 <User className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors" />
