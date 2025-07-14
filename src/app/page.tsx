@@ -31,19 +31,25 @@ const HeroSection = () => {
   useEffect(() => {
     if (!heroRef.current || !heroImageRef.current || !heroContentRef.current) return;
 
-    const tl = gsap.timeline({delay: 0.5});
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    gsap.set(heroContentRef.current, { opacity: 0, x: -50 });
+    
+    if (isMobile) {
+      gsap.set(heroImageRef.current, { opacity: 0, y: 50 });
+    } else {
+      gsap.set(heroImageRef.current, { width: "0%" });
+    }
+
+    const tl = gsap.timeline({ delay: 0.5 });
 
     if (isMobile) {
-        gsap.set(heroImageRef.current, { width: "100%", height: "0", y: "100%"});
         tl.to(heroImageRef.current, {
-            height: "60%",
-            y: "40%",
+            opacity: 1,
+            y: 0,
             duration: 1.2,
-            ease: "power3.inOut",
-        });
+            ease: "power3.out",
+        }, "+=0.2");
     } else {
-        gsap.set(heroImageRef.current, { width: "0%", right: 0 });
         tl.to(heroImageRef.current, {
             width: "50%",
             duration: 1.2,
@@ -51,12 +57,12 @@ const HeroSection = () => {
         });
     }
     
-    tl.from(heroContentRef.current, {
-        opacity: 0,
-        x: -50,
+    tl.to(heroContentRef.current, {
+        opacity: 1,
+        x: 0,
         duration: 1,
         ease: "power3.out",
-    }, "-=0.5");
+    }, "-=0.8");
 
 
     return () => {
@@ -66,15 +72,15 @@ const HeroSection = () => {
 
   return (
     <section ref={heroRef} className="hero-section relative min-h-screen flex items-center bg-gray-50 overflow-hidden">
-        <div className="container mx-auto px-6 relative z-10">
-            <div ref={heroContentRef} className="max-w-3xl hero-content-container">
+        <div className="container mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center">
+            <div ref={heroContentRef} className="max-w-3xl hero-content-container md:w-1/2">
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 font-headline text-foreground">
                     We Create Digital Experiences That Matter
                 </h1>
                 <p className="text-xl md:text-2xl mb-10 max-w-2xl text-muted-foreground">
                     Award-winning creative agency focused on branding, web design and development
                 </p>
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                     <Button asChild size="lg">
                         <Link href="/solutions">View Our Work</Link>
                     </Button>
@@ -83,6 +89,28 @@ const HeroSection = () => {
                     </Button>
                 </div>
             </div>
+             <div ref={heroImageRef} className="hero-image absolute right-0 bottom-0 h-full md:w-1/2">
+                <Swiper
+                    modules={[EffectFade, Autoplay]}
+                    effect="fade"
+                    loop={true}
+                    autoplay={{
+                        delay: 4000,
+                        disableOnInteraction: false,
+                    }}
+                    className="h-full w-full"
+                >
+                    <SwiperSlide>
+                        <Image src="https://placehold.co/800x1200.png" alt="Creative work 1" layout="fill" objectFit="cover" data-ai-hint="creative work" />
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <Image src="https://placehold.co/800x1200.png" alt="Creative work 2" layout="fill" objectFit="cover" data-ai-hint="digital agency" />
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <Image src="https://placehold.co/800x1200.png" alt="Creative work 3" layout="fill" objectFit="cover" data-ai-hint="design studio" />
+                    </SwiperSlide>
+                </Swiper>
+            </div>
         </div>
 
         <div className="hero-background absolute inset-0 z-0">
@@ -90,28 +118,7 @@ const HeroSection = () => {
             <div className="shape-2"></div>
         </div>
 
-        <div ref={heroImageRef} className="hero-image absolute right-0 bottom-0 h-full">
-            <Swiper
-                modules={[EffectFade, Autoplay]}
-                effect="fade"
-                loop={true}
-                autoplay={{
-                    delay: 4000,
-                    disableOnInteraction: false,
-                }}
-                className="h-full w-full"
-            >
-                <SwiperSlide>
-                    <Image src="https://placehold.co/800x1200.png" alt="Creative work 1" layout="fill" objectFit="cover" data-ai-hint="creative work" />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <Image src="https://placehold.co/800x1200.png" alt="Creative work 2" layout="fill" objectFit="cover" data-ai-hint="digital agency" />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <Image src="https://placehold.co/800x1200.png" alt="Creative work 3" layout="fill" objectFit="cover" data-ai-hint="design studio" />
-                </SwiperSlide>
-            </Swiper>
-        </div>
+       
     </section>
   );
 };

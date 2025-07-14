@@ -76,16 +76,18 @@ body {
 
 @layer components {
     .hero-background .shape-1 {
-        @apply absolute w-[300px] h-[300px] top-[15%] left-[10%] mix-blend-multiply filter blur-[40px] rounded-[30%_70%_70%_30%_/_30%_30%_70%_70%];
+        @apply absolute w-[300px] h-[300px] top-[15%] left-[10%] mix-blend-multiply filter blur-[40px];
         background: hsla(var(--primary) / 0.2);
         animation: float 8s ease-in-out infinite alternate;
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
     }
       
     .hero-background .shape-2 {
-        @apply absolute w-[250px] h-[250px] bottom-[15%] left-[25%] mix-blend-multiply filter blur-[40px] rounded-[60%_40%_30%_70%_/_60%_30%_70%_40%];
+        @apply absolute w-[250px] h-[250px] bottom-[15%] left-[25%] mix-blend-multiply filter blur-[40px];
         background: hsla(var(--accent) / 0.15);
         animation: float 8s ease-in-out infinite alternate;
         animation-delay: -4s;
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
     }
 }
 
@@ -109,24 +111,27 @@ body {
     }
 
     @media (max-width: 768px) {
+        .hero-section {
+          padding-top: 5rem;
+          padding-bottom: 2rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: calc(100vh - 5rem);
+        }
+        
         .hero-content-container {
           max-width: 100%;
           text-align: center;
-        }
-      
-        .hero-section {
-          padding-top: 5rem;
-          padding-bottom: 20rem; /* Space for the image */
-          display: block;
+          margin-bottom: auto; /* Pushes content to the top */
         }
       
         .hero-image {
-          width: 100%;
-          height: 60%;
-          bottom: 0;
-          left:0;
-          right:0;
-          top: 40%;
+          position: relative;
+          width: 90%;
+          height: 300px;
+          margin-top: 2rem;
         }
       }
 }
