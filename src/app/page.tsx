@@ -17,6 +17,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import ParticlesWrapper from "@/components/ParticlesWrapper";
+import { About } from "@/components/sections/about";
+import { Contact } from "@/components/sections/contact";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -134,11 +136,11 @@ const HeroSection = () => {
                 transition={{ duration: 0.6, delay: 0.6 }}
                 className="flex flex-wrap gap-4"
               >
-                <Button asChild size="lg" className="px-8">
-                  <Link href="/solutions">View Our Work</Link>
+                <Button asChild size="lg">
+                  <Link href="/#portfolio">View Our Work</Link>
                 </Button>
-                <Button asChild variant="secondary" size="lg" className="px-8">
-                  <Link href="/contact">Get in Touch</Link>
+                <Button asChild variant="secondary" size="lg">
+                  <Link href="/#contact">Get in Touch</Link>
                 </Button>
               </motion.div>
             </>
@@ -268,8 +270,6 @@ export default function Home() {
     },
   ];
 
-  const featuredProjects = projects.slice(0, 3);
-
   return (
     <>
       <HeroSection />
@@ -318,14 +318,14 @@ export default function Home() {
           >
             <Badge variant="outline" className="mb-4">Our Work</Badge>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Featured Projects
+              Our Portfolio
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               A glimpse into our creative world and the impact we deliver.
             </p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProjects.map((project, index) => (
+            {projects.map((project, index) => (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0, y: 50 }}
@@ -337,21 +337,12 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            viewport={{ once: true }}
-            className="text-center mt-16"
-          >
-            <Button asChild size="lg" className="px-8">
-              <Link href="/solutions">
-                View All Projects <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-          </motion.div>
         </div>
       </section>
+
+      <About />
+
+      <Contact />
     </>
   );
 }

@@ -46,7 +46,7 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
               </Badge>
             ))}
           </div>
-          <Link href={`/solutions`} className="absolute inset-0" aria-label={project.title}></Link>
+          <Link href={`/#portfolio`} className="absolute inset-0" aria-label={project.title}></Link>
           <div className="absolute top-4 right-4 bg-background p-2 translate-x-12 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
             <ArrowUpRight className="w-5 h-5 text-foreground" />
           </div>
