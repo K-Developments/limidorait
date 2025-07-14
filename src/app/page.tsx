@@ -12,7 +12,7 @@ import { getHeroContent, HeroContent, ServiceSlide, StoryNewsItem } from "@/serv
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import ParticlesWrapper from "@/components/ParticlesWrapper";
-import { Globe, Smartphone, Code, LayoutGrid, ArrowUpRight } from 'lucide-react';
+import { Globe, Smartphone, Code, LayoutGrid, ArrowUpRight, Twitter, Linkedin, Github } from 'lucide-react';
 
 
 import "swiper/css";
@@ -98,10 +98,32 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-xl md:text-2xl mb-10 max-w-2xl text-muted-foreground"
+                className="text-xl md:text-2xl mb-6 max-w-2xl text-muted-foreground"
               >
                 {content?.subtitle}
               </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="flex gap-4 mb-10"
+              >
+                <Button asChild variant="outline" size="icon">
+                  <Link href="#" aria-label="Twitter">
+                    <Twitter className="h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="icon">
+                  <Link href="#" aria-label="LinkedIn">
+                    <Linkedin className="h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="icon">
+                  <Link href="#" aria-label="GitHub">
+                    <Github className="h-5 w-5" />
+                  </Link>
+                </Button>
+              </motion.div>
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
