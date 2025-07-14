@@ -63,7 +63,7 @@ const HeroSection = () => {
         const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
         if (isMobile) {
-            gsap.set(heroImageRef.current, { height: "300px"});
+            gsap.set(heroImageRef.current, { height: "auto"});
             tl.to(heroImageRef.current, {
                 duration: 1.2,
                 ease: "power3.inOut",
@@ -130,35 +130,6 @@ const HeroSection = () => {
                     </div>
                   </>
                 )}
-                 <div className="mt-12 md:mt-20 w-full">
-                    <Swiper
-                        modules={[Autoplay]}
-                        spaceBetween={30}
-                        slidesPerView={2}
-                        breakpoints={{
-                            768: {
-                                slidesPerView: 4,
-                            },
-                        }}
-                        loop={true}
-                        autoplay={{
-                            delay: 2500,
-                            disableOnInteraction: false,
-                        }}
-                        className="w-full"
-                    >
-                        {serviceSlides.map((slide, index) => (
-                            <SwiperSlide key={index}>
-                                <div className="aspect-square relative group">
-                                    <Image src={slide.image} alt={slide.text} layout="fill" objectFit="cover" data-ai-hint={slide.hint} />
-                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <h3 className="text-white text-lg font-bold">{slide.text}</h3>
-                                    </div>
-                                </div>
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-                </div>
             </div>
         </div>
 
@@ -167,7 +138,7 @@ const HeroSection = () => {
             <div className="shape-2"></div>
         </div>
 
-        <div ref={heroImageRef} className="hero-image absolute right-0 bottom-0 h-full" style={{ width: '50vw' }}>
+        <div ref={heroImageRef} className="hero-image absolute right-0 bottom-0 h-full flex flex-col justify-end" style={{ width: '50vw' }}>
           {isLoading ? (
             <Skeleton className="w-full h-full"/>
           ) : (
@@ -188,6 +159,36 @@ const HeroSection = () => {
               ))}
             </Swiper>
           )}
+           <div className="w-full p-4">
+              <Swiper
+                  modules={[Autoplay]}
+                  spaceBetween={10}
+                  slidesPerView={2}
+                  breakpoints={{
+                      768: {
+                          slidesPerView: 4,
+                          spaceBetween: 10
+                      },
+                  }}
+                  loop={true}
+                  autoplay={{
+                      delay: 2500,
+                      disableOnInteraction: false,
+                  }}
+                  className="w-full"
+              >
+                  {serviceSlides.map((slide, index) => (
+                      <SwiperSlide key={index}>
+                          <div className="aspect-square relative group">
+                              <Image src={slide.image} alt={slide.text} layout="fill" objectFit="cover" data-ai-hint={slide.hint} />
+                              <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                  <h3 className="text-white text-lg font-bold">{slide.text}</h3>
+                              </div>
+                          </div>
+                      </SwiperSlide>
+                  ))}
+              </Swiper>
+          </div>
         </div>
     </section>
   );
@@ -284,3 +285,5 @@ export default function Home() {
     </>
   );
 }
+
+    
