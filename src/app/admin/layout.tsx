@@ -1,7 +1,6 @@
 
 import type { Metadata } from 'next';
 import { Sidebar } from '@/components/layout/admin-sidebar';
-import { Toaster } from "@/components/ui/toaster";
 import '../globals.css';
 
 export const metadata: Metadata = {
@@ -15,12 +14,13 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-muted/40 w-full">
-        <Sidebar />
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+    <div className="flex min-h-screen w-full bg-muted/40">
+      <Sidebar />
+      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14 w-full">
+        <main className="flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
             {children}
         </main>
-        {/* Toaster can be here if you want separate toasts for admin */}
+      </div>
     </div>
   );
 }
