@@ -154,6 +154,7 @@ const HeroSection = () => {
                 {(content?.imageUrls || []).map((url, index) => (
                     <SwiperSlide key={index} className="relative">
                         <Image src={url} alt={`Creative work ${index + 1}`} fill objectFit="cover" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                     </SwiperSlide>
                 ))}
                 </Swiper>
