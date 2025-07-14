@@ -1,8 +1,6 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
-import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
 
 export const metadata: Metadata = {
   title: 'Limidora Digital | Creative IT Solutions',
@@ -17,9 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-body antialiased">
-        <Header />
         {children}
-        <Footer />
         <Toaster />
       </body>
     </html>

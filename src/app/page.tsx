@@ -17,6 +17,8 @@ import {
 import { projects } from "@/lib/portfolio-data";
 import { ArrowRight, Lightbulb, Palette, PenTool } from "lucide-react";
 import { PortfolioCard } from "@/components/PortfolioCard";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -37,7 +39,7 @@ const HeroSection = () => {
 
         if (isMobile) {
             gsap.set(heroImageRef.current, { height: "0%"});
-            tl.to(heroImageRef.current, {
+            tl.to(heroImage.current, {
                 height: "300px",
                 duration: 1.2,
                 ease: "power3.inOut",
@@ -147,6 +149,7 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      <Header />
       <main className="flex-1">
         <HeroSection />
         
@@ -210,6 +213,7 @@ export default function Home() {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }
