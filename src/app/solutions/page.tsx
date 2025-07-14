@@ -1,25 +1,19 @@
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { Hero } from '@/components/sections/hero';
-import { MotionWrapper } from '@/components/motion-wrapper';
 import { Services } from '@/components/sections/services';
 import { Portfolio } from '@/components/sections/portfolio';
-import { Contact } from '@/components/sections/contact';
+import { MotionWrapper } from '@/components/motion-wrapper';
 
-export default function Home() {
+export default function SolutionsPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
-      <main className="flex-1">
-        <Hero />
+      <main className="flex-1 pt-20">
         <MotionWrapper>
           <Services />
         </MotionWrapper>
         <MotionWrapper>
           <Portfolio />
-        </MotionWrapper>
-        <MotionWrapper>
-          <Contact />
         </MotionWrapper>
       </main>
       <Footer />

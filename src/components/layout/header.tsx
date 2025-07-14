@@ -33,9 +33,9 @@ export function Header() {
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   const navItems = [
-    { name: 'Services', href: '#services' },
-    { name: 'Portfolio', href: '#portfolio' },
-    { name: 'About', href: '#about' },
+    { name: 'Solutions', href: '/solutions' },
+    { name: 'About', href: '/about' },
+    { name: 'Blog', href: '/blog' },
   ];
 
   return (
@@ -66,7 +66,7 @@ export function Header() {
           </nav>
           <div className="hidden md:flex items-center">
             <Button asChild>
-              <Link href="#contact">Get in Touch</Link>
+              <Link href="/contact">Get in Touch</Link>
             </Button>
           </div>
           <div className="md:hidden">

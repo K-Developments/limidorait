@@ -18,10 +18,10 @@ export function Hero() {
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button asChild size="lg">
-            <Link href="#portfolio">Our Work</Link>
+            <Link href="/solutions">Our Work</Link>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <Link href="#services">Our Services</Link>
+            <Link href="/contact">Get in Touch</Link>
           </Button>
         </div>
         </MotionWrapper>
