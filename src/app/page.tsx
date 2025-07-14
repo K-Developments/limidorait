@@ -16,6 +16,7 @@ import { getHeroContent, HeroContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
+import ParticlesWrapper from "@/components/ParticlesWrapper";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -97,6 +98,7 @@ const HeroSection = () => {
 
   return (
     <section ref={heroRef} className="hero-section relative min-h-screen flex items-center overflow-hidden">
+      <ParticlesWrapper />
       <div className="container mx-auto px-6 relative z-10">
         <div ref={heroContentRef} className="max-w-3xl hero-content-container">
           {isLoading ? (
@@ -353,7 +355,3 @@ export default function Home() {
     </>
   );
 }
-
-    
-
-    

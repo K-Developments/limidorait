@@ -88,6 +88,15 @@ body {
         animation: float 8s ease-in-out infinite alternate;
         animation-delay: -4s;
     }
+
+    .particles-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
 }
 
 
