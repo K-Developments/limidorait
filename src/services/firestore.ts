@@ -3,10 +3,17 @@ import { db, storage } from '@/lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
+export interface ServiceSlide {
+  text: string;
+  image: string;
+  hint: string;
+}
+
 export interface HeroContent {
   title: string;
   subtitle: string;
   imageUrls: string[];
+  serviceSlides: ServiceSlide[];
 }
 
 const HERO_CONTENT_DOC_ID = 'heroContent';
@@ -18,7 +25,24 @@ export const getHeroContent = async (): Promise<HeroContent> => {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    return docSnap.data() as HeroContent;
+    // Merge existing data with defaults to prevent errors if new fields are added
+    const data = docSnap.data();
+    return {
+      title: "We Create Digital Experiences That Matter",
+      subtitle: "Award-winning creative agency focused on branding, web design and development",
+      imageUrls: [
+        "https://placehold.co/800x1200.png",
+        "https://placehold.co/800x1200.png",
+        "https://placehold.co/800x1200.png",
+      ],
+      serviceSlides: [
+        { text: "Web", image: "https://placehold.co/400x400.png", hint: "modern website" },
+        { text: "Mobile App", image: "https://placehold.co/400x400.png", hint: "app interface" },
+        { text: "Web Application", image: "https://placehold.co/400x400.png", hint: "saas dashboard" },
+        { text: "Software", image: "https://placehold.co/400x400.png", hint: "custom software" },
+      ],
+      ...data,
+    } as HeroContent;
   } else {
     // Return default content if document doesn't exist
     return {
@@ -28,6 +52,12 @@ export const getHeroContent = async (): Promise<HeroContent> => {
         "https://placehold.co/800x1200.png",
         "https://placehold.co/800x1200.png",
         "https://placehold.co/800x1200.png",
+      ],
+      serviceSlides: [
+        { text: "Web", image: "https://placehold.co/400x400.png", hint: "modern website" },
+        { text: "Mobile App", image: "https://placehold.co/400x400.png", hint: "app interface" },
+        { text: "Web Application", image: "https://placehold.co/400x400.png", hint: "saas dashboard" },
+        { text: "Software", image: "https://placehold.co/400x400.png", hint: "custom software" },
       ]
     };
   }

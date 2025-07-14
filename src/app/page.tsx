@@ -15,7 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { projects } from "@/lib/portfolio-data";
-import { ArrowRight, Lightbulb, Palette, PenTool, Tv, Smartphone, Globe, Code } from "lucide-react";
+import { ArrowRight, Lightbulb, Palette, PenTool } from "lucide-react";
 import { PortfolioCard } from "@/components/PortfolioCard";
 import { getHeroContent, HeroContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -37,7 +37,6 @@ const HeroSection = () => {
         setContent(heroContent);
       } catch (error) {
         console.error("Failed to fetch hero content:", error);
-        // Fallback content in case of error
         setContent({
           title: "We Create Digital Experiences That Matter",
           subtitle: "Award-winning creative agency focused on branding, web design and development",
@@ -45,6 +44,12 @@ const HeroSection = () => {
             "https://placehold.co/800x1200.png",
             "https://placehold.co/800x1200.png",
             "https://placehold.co/800x1200.png"
+          ],
+          serviceSlides: [
+              { text: "Web", image: "https://placehold.co/400x400.png", hint: "modern website" },
+              { text: "Mobile App", image: "https://placehold.co/400x400.png", hint: "app interface" },
+              { text: "Web Application", image: "https://placehold.co/400x400.png", hint: "saas dashboard" },
+              { text: "Software", image: "https://placehold.co/400x400.png", hint: "custom software" },
           ]
         });
       } finally {
@@ -91,13 +96,6 @@ const HeroSection = () => {
       ctx.revert();
     };
   }, [isLoading]);
-
-  const serviceSlides = [
-      { text: "Web", image: "https://placehold.co/400x400.png", hint: "modern website" },
-      { text: "Mobile App", image: "https://placehold.co/400x400.png", hint: "app interface" },
-      { text: "Web Application", image: "https://placehold.co/400x400.png", hint: "saas dashboard" },
-      { text: "Software", image: "https://placehold.co/400x400.png", hint: "custom software" },
-  ]
 
   return (
     <section ref={heroRef} className="hero-section relative min-h-screen flex items-center bg-gray-50 overflow-hidden">
@@ -177,7 +175,7 @@ const HeroSection = () => {
                         }}
                         className="w-full"
                     >
-                        {serviceSlides.map((slide, index) => (
+                        {(content?.serviceSlides || []).map((slide, index) => (
                             <SwiperSlide key={index}>
                                 <div className="aspect-square relative group">
                                     <Image src={slide.image} alt={slide.text} fill objectFit="cover" data-ai-hint={slide.hint} />
