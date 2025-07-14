@@ -197,8 +197,8 @@ const HeroSection = () => {
                         fill 
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <h3 className="text-white text-lg font-bold translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-end p-4">
+                        <h3 className="text-white text-lg font-bold">
                           {slide.text}
                         </h3>
                       </div>
