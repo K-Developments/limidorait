@@ -30,36 +30,41 @@ const HeroSection = () => {
     if (!heroRef.current || !heroImageRef.current || !heroContentRef.current) return;
 
     const tl = gsap.timeline({delay: 0.5});
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-
-    gsap.set(heroContentRef.current, { opacity: 0, x: -50 });
-
-    if (isMobile) {
-        gsap.set(heroImageRef.current, { height: "0%"});
-        tl.to(heroImageRef.current, {
-            height: "60%",
-            duration: 1.2,
-            ease: "power3.inOut",
-        });
-    } else {
-        gsap.set(heroImageRef.current, { width: "0%" });
-        tl.to(heroImageRef.current, {
-            width: "50vw",
-            duration: 1.2,
-            ease: "power3.inOut",
-        });
-    }
     
-    tl.to(heroContentRef.current, {
-        opacity: 1,
-        x: 0,
-        duration: 1,
-        ease: "power3.out",
-    }, "-=0.8");
+    // Use GSAP's context for responsive animations
+    let ctx = gsap.context(() => {
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+        if (isMobile) {
+            gsap.set(heroImageRef.current, { height: "0%"});
+            tl.to(heroImageRef.current, {
+                height: "300px",
+                duration: 1.2,
+                ease: "power3.inOut",
+            });
+        } else {
+            gsap.set(heroImageRef.current, { width: "0%" });
+            tl.to(heroImageRef.current, {
+                width: "50vw",
+                duration: 1.2,
+                ease: "power3.inOut",
+            });
+        }
+        
+        tl.to(heroContentRef.current, {
+            opacity: 1,
+            x: 0,
+            duration: 1,
+            ease: "power3.out",
+        }, "-=0.8");
+
+        gsap.set(heroContentRef.current, { opacity: 0, x: -50 });
+
+    }, heroRef);
 
 
     return () => {
-      tl.kill();
+      ctx.revert();
     };
   }, []);
 
