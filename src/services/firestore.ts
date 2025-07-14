@@ -31,12 +31,7 @@ export interface HeroContent {
 const HERO_CONTENT_DOC_ID = 'heroContent';
 const CONTENT_COLLECTION_ID = 'homepage';
 
-// Function to get hero content from Firestore
-export const getHeroContent = async (): Promise<HeroContent> => {
-  const docRef = doc(db, CONTENT_COLLECTION_ID, HERO_CONTENT_DOC_ID);
-  const docSnap = await getDoc(docRef);
-
-  const defaultContent: HeroContent = {
+const defaultContent: HeroContent = {
     title: "We Create Digital Experiences That Matter",
     subtitle: "Award-winning creative agency focused on branding, web design and development",
     imageUrls: [
@@ -66,25 +61,41 @@ export const getHeroContent = async (): Promise<HeroContent> => {
         link: "#"
       }
     }
-  };
-  
+};
+
+// Deep merge utility to combine existing and new content
+const deepMerge = (target: any, source: any) => {
+    const output = { ...target };
+
+    if (isObject(target) && isObject(source)) {
+        Object.keys(source).forEach(key => {
+            if (isObject(source[key])) {
+                if (!(key in target))
+                    Object.assign(output, { [key]: source[key] });
+                else
+                    output[key] = deepMerge(target[key], source[key]);
+            } else {
+                Object.assign(output, { [key]: source[key] });
+            }
+        });
+    }
+
+    return output;
+}
+
+const isObject = (item: any) => {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+// Function to get hero content from Firestore
+export const getHeroContent = async (): Promise<HeroContent> => {
+  const docRef = doc(db, CONTENT_COLLECTION_ID, HERO_CONTENT_DOC_ID);
+  const docSnap = await getDoc(docRef);
+
   if (docSnap.exists()) {
     const data = docSnap.data();
-    // Deep merge to ensure nested objects are handled correctly
-    return {
-      ...defaultContent,
-      ...data,
-      storiesAndNews: {
-        story: {
-          ...defaultContent.storiesAndNews.story,
-          ...(data.storiesAndNews?.story || {}),
-        },
-        news: {
-          ...defaultContent.storiesAndNews.news,
-          ...(data.storiesAndNews?.news || {}),
-        },
-      },
-    } as HeroContent;
+    // Deep merge to ensure nested objects are handled correctly and defaults are applied
+    return deepMerge(defaultContent, data) as HeroContent;
   } else {
     // Return default content if document doesn't exist
     return defaultContent;
@@ -95,8 +106,8 @@ export const getHeroContent = async (): Promise<HeroContent> => {
 export const updateHeroContent = async (content: HeroContent): Promise<void> => {
   const docRef = doc(db, CONTENT_COLLECTION_ID, HERO_CONTENT_DOC_ID);
    try {
-    // Use setDoc with merge:true to create the document if it doesn't exist, or update it if it does.
-    await setDoc(docRef, content, { merge: true });
+    // Use setDoc without merge and handle the merge logic in code to ensure deep merge
+    await setDoc(docRef, content);
   } catch (error) {
     console.error("Error updating document: ", error);
     throw new Error("Could not update hero content.");
