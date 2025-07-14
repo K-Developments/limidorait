@@ -161,10 +161,10 @@ export default function Home() {
               {services.map((service) => (
                 <Card
                   key={service.title}
-                  className="text-center p-6 border-2 border-transparent hover:border-primary transition-colors duration-300 shadow-lg"
+                  className="text-center p-6 border-2 border-transparent hover:border-primary transition-colors duration-300"
                 >
                   <CardHeader className="items-center">
-                    <div className="p-4 bg-primary/10 rounded-full mb-4">
+                    <div className="p-4 bg-primary/10 mb-4">
                       {service.icon}
                     </div>
                     <CardTitle className="font-headline text-2xl">

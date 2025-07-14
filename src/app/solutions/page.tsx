@@ -49,7 +49,6 @@ export default function SolutionsPage() {
                   key={category}
                   variant={selectedCategory === category ? 'default' : 'outline'}
                   onClick={() => setSelectedCategory(category)}
-                  className="rounded-full"
                 >
                   {category}
                 </Button>

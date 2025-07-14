@@ -11,7 +11,7 @@ export function About() {
     <section id="about" className="w-full py-12 md:py-24 lg:py-32 bg-card">
       <div className="container mx-auto grid items-center gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-12">
         <div className="space-y-4">
-          <div className="inline-block rounded-lg bg-background px-3 py-1 text-sm text-secondary-foreground">About Us</div>
+          <div className="inline-block bg-background px-3 py-1 text-sm text-secondary-foreground">About Us</div>
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
             Driven by Passion, Defined by Quality
           </h2>
@@ -23,7 +23,7 @@ export function About() {
           <h3 className="text-2xl font-bold">Meet the Team</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {teamMembers.map((member) => (
-              <div key={member.name} className="flex flex-col items-center text-center p-4 bg-background rounded-lg shadow-md transition-shadow hover:shadow-lg">
+              <div key={member.name} className="flex flex-col items-center text-center p-4 bg-background transition-shadow hover:shadow-lg">
                 <Avatar className="w-24 h-24 mb-4 border-2 border-primary">
                   <AvatarImage src={member.imageUrl} alt={member.name} data-ai-hint={member.aiHint} />
                   <AvatarFallback>{member.name.substring(0,2)}</AvatarFallback>

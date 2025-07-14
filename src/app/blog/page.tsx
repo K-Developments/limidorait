@@ -55,7 +55,7 @@ export default function BlogPage() {
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-12 mt-12">
               {blogPosts.map((post) => (
                 <MotionWrapper key={post.title}>
-                  <Card className="overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col">
+                  <Card className="overflow-hidden group transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
                     <CardHeader className="p-0">
                       <Link href={post.slug} className="block">
                         <Image

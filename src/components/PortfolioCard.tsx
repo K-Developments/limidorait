@@ -21,7 +21,7 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
     >
-      <Card className="group overflow-hidden relative h-full rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+      <Card className="group overflow-hidden relative h-full transition-shadow duration-300">
         <CardHeader className="p-0">
           <div className="aspect-video overflow-hidden">
             <Image
@@ -47,7 +47,7 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
             ))}
           </div>
           <Link href={`/solutions`} className="absolute inset-0" aria-label={project.title}></Link>
-          <div className="absolute top-4 right-4 bg-background p-2 rounded-full translate-x-12 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+          <div className="absolute top-4 right-4 bg-background p-2 translate-x-12 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
             <ArrowUpRight className="w-5 h-5 text-foreground" />
           </div>
         </CardContent>
