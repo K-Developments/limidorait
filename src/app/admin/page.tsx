@@ -1,29 +1,83 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { getHeroContent, updateHeroContent, HeroContent } from '@/services/firestore';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AdminHomePage() {
   const { toast } = useToast();
-  // In a real app, you'd fetch this from your CMS/database
-  const [heroTitle, setHeroTitle] = useState("We Create Digital Experiences That Matter");
-  const [heroSubtitle, setHeroSubtitle] = useState("Award-winning creative agency focused on branding, web design and development");
+  const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically send the updated data to your backend/API
-    console.log("Updated Hero Content:", { heroTitle, heroSubtitle });
-    toast({
-      title: "Success!",
-      description: "Hero section content has been updated.",
-    });
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const content = await getHeroContent();
+        setHeroContent(content);
+      } catch (error) {
+        console.error("Failed to fetch hero content:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load content from the database.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchContent();
+  }, [toast]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    if (heroContent) {
+      setHeroContent({ ...heroContent, [name]: value });
+    }
   };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!heroContent) return;
+
+    try {
+      await updateHeroContent(heroContent);
+      toast({
+        title: "Success!",
+        description: "Hero section content has been updated.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error!",
+        description: "Failed to update content. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div>
+        <h1 className="text-3xl font-bold mb-8">Content Management</h1>
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-8 w-1/2" />
+            <Skeleton className="h-4 w-3/4" />
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-10 w-24" />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
@@ -36,20 +90,22 @@ export default function AdminHomePage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="heroTitle">Hero Title</Label>
+              <Label htmlFor="title">Hero Title</Label>
               <Textarea
-                id="heroTitle"
-                value={heroTitle}
-                onChange={(e) => setHeroTitle(e.target.value)}
+                id="title"
+                name="title"
+                value={heroContent?.title || ''}
+                onChange={handleInputChange}
                 className="min-h-[100px]"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="heroSubtitle">Hero Subtitle</Label>
+              <Label htmlFor="subtitle">Hero Subtitle</Label>
               <Textarea
-                id="heroSubtitle"
-                value={heroSubtitle}
-                onChange={(e) => setHeroSubtitle(e.target.value)}
+                id="subtitle"
+                name="subtitle"
+                value={heroContent?.subtitle || ''}
+                onChange={handleInputChange}
                 className="min-h-[100px]"
               />
             </div>
