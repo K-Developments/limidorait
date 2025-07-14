@@ -69,14 +69,20 @@ export const getHeroContent = async (): Promise<HeroContent> => {
   };
   
   if (docSnap.exists()) {
-    // Merge existing data with defaults to prevent errors if new fields are added
     const data = docSnap.data();
+    // Deep merge to ensure nested objects are handled correctly
     return {
       ...defaultContent,
       ...data,
       storiesAndNews: {
-        ...defaultContent.storiesAndNews,
-        ...(data.storiesAndNews || {}),
+        story: {
+          ...defaultContent.storiesAndNews.story,
+          ...(data.storiesAndNews?.story || {}),
+        },
+        news: {
+          ...defaultContent.storiesAndNews.news,
+          ...(data.storiesAndNews?.news || {}),
+        },
       },
     } as HeroContent;
   } else {
