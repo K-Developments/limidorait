@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ComponentType, type SVGProps } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -12,9 +12,19 @@ import { getHeroContent, HeroContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import ParticlesWrapper from "@/components/ParticlesWrapper";
+import { Globe, Smartphone, Code, LayoutGrid } from 'lucide-react';
+
 
 import "swiper/css";
 import "swiper/css/effect-fade";
+
+const iconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
+  "Web": Globe,
+  "Mobile App": Smartphone,
+  "Web Application": LayoutGrid,
+  "Software": Code,
+};
+
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -188,23 +198,29 @@ const HeroSection = () => {
                 }}
                 className="w-full"
               >
-                {(content?.serviceSlides || []).map((slide, index) => (
-                  <SwiperSlide key={index} className="border-r border-white/20 last:border-r-0">
-                    <div className="aspect-square relative group overflow-hidden">
-                      <Image 
-                        src={slide.image} 
-                        alt={slide.text} 
-                        fill 
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-end p-4">
-                        <h3 className="text-white text-lg font-bold">
-                          {slide.text}
-                        </h3>
+                {(content?.serviceSlides || []).map((slide, index) => {
+                  const Icon = iconMap[slide.text];
+                  return (
+                    <SwiperSlide key={index} className="border-r border-white/20 last:border-r-0">
+                      <div className="aspect-square relative group overflow-hidden">
+                        <Image 
+                          src={slide.image} 
+                          alt={slide.text} 
+                          fill 
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-center justify-center p-4">
+                          {Icon && (
+                            <Icon className="w-12 h-12 text-white/80 transition-opacity duration-300 group-hover:opacity-0" />
+                          )}
+                          <h3 className="text-white text-lg font-bold absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            {slide.text}
+                          </h3>
+                        </div>
                       </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
+                    </SwiperSlide>
+                  );
+                })}
               </Swiper>
             </div>
           </div>
