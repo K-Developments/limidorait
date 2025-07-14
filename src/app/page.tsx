@@ -15,7 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { projects } from "@/lib/portfolio-data";
-import { ArrowRight, Lightbulb, Palette, PenTool } from "lucide-react";
+import { ArrowRight, Lightbulb, Palette, PenTool, Tv, Smartphone, Globe, Code } from "lucide-react";
 import { PortfolioCard } from "@/components/PortfolioCard";
 import { getHeroContent, HeroContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -63,9 +63,8 @@ const HeroSection = () => {
         const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
         if (isMobile) {
-            gsap.set(heroImageRef.current, { height: "0%"});
+            gsap.set(heroImageRef.current, { height: "300px"});
             tl.to(heroImageRef.current, {
-                height: "300px",
                 duration: 1.2,
                 ease: "power3.inOut",
             });
@@ -92,6 +91,13 @@ const HeroSection = () => {
       ctx.revert();
     };
   }, [isLoading]);
+
+  const serviceSlides = [
+      { text: "Web", image: "https://placehold.co/400x400.png", hint: "modern website" },
+      { text: "Mobile App", image: "https://placehold.co/400x400.png", hint: "app interface" },
+      { text: "Web Application", image: "https://placehold.co/400x400.png", hint: "saas dashboard" },
+      { text: "Software", image: "https://placehold.co/400x400.png", hint: "custom software" },
+  ]
 
   return (
     <section ref={heroRef} className="hero-section relative min-h-screen flex items-center bg-gray-50 overflow-hidden">
@@ -124,6 +130,35 @@ const HeroSection = () => {
                     </div>
                   </>
                 )}
+                 <div className="mt-12 md:mt-20 w-full">
+                    <Swiper
+                        modules={[Autoplay]}
+                        spaceBetween={30}
+                        slidesPerView={2}
+                        breakpoints={{
+                            768: {
+                                slidesPerView: 4,
+                            },
+                        }}
+                        loop={true}
+                        autoplay={{
+                            delay: 2500,
+                            disableOnInteraction: false,
+                        }}
+                        className="w-full"
+                    >
+                        {serviceSlides.map((slide, index) => (
+                            <SwiperSlide key={index}>
+                                <div className="aspect-square relative group">
+                                    <Image src={slide.image} alt={slide.text} layout="fill" objectFit="cover" data-ai-hint={slide.hint} />
+                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <h3 className="text-white text-lg font-bold">{slide.text}</h3>
+                                    </div>
+                                </div>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </div>
             </div>
         </div>
 
