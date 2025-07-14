@@ -4,8 +4,6 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade, Autoplay } from "swiper/modules";
 import { gsap } from "gsap";
@@ -89,7 +87,7 @@ const HeroSection = () => {
                     </Button>
                 </div>
             </div>
-             <div ref={heroImageRef} className="hero-image absolute right-0 bottom-0 h-full md:w-1/2">
+             <div ref={heroImageRef} className="hero-image absolute right-0 bottom-0 h-full w-full md:w-1/2">
                 <Swiper
                     modules={[EffectFade, Autoplay]}
                     effect="fade"
@@ -150,7 +148,6 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <Header />
       <main className="flex-1">
         <HeroSection />
         
@@ -214,7 +211,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }

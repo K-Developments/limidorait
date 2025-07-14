@@ -2,8 +2,6 @@
 "use client";
 
 import { useState } from 'react';
-import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
 import { PortfolioCard } from '@/components/PortfolioCard';
 import { projects, Project } from '@/lib/portfolio-data';
 import { Button } from '@/components/ui/button';
@@ -20,7 +18,6 @@ export default function SolutionsPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <Header />
       <main className="flex-1 pt-20">
         <section className="py-20 md:py-28">
           <div className="container mx-auto px-4">
@@ -63,7 +60,6 @@ export default function SolutionsPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }
