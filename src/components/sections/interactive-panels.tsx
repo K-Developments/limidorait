@@ -51,12 +51,14 @@ export function InteractivePanels() {
     setActivePanel(null);
   }
 
+  const panels = Object.keys(panelData) as Panel[];
+
   return (
     <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 md:h-[400px] gap-4">
-            {(Object.keys(panelData) as Panel[]).map((panelId) => {
-                const isHidden = activePanel && activePanel !== panelId;
+        <div className="flex flex-col md:flex-row md:h-[400px] rounded-lg overflow-hidden border">
+            {panels.map((panelId, index) => {
                 const isActive = activePanel === panelId;
+                const isInactive = activePanel && !isActive;
 
                 return (
                     <motion.div
@@ -64,19 +66,28 @@ export function InteractivePanels() {
                         layout
                         onClick={() => handlePanelClick(panelId)}
                         className={cn(
-                            "relative rounded-lg overflow-hidden cursor-pointer h-48 md:h-auto",
-                            isActive ? "md:col-span-3" : "md:col-span-1",
-                            isHidden ? "hidden" : "block"
+                            "relative overflow-hidden cursor-pointer h-48 md:h-auto border-b md:border-b-0 md:border-r last:border-b-0 last:md:border-r-0",
                         )}
-                        transition={{ duration: 0.5, type: "spring" }}
+                        style={{
+                            flexBasis: isInactive ? '10%' : isActive ? '80%' : '33.33%',
+                            flexGrow: isInactive ? 0.001 : isActive ? 1 : 0.5,
+                        }}
+                        transition={{ duration: 0.7, type: "spring" }}
                     >
-                        <Image
-                            src={panelData[panelId].imageUrl}
-                            alt={panelData[panelId].title}
-                            fill
-                            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                            data-ai-hint={panelData[panelId].aiHint}
-                        />
+                        <motion.div 
+                            className="absolute inset-0 w-full h-full"
+                            initial={{ scale: 1.05 }}
+                            animate={{ scale: isActive ? 1.1 : 1.05 }}
+                            transition={{ duration: 0.7, type: "spring" }}
+                        >
+                            <Image
+                                src={panelData[panelId].imageUrl}
+                                alt={panelData[panelId].title}
+                                fill
+                                className="object-cover"
+                                data-ai-hint={panelData[panelId].aiHint}
+                            />
+                        </motion.div>
                          <div className="absolute inset-0 bg-black/50" />
                          <div className="relative z-10 flex flex-col justify-end h-full p-6 text-white">
                            <AnimatePresence>
@@ -90,6 +101,19 @@ export function InteractivePanels() {
                                 </motion.h3>
                             )}
                             </AnimatePresence>
+                            
+                           <AnimatePresence>
+                             {isInactive && (
+                                <motion.h3 
+                                  initial={{ opacity: 0, y: 20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  exit={{ opacity: 0, y: 20 }}
+                                  className="text-2xl font-bold [writing-mode:vertical-rl] rotate-180"
+                                >
+                                    {panelData[panelId].title}
+                                </motion.h3>
+                             )}
+                           </AnimatePresence>
 
                             <AnimatePresence>
                             {isActive && (
