@@ -44,9 +44,11 @@ export interface AboutContent {
   conceptsTitle: string;
   conceptsDescription: string;
   conceptsImageUrl: string;
+  conceptsLink: string;
   workflowTitle: string;
   workflowDescription: string;
   workflowImageUrl: string;
+  workflowLink: string;
 }
 
 const HERO_CONTENT_DOC_ID = 'heroContent';
@@ -102,9 +104,11 @@ const defaultAboutContent: AboutContent = {
   conceptsTitle: "Limidora Concepts",
   conceptsDescription: "We provide solutions for businesses of all types and sizes. Whether your business is large or small, our concepts are designed to integrate modern technology seamlessly. In today's world, every business needs to adapt and evolve. We create tailored technological solutions to improve your processes, reach, and overall success.",
   conceptsImageUrl: "https://placehold.co/400x400.png",
+  conceptsLink: "#",
   workflowTitle: "Our Workflow",
   workflowDescription: "Our process is collaborative and transparent. We start with discovery and strategy, move to design and development, and finish with testing and launch. We keep you involved every step of the way to ensure the final product exceeds your expectations.",
   workflowImageUrl: "https://placehold.co/400x400.png",
+  workflowLink: "#",
 };
 
 // Deep merge utility to combine existing and new content

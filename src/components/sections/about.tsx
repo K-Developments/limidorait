@@ -95,6 +95,9 @@ export function About() {
                   <p className="text-muted-foreground md:text-lg">
                     {content?.conceptsDescription}
                   </p>
+                  <Link href={content?.conceptsLink || '#'} className="inline-flex items-center font-semibold text-primary hover:underline">
+                    Explore <ChevronRight className="w-4 h-4 ml-1" />
+                  </Link>
                 </>
               )}
             </motion.div>
@@ -121,6 +124,9 @@ export function About() {
                   <p className="text-muted-foreground md:text-lg">
                     {content?.workflowDescription}
                   </p>
+                  <Link href={content?.workflowLink || '#'} className="inline-flex items-center font-semibold text-primary hover:underline">
+                    Explore <ChevronRight className="w-4 h-4 ml-1" />
+                  </Link>
                 </>
               )}
             </motion.div>

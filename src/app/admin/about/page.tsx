@@ -283,6 +283,16 @@ export default function AdminAboutPage() {
               />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="conceptsLink">Concepts Link</Label>
+              <Input
+                id="conceptsLink"
+                name="conceptsLink"
+                value={aboutContent?.conceptsLink || ''}
+                onChange={handleInputChange}
+                placeholder="/portfolio"
+              />
+            </div>
+            <div className="space-y-2">
                 <Label>Current Concepts Image</Label>
                 <div className="relative group w-full max-w-sm aspect-square">
                   <Image src={aboutContent?.conceptsImageUrl || 'https://placehold.co/400x400.png'} alt="Limidora concepts image" layout="fill" className="object-cover rounded-md"/>
@@ -329,6 +339,16 @@ export default function AdminAboutPage() {
                 value={aboutContent?.workflowDescription || ''}
                 onChange={handleInputChange}
                 className="min-h-[150px]"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="workflowLink">Workflow Link</Label>
+              <Input
+                id="workflowLink"
+                name="workflowLink"
+                value={aboutContent?.workflowLink || ''}
+                onChange={handleInputChange}
+                placeholder="/contact"
               />
             </div>
             <div className="space-y-2">
