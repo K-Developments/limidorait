@@ -171,6 +171,7 @@ html{
 }
 .react-chatbot-kit-chat-message-container {
   padding: inherit !important;
+
 }
 .react-chatbot-kit-chat-header{
   display: none !important;
@@ -179,3 +180,13 @@ html{
   width: 0px;
   background: transparent; /* make scrollbar transparent */
 }
+.react-chatbot-kit-chat-input-container {
+    position: relative;
+    bottom:0;
+}
+@media (min-width: 768px) {
+  .react-chatbot-kit-chat-input-container {
+    bottom: -10px;
+  }
+}
+
