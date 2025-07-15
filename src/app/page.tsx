@@ -169,7 +169,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
         </div>
       </div>
       
-      <div ref={heroImageRef} className="hero-image absolute right-0 bottom-0 h-full flex flex-col justify-end">
+      <div ref={heroImageRef} className="hero-image absolute left-0 bottom-0 h-full flex flex-col justify-end">
         {isLoading ? (
           <Skeleton className="w-full h-full"/>
         ) : (
