@@ -19,9 +19,6 @@ const config: IConfig = {
         border: 'none',
         background: 'transparent',
     },
-    chatInnerContainer: {
-        backgroundColor: 'transparent',
-    },
     messagesContainer: {
         height: '100%',
         background: 'transparent',
@@ -33,6 +30,7 @@ const config: IConfig = {
     chatbotContainer: {
       width: '100%',
       height: '100%',
+      backgroundColor: 'transparent',
     }
   },
 };

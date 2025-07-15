@@ -152,4 +152,7 @@ html{
   transition-property: opacity, transform !important;
 }
 
-    
+/* react-chatbot-kit overrides */
+.react-chatbot-kit-chat-inner-container {
+    background-color: transparent;
+}
