@@ -5,6 +5,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { getFaqContent, FaqContent, submitQuestion } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,8 @@ export function Faq() {
   const { toast } = useToast();
   const [content, setContent] = useState<FaqContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const cameFromAbout = searchParams.get('from') === 'about';
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -91,6 +94,12 @@ export function Faq() {
             <nav className="flex items-center text-sm text-muted-foreground">
                 <Link href="/" className="hover:text-primary transition-colors">Home</Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
+                {cameFromAbout && (
+                  <>
+                    <Link href="/about" className="hover:text-primary transition-colors">About</Link>
+                    <ChevronRight className="h-4 w-4 mx-1" />
+                  </>
+                )}
                 <span className="font-medium text-foreground">FAQs</span>
             </nav>
         </div>
