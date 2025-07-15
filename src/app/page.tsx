@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef, useState, type ComponentType, type SVGProps } from "react";
@@ -13,7 +12,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import ParticlesWrapper from "@/components/ParticlesWrapper";
 import { Globe, Smartphone, Code, LayoutGrid, ArrowUpRight, Twitter, Linkedin, Facebook } from 'lucide-react';
-import { Chatbot } from "@/components/chatbot";
 
 
 import "swiper/css";
@@ -48,7 +46,6 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
   const heroRef = useRef<HTMLDivElement>(null);
   const heroImageRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
-  const [isChatbotVisible, setIsChatbotVisible] = useState(true);
 
   useEffect(() => {
     if (isLoading || !heroRef.current || !heroImageRef.current || !heroContentRef.current) return;
@@ -92,7 +89,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
   return (
     <section ref={heroRef} className="hero-section relative min-h-screen flex items-center overflow-hidden">
        <ParticlesWrapper />
-      <div ref={heroImageRef} className="hero-image absolute left-0 bottom-0 h-full flex flex-col justify-end">
+      <div ref={heroImageRef} className="hero-image absolute right-0 bottom-0 h-full flex flex-col justify-end">
         {isLoading ? (
           <Skeleton className="w-full h-full"/>
         ) : (
@@ -180,8 +177,6 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
                 <Skeleton className="h-12 w-32" />
               </div>
             </>
-          ) : isChatbotVisible ? (
-            <Chatbot onClose={() => setIsChatbotVisible(false)} />
           ) : (
             <>
               <motion.h1 
