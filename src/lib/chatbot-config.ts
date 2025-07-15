@@ -6,10 +6,11 @@ const config: IConfig = {
   botName: 'LimidoraAssistant',
   customStyles: {
     botMessageBox: {
-      backgroundColor: 'hsl(var(--primary))',
+      backgroundColor: 'hsla(var(--primary) / 0.8)',
+      color: 'white',
     },
     chatButton: {
-      backgroundColor: 'hsl(var(--primary))',
+      backgroundColor: 'hsla(var(--primary) / 0.8)',
     },
     chatContainer: {
         width: '100%',
@@ -23,7 +24,7 @@ const config: IConfig = {
         background: 'transparent',
     },
     userMessageBox: {
-      backgroundColor: 'hsl(var(--secondary))',
+      backgroundColor: 'hsla(var(--secondary) / 0.8)',
       color: 'hsl(var(--secondary-foreground))',
     },
     chatbotContainer: {
