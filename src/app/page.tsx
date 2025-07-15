@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import ParticlesWrapper from "@/components/ParticlesWrapper";
 import { Globe, Smartphone, Code, LayoutGrid, ArrowUpRight, Twitter, Linkedin, Facebook } from 'lucide-react';
+import { Chatbot } from "@/components/chatbot";
 
 
 import "swiper/css";
@@ -47,6 +48,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
   const heroRef = useRef<HTMLDivElement>(null);
   const heroImageRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
+  const [isChatbotVisible, setIsChatbotVisible] = useState(true);
 
   useEffect(() => {
     if (isLoading || !heroRef.current || !heroImageRef.current || !heroContentRef.current) return;
@@ -89,81 +91,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
 
   return (
     <section ref={heroRef} className="hero-section relative min-h-screen flex items-center overflow-hidden">
-      <ParticlesWrapper />
-      <div className="container mx-auto px-6 relative z-10 flex justify-end">
-        <div ref={heroContentRef} className="max-w-3xl hero-content-container text-left md:text-right">
-          {isLoading ? (
-            <>
-              <Skeleton className="h-16 w-full mb-6" />
-              <Skeleton className="h-10 w-3/4 mb-10 ml-auto" />
-              <div className="flex flex-wrap gap-4 justify-end">
-                <Skeleton className="h-12 w-32" />
-                <Skeleton className="h-12 w-32" />
-              </div>
-            </>
-          ) : (
-            <>
-              <motion.h1 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-foreground"
-              >
-                {content?.title}
-              </motion.h1>
-              <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-xl md:text-2xl mb-6 max-w-2xl text-muted-foreground ml-auto"
-              >
-                {content?.subtitle}
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="flex gap-4 mb-10 justify-start md:justify-end"
-              >
-                <Button asChild variant="outline" size="icon">
-                  <Link href="#" aria-label="Twitter">
-                    <Twitter className="h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="icon">
-                  <Link href="#" aria-label="LinkedIn">
-                    <Linkedin className="h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="icon">
-                  <Link href="#" aria-label="Facebook">
-                    <Facebook className="h-5 w-5" />
-                  </Link>
-                </Button>
-                 <Button asChild variant="outline" size="icon">
-                  <Link href="#" aria-label="WhatsApp">
-                    <WhatsAppIcon className="h-5 w-5" />
-                  </Link>
-                </Button>
-              </motion.div>
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="flex flex-wrap gap-4 justify-start md:justify-end"
-              >
-                <Button asChild size="lg">
-                  <Link href={content?.primaryButton.link || '#'}>{content?.primaryButton.text}</Link>
-                </Button>
-                <Button asChild variant="secondary" size="lg">
-                  <Link href={content?.secondaryButton.link || '#'}>{content?.secondaryButton.text}</Link>
-                </Button>
-              </motion.div>
-            </>
-          )}
-        </div>
-      </div>
-      
+       <ParticlesWrapper />
       <div ref={heroImageRef} className="hero-image absolute left-0 bottom-0 h-full flex flex-col justify-end">
         {isLoading ? (
           <Skeleton className="w-full h-full"/>
@@ -239,6 +167,82 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
             </div>
           </div>
         )}
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10 flex justify-start">
+        <div ref={heroContentRef} className="max-w-3xl hero-content-container text-left">
+          {isLoading ? (
+            <>
+              <Skeleton className="h-16 w-full mb-6" />
+              <Skeleton className="h-10 w-3/4 mb-10" />
+              <div className="flex flex-wrap gap-4 justify-start">
+                <Skeleton className="h-12 w-32" />
+                <Skeleton className="h-12 w-32" />
+              </div>
+            </>
+          ) : isChatbotVisible ? (
+            <Chatbot onClose={() => setIsChatbotVisible(false)} />
+          ) : (
+            <>
+              <motion.h1 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-foreground"
+              >
+                {content?.title}
+              </motion.h1>
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="text-xl md:text-2xl mb-6 max-w-2xl text-muted-foreground"
+              >
+                {content?.subtitle}
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="flex gap-4 mb-10 justify-start"
+              >
+                <Button asChild variant="outline" size="icon">
+                  <Link href="#" aria-label="Twitter">
+                    <Twitter className="h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="icon">
+                  <Link href="#" aria-label="LinkedIn">
+                    <Linkedin className="h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="icon">
+                  <Link href="#" aria-label="Facebook">
+                    <Facebook className="h-5 w-5" />
+                  </Link>
+                </Button>
+                 <Button asChild variant="outline" size="icon">
+                  <Link href="#" aria-label="WhatsApp">
+                    <WhatsAppIcon className="h-5 w-5" />
+                  </Link>
+                </Button>
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="flex flex-wrap gap-4 justify-start"
+              >
+                <Button asChild size="lg">
+                  <Link href={content?.primaryButton.link || '#'}>{content?.primaryButton.text}</Link>
+                </Button>
+                <Button asChild variant="secondary" size="lg">
+                  <Link href={content?.secondaryButton.link || '#'}>{content?.secondaryButton.text}</Link>
+                </Button>
+              </motion.div>
+            </>
+          )}
+        </div>
       </div>
     </section>
   );
