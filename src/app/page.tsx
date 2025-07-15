@@ -170,7 +170,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
              {isLoading ? (
                 <Skeleton className="w-full h-96" />
              ) : showChatbot ? (
-                <div className="w-full h-[70vh] flex flex-col">
+                <div className="w-full h-full flex flex-col">
                     <RuleBasedChatbot onClose={() => setShowChatbot(false)} />
                 </div>
              ) : (

@@ -154,5 +154,7 @@ html{
 
 /* react-chatbot-kit overrides */
 .react-chatbot-kit-chat-inner-container {
-    background-color: transparent;
+    background-color: transparent !important;
+    width: 100% !important;
+    padding:0 !important;
 }
