@@ -7,7 +7,7 @@ const config: IConfig = {
   customStyles: {
     botMessageBox: {
       backgroundColor: 'transparent',
-      color: 'white',
+      color: 'hsl(var(--foreground))',
     },
     chatButton: {
       backgroundColor: 'hsla(var(--primary) / 0.8)',
