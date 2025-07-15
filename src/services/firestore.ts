@@ -40,6 +40,7 @@ export interface InteractivePanelContent {
   description: string;
   imageUrl: string;
   imageHint: string;
+  link: string;
 }
 
 export interface AboutContent {
@@ -127,18 +128,21 @@ const defaultAboutContent: AboutContent = {
       description: "Find answers to common questions about our services, processes, and technology. We believe in transparency and are here to provide the clarity you need.",
       imageUrl: "https://images.unsplash.com/photo-1543286386-713bdd548da4?q=80&w=3000&auto=format&fit=crop",
       imageHint: "question mark abstract",
+      link: "#",
     },
     testimonials: {
       title: "What Our Clients Say",
       description: "Our clients' success is our success. Read stories and testimonials from businesses we've helped transform with our digital solutions.",
       imageUrl: "https://images.unsplash.com/photo-1521791055366-0d553872125f?q=80&w=3000&auto=format&fit=crop",
       imageHint: "customer review happy",
+      link: "#",
     },
     solutions: {
       title: "Our Service Overview",
       description: "From web development and UI/UX design to comprehensive brand strategies, we offer a full suite of services to bring your digital vision to life.",
       imageUrl: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=3000&auto=format&fit=crop",
       imageHint: "business solution puzzle",
+      link: "#",
     },
   }
 };

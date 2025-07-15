@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { X } from "lucide-react";
+import Link from "next/link";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import type { AboutContent } from "@/services/firestore";
@@ -16,6 +16,7 @@ interface PanelData {
     title: string;
     imageUrl: string;
     aiHint: string;
+    link: string;
     content: {
       title: string;
       text: string;
@@ -29,6 +30,7 @@ const getPanelData = (content: AboutContent['interactivePanels'] | null): Record
         title: "FAQs",
         imageUrl: content.faq.imageUrl,
         aiHint: content.faq.imageHint,
+        link: content.faq.link,
         content: {
           title: content.faq.title,
           text: content.faq.description,
@@ -38,6 +40,7 @@ const getPanelData = (content: AboutContent['interactivePanels'] | null): Record
         title: "Testimonials",
         imageUrl: content.testimonials.imageUrl,
         aiHint: content.testimonials.imageHint,
+        link: content.testimonials.link,
         content: {
           title: content.testimonials.title,
           text: content.testimonials.description,
@@ -47,6 +50,7 @@ const getPanelData = (content: AboutContent['interactivePanels'] | null): Record
         title: "Solutions",
         imageUrl: content.solutions.imageUrl,
         aiHint: content.solutions.imageHint,
+        link: content.solutions.link,
         content: {
           title: content.solutions.title,
           text: content.solutions.description,
@@ -208,7 +212,9 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
                       >
-                        <Button variant="default" size="lg">Learn more</Button>
+                         <Button asChild variant="default" size="lg">
+                          <Link href={panelData[panelId].link}>Learn more</Link>
+                        </Button>
                       </motion.div>
                     </motion.div>
                   )}

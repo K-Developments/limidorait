@@ -358,6 +358,10 @@ export default function AdminAboutPage() {
                     <Label htmlFor={`${panelKey}-imageHint`}>Image AI Hint</Label>
                     <Input id={`${panelKey}-imageHint`} value={aboutContent?.interactivePanels[panelKey]?.imageHint || ''} onChange={(e) => handlePanelChange(panelKey, 'imageHint', e.target.value)} />
                   </div>
+                   <div className="space-y-2">
+                    <Label htmlFor={`${panelKey}-link`}>Link</Label>
+                    <Input id={`${panelKey}-link`} value={aboutContent?.interactivePanels[panelKey]?.link || ''} onChange={(e) => handlePanelChange(panelKey, 'link', e.target.value)} placeholder="/faq" />
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor={`${panelKey}-image-upload`}>Or Upload New Image</Label>
                     <Input id={`${panelKey}-image-upload`} type="file" onChange={(e) => handleImageUpload(e, `interactivePanels.${panelKey}`)} accept="image/*" disabled={isUploading[`interactivePanels.${panelKey}`]} />
