@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export function AboutHero() {
   return (
-    <section className="relative w-full h-[40vh] flex items-end justify-start text-left text-white overflow-hidden">
+    <section className="relative w-full h-[60vh] flex items-end justify-start text-left text-white overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
           src="https://placehold.co/1600x640.png"
