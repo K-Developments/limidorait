@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useRef, useState, type ComponentType, type SVGProps } from "react";
@@ -11,7 +12,7 @@ import { getHeroContent, HeroContent, ServiceSlide, StoryNewsItem } from "@/serv
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import ParticlesWrapper from "@/components/ParticlesWrapper";
-import { Globe, Smartphone, Code, LayoutGrid, ArrowUpRight, Twitter, Linkedin, Facebook } from 'lucide-react';
+import { Globe, Smartphone, Code, LayoutGrid, ArrowUpRight, Twitter, Linkedin, Facebook, MessageSquare } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 import "swiper/css";
@@ -171,7 +172,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
             <RuleBasedChatbot onClose={() => setShowChatbot(false)} />
           </div>
         ) : (
-          <div className="w-full max-w-2xl text-left">
+          <div className="w-full max-w-2xl text-left relative">
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -226,6 +227,21 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
               </Button>
               <Button asChild variant="secondary" size="lg">
                 <Link href={content?.secondaryButton.link || '#'}>{content?.secondaryButton.text}</Link>
+              </Button>
+            </motion.div>
+             <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: 0.8 }}
+            >
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="absolute -bottom-8 -right-8 rounded-full h-16 w-16 shadow-lg z-20"
+                onClick={() => setShowChatbot(true)}
+              >
+                <MessageSquare className="h-8 w-8"/>
+                <span className="sr-only">Open Chatbot</span>
               </Button>
             </motion.div>
           </div>
