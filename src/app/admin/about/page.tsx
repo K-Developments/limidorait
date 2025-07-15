@@ -145,8 +145,18 @@ export default function AdminAboutPage() {
                   <Image src={aboutContent?.heroImageUrl || 'https://placehold.co/1600x640.png'} alt="About hero image" layout="fill" className="object-cover rounded-md"/>
                 </div>
             </div>
+            <div className="space-y-2">
+                <Label htmlFor="heroImageUrl">Image URL</Label>
+                <Input
+                    id="heroImageUrl"
+                    name="heroImageUrl"
+                    value={aboutContent?.heroImageUrl || ''}
+                    onChange={handleInputChange}
+                    placeholder="https://example.com/image.png"
+                />
+            </div>
              <div className="space-y-2">
-                <Label htmlFor="image-upload">Upload a New Hero Image</Label>
+                <Label htmlFor="image-upload">Or Upload a New Hero Image</Label>
                 <Input id="image-upload" type="file" onChange={handleImageUpload} accept="image/*" disabled={isUploading}/>
                 {isUploading && <p>Uploading...</p>}
             </div>
