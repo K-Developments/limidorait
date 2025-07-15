@@ -88,7 +88,7 @@ export function Faq() {
   }
 
   return (
-    <section id="faq" className="w-full bg-background pt-12 md:pt-24 pb-12 md:pb-24 lg:pb-32">
+    <section id="faq" className="w-full bg-background pt-12 pb-12 md:pb-24 lg:pb-32">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-8">
             <nav className="flex items-center text-sm text-muted-foreground">
