@@ -158,3 +158,24 @@ html{
     width: 100% !important;
     padding:0 !important;
 }
+.react-chatbot-kit-chat-bot-message {
+  margin-left:inherit !important;
+  font-size: 1.2rem !important;
+  color:black !important;
+  border: 1px solid black;
+
+}
+.react-chatbot-kit-chat-container{
+  width: 100% !important;
+  height: 100% !important;
+}
+.react-chatbot-kit-chat-message-container {
+  padding: inherit !important;
+}
+.react-chatbot-kit-chat-header{
+  display: none !important;
+}
+.react-chatbot-kit-chat-message-container::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
+}

@@ -1,4 +1,3 @@
-
 "use client";
 
 import Chatbot from 'react-chatbot-kit';
@@ -14,23 +13,23 @@ interface RuleBasedChatbotProps {
 
 const RuleBasedChatbot = ({ onClose }: RuleBasedChatbotProps) => {
   return (
-    <div className="relative w-full h-full flex flex-col">
-       <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={onClose} 
-            aria-label="Close chat"
-            className="absolute top-2 right-2 z-20 text-foreground hover:bg-white/20"
-        >
-            <X className="h-5 w-5" />
-        </Button>
-       <div className="flex-grow overflow-y-auto w-full h-full">
+    <div className="relative w-full h-full">
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        onClick={onClose} 
+        aria-label="Close chat"
+        className="absolute top-2 right-2 z-20 text-foreground hover:bg-white/20"
+      >
+        <X className="h-5 w-5" />
+      </Button>
+      <div className="w-full h-full">
         <Chatbot
-            config={config}
-            messageParser={MessageParser}
-            actionProvider={ActionProvider}
+          config={config}
+          messageParser={MessageParser}
+          actionProvider={ActionProvider}
         />
-       </div>
+      </div>
     </div>
   );
 };
