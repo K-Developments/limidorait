@@ -21,9 +21,6 @@ const config = (router: AppRouterInstance): IConfig => ({
         border: 'none',
         background: 'transparent',
     },
-    chatInnerContainer: {
-      backgroundColor: 'transparent',
-    },
     messagesContainer: {
         height: '100%',
         background: 'transparent',

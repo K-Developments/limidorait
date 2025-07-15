@@ -17,7 +17,7 @@ class MessageParser {
             this.actionProvider.handleContact();
         } else if (lowerCaseMessage.includes('portfolio') || lowerCaseMessage.includes('work')) {
             this.actionProvider.handlePortfolio();
-        } else if (lowerCaseMessage.includes('navigate to')) {
+        } else if (lowerCaseMessage.startsWith('navigate to')) {
             const page = lowerCaseMessage.split('navigate to')[1].trim();
             this.actionProvider.handleNavigation(page);
         } else if (lowerCaseMessage.startsWith('go to')) {
