@@ -21,6 +21,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 
 export function Faq() {
   const { toast } = useToast();
@@ -85,6 +87,13 @@ export function Faq() {
   return (
     <section id="faq" className="w-full py-12 md:py-24 lg:py-32 bg-background">
       <div className="container mx-auto px-4 md:px-6">
+        <div className="mb-8">
+            <nav className="flex items-center text-sm text-muted-foreground">
+                <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+                <ChevronRight className="h-4 w-4 mx-1" />
+                <span className="font-medium text-foreground">FAQs</span>
+            </nav>
+        </div>
         <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
