@@ -53,11 +53,9 @@ export default function AdminAboutPage() {
         const updatedContent = { ...aboutContent, heroImageUrl: url };
         setAboutContent(updatedContent);
         
-        await updateAboutContent(updatedContent);
-        
         toast({
             title: "Success!",
-            description: "Image uploaded and saved successfully.",
+            description: "Image uploaded successfully. Click 'Save All Changes' to apply.",
         });
       } catch (error) {
         toast({
