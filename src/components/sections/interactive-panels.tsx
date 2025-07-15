@@ -40,7 +40,7 @@ const panelData = {
 };
 
 export function InteractivePanels() {
-  const [activePanel, setActivePanel] = useState<Panel | null>(null);
+  const [activePanel, setActivePanel] = useState<Panel>('faq');
 
   const handlePanelClick = (panel: Panel) => {
     setActivePanel(panel);
@@ -48,7 +48,10 @@ export function InteractivePanels() {
 
   const handleClose = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setActivePanel(null);
+    // On mobile, instead of closing, we could set a default or do nothing.
+    // For now, let's prevent closing on any screen if it's the only one open.
+    // To allow closing, we would set it to null.
+    // setActivePanel(null);
   }
 
   const panels = Object.keys(panelData) as Panel[];
@@ -58,7 +61,7 @@ export function InteractivePanels() {
         <div className="flex flex-col md:flex-row md:h-[400px] rounded-lg overflow-hidden border">
             {panels.map((panelId) => {
                 const isActive = activePanel === panelId;
-                const isInactive = activePanel && !isActive;
+                const isInactive = activePanel !== null && !isActive;
 
                 return (
                     <motion.div
@@ -78,7 +81,7 @@ export function InteractivePanels() {
                             className="absolute inset-0 w-full h-full"
                             initial={{ scale: 1.05 }}
                             animate={{ scale: isActive ? 1.1 : 1.05 }}
-                            transition={{ duration: 0.7, type: "spring" }}
+                            transition={{ type: "spring", stiffness: 100, damping: 20 }}
                         >
                             <Image
                                 src={panelData[panelId].imageUrl}
@@ -124,7 +127,7 @@ export function InteractivePanels() {
                                     transition={{ delay: 0.3 }}
                                     className="space-y-4"
                                 >
-                                    <button onClick={handleClose} className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 p-2 rounded-full z-20">
+                                    <button onClick={handleClose} className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 p-2 rounded-full z-20 hidden md:block">
                                         <X className="h-6 w-6 text-white"/>
                                         <span className="sr-only">Close</span>
                                     </button>
