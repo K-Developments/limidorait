@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getHeroContent, updateHeroContent, HeroContent, uploadImageAndGetURL, ServiceSlide, StoryNewsItem } from '@/services/firestore';
+import { getHeroContent, updateHeroContent, HeroContent, uploadImageAndGetURL, ServiceSlide, StoryNewsItem, ButtonContent } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import { X, PlusCircle } from 'lucide-react';
@@ -192,6 +192,18 @@ export default function AdminHomePage() {
     }
   };
 
+  const handleButtonChange = (button: 'primaryButton' | 'secondaryButton', field: keyof ButtonContent, value: string) => {
+    if (heroContent) {
+      setHeroContent({
+        ...heroContent,
+        [button]: {
+          ...heroContent[button],
+          [field]: value,
+        },
+      });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!heroContent) return;
@@ -276,6 +288,54 @@ export default function AdminHomePage() {
             </div>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Hero Buttons</CardTitle>
+            <CardDescription>Update the text and links for the hero section buttons.</CardDescription>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <h3 className="font-medium">Primary Button</h3>
+              <div className="space-y-2">
+                <Label htmlFor="primary-button-text">Button Text</Label>
+                <Input
+                  id="primary-button-text"
+                  value={heroContent?.primaryButton?.text || ''}
+                  onChange={(e) => handleButtonChange('primaryButton', 'text', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="primary-button-link">Button Link</Label>
+                <Input
+                  id="primary-button-link"
+                  value={heroContent?.primaryButton?.link || ''}
+                  onChange={(e) => handleButtonChange('primaryButton', 'link', e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h3 className="font-medium">Secondary Button</h3>
+              <div className="space-y-2">
+                <Label htmlFor="secondary-button-text">Button Text</Label>
+                <Input
+                  id="secondary-button-text"
+                  value={heroContent?.secondaryButton?.text || ''}
+                  onChange={(e) => handleButtonChange('secondaryButton', 'text', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="secondary-button-link">Button Link</Label>
+                <Input
+                  id="secondary-button-link"
+                  value={heroContent?.secondaryButton?.link || ''}
+                  onChange={(e) => handleButtonChange('secondaryButton', 'link', e.target.value)}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
 
         <Card>
           <CardHeader>

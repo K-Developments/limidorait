@@ -17,6 +17,11 @@ export interface StoryNewsItem {
   link: string;
 }
 
+export interface ButtonContent {
+  text: string;
+  link: string;
+}
+
 export interface HeroContent {
   title: string;
   subtitle: string;
@@ -26,6 +31,8 @@ export interface HeroContent {
     story: StoryNewsItem;
     news: StoryNewsItem;
   };
+  primaryButton: ButtonContent;
+  secondaryButton: ButtonContent;
 }
 
 const HERO_CONTENT_DOC_ID = 'heroContent';
@@ -60,6 +67,14 @@ const defaultContent: HeroContent = {
         imageHint: "person writing blog",
         link: "#"
       }
+    },
+    primaryButton: {
+      text: "View Our Work",
+      link: "/portfolio"
+    },
+    secondaryButton: {
+      text: "Get in Touch",
+      link: "/contact"
     }
 };
 

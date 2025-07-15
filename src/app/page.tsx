@@ -153,10 +153,10 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
                 className="flex flex-wrap gap-4"
               >
                 <Button asChild size="lg">
-                  <Link href="/portfolio">View Our Work</Link>
+                  <Link href={content?.primaryButton.link || '#'}>{content?.primaryButton.text}</Link>
                 </Button>
                 <Button asChild variant="secondary" size="lg">
-                  <Link href="/contact">Get in Touch</Link>
+                  <Link href={content?.secondaryButton.link || '#'}>{content?.secondaryButton.text}</Link>
                 </Button>
               </motion.div>
             </>
