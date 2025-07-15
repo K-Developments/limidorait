@@ -35,6 +35,13 @@ export interface HeroContent {
   secondaryButton: ButtonContent;
 }
 
+export interface InteractivePanelContent {
+  title: string;
+  description: string;
+  imageUrl: string;
+  imageHint: string;
+}
+
 export interface AboutContent {
   heroTitle: string;
   heroSubtitle: string;
@@ -49,6 +56,11 @@ export interface AboutContent {
   workflowDescription: string;
   workflowImageUrl: string;
   workflowLink: string;
+  interactivePanels: {
+    faq: InteractivePanelContent;
+    testimonials: InteractivePanelContent;
+    solutions: InteractivePanelContent;
+  }
 }
 
 const HERO_CONTENT_DOC_ID = 'heroContent';
@@ -109,6 +121,26 @@ const defaultAboutContent: AboutContent = {
   workflowDescription: "Our process is collaborative and transparent. We start with discovery and strategy, move to design and development, and finish with testing and launch. We keep you involved every step of the way to ensure the final product exceeds your expectations.",
   workflowImageUrl: "https://placehold.co/400x400.png",
   workflowLink: "/contact",
+  interactivePanels: {
+    faq: {
+      title: "Frequently Asked Questions",
+      description: "Find answers to common questions about our services, processes, and technology. We believe in transparency and are here to provide the clarity you need.",
+      imageUrl: "https://images.unsplash.com/photo-1543286386-713bdd548da4?q=80&w=3000&auto=format&fit=crop",
+      imageHint: "question mark abstract",
+    },
+    testimonials: {
+      title: "What Our Clients Say",
+      description: "Our clients' success is our success. Read stories and testimonials from businesses we've helped transform with our digital solutions.",
+      imageUrl: "https://images.unsplash.com/photo-1521791055366-0d553872125f?q=80&w=3000&auto=format&fit=crop",
+      imageHint: "customer review happy",
+    },
+    solutions: {
+      title: "Our Service Overview",
+      description: "From web development and UI/UX design to comprehensive brand strategies, we offer a full suite of services to bring your digital vision to life.",
+      imageUrl: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=3000&auto=format&fit=crop",
+      imageHint: "business solution puzzle",
+    },
+  }
 };
 
 // Deep merge utility to combine existing and new content

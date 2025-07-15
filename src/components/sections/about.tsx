@@ -156,7 +156,7 @@ export function About() {
 
       </div>
        <div className="py-12 md:py-16">
-          <InteractivePanels />
+          <InteractivePanels content={content} />
       </div>
     </section>
   );

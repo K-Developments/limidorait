@@ -1,46 +1,77 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { X } from "lucide-react";
+import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
+import type { AboutContent } from "@/services/firestore";
 
 type Panel = "faq" | "testimonials" | "solutions";
 
-const panelData = {
-  faq: {
-    title: "FAQs",
-    imageUrl: "https://placehold.co/800x600.png",
-    aiHint: "question mark abstract",
+interface PanelData {
+    title: string;
+    imageUrl: string;
+    aiHint: string;
     content: {
-        title: "Frequently Asked Questions",
-        text: "Find answers to common questions about our services, processes, and technology. We believe in transparency and are here to provide the clarity you need.",
-    }
-  },
-  testimonials: {
-    title: "Testimonials",
-    imageUrl: "https://placehold.co/800x600.png",
-    aiHint: "customer review happy",
-    content: {
-        title: "What Our Clients Say",
-        text: "Our clients' success is our success. Read stories and testimonials from businesses we've helped transform with our digital solutions.",
-    }
-  },
-  solutions: {
-    title: "Solutions",
-    imageUrl: "https://placehold.co/800x600.png",
-    aiHint: "business solution puzzle",
-    content: {
-        title: "Our Service Overview",
-        text: "From web development and UI/UX design to comprehensive brand strategies, we offer a full suite of services to bring your digital vision to life.",
-    }
-  },
+      title: string;
+      text: string;
+    };
+    gradient: string;
+}
+
+const getPanelData = (content: AboutContent['interactivePanels'] | null): Record<Panel, PanelData> | null => {
+    if (!content) return null;
+    return {
+      faq: {
+        title: "FAQs",
+        imageUrl: content.faq.imageUrl,
+        aiHint: content.faq.imageHint,
+        content: {
+          title: content.faq.title,
+          text: content.faq.description,
+        },
+        gradient: "from-purple-600/80 to-indigo-600/80",
+      },
+      testimonials: {
+        title: "Testimonials",
+        imageUrl: content.testimonials.imageUrl,
+        aiHint: content.testimonials.imageHint,
+        content: {
+          title: content.testimonials.title,
+          text: content.testimonials.description,
+        },
+        gradient: "from-amber-600/80 to-orange-600/80",
+      },
+      solutions: {
+        title: "Solutions",
+        imageUrl: content.solutions.imageUrl,
+        aiHint: content.solutions.imageHint,
+        content: {
+          title: content.solutions.title,
+          text: content.solutions.description,
+        },
+        gradient: "from-emerald-600/80 to-teal-600/80",
+      },
+    };
 };
 
-export function InteractivePanels() {
+
+export function InteractivePanels({ content }: { content: AboutContent | null }) {
   const [activePanel, setActivePanel] = useState<Panel>('faq');
+  const [hoveredPanel, setHoveredPanel] = useState<Panel | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [panelData, setPanelData] = useState<Record<Panel, PanelData> | null>(null);
+
+  useEffect(() => {
+      if (content) {
+          setPanelData(getPanelData(content.interactivePanels));
+          setIsLoading(false);
+      }
+  }, [content]);
 
   const handlePanelClick = (panel: Panel) => {
     setActivePanel(panel);
@@ -48,99 +79,162 @@ export function InteractivePanels() {
 
   const handleClose = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // On mobile, instead of closing, we could set a default or do nothing.
-    // For now, let's prevent closing on any screen if it's the only one open.
-    // To allow closing, we would set it to null.
-    // setActivePanel(null);
+    // No-op to prevent closing the active panel
+  };
+
+  if (isLoading || !panelData) {
+    return (
+        <div className="container mx-auto px-4 md:px-6 py-12">
+            <div className="flex flex-col md:flex-row md:h-[500px] rounded-xl overflow-hidden border border-gray-200 shadow-lg">
+                <Skeleton className="w-full h-48 md:h-auto" />
+                <Skeleton className="w-full h-48 md:h-auto" />
+                <Skeleton className="w-full h-48 md:h-auto" />
+            </div>
+        </div>
+    );
   }
 
   const panels = Object.keys(panelData) as Panel[];
 
   return (
-    <div className="container mx-auto px-4 md:px-6">
-        <div className="flex flex-col md:flex-row md:h-[400px] rounded-lg overflow-hidden border">
-            {panels.map((panelId) => {
-                const isActive = activePanel === panelId;
-                const isInactive = activePanel !== null && !isActive;
+    <div className="container mx-auto px-4 md:px-6 py-12">
+      <div className="flex flex-col md:flex-row md:h-[500px] rounded-xl overflow-hidden border border-gray-200 shadow-lg">
+        {panels.map((panelId) => {
+          const isActive = activePanel === panelId;
+          const isInactive = activePanel !== null && !isActive;
+          const isHovered = hoveredPanel === panelId && !activePanel;
 
-                return (
-                    <motion.div
-                        key={panelId}
-                        layout
-                        onClick={() => handlePanelClick(panelId)}
-                        className={cn(
-                            "relative overflow-hidden cursor-pointer h-48 md:h-auto border-b md:border-b-0 md:border-r last:border-b-0 last:md:border-r-0",
-                        )}
-                        style={{
-                            flexBasis: isInactive ? '10%' : isActive ? '80%' : '33.33%',
-                            flexGrow: isInactive ? 0.001 : isActive ? 1 : 0.5,
-                        }}
-                        transition={{ type: "spring", stiffness: 100, damping: 20 }}
+          return (
+            <motion.div
+              key={panelId}
+              layout
+              onClick={() => handlePanelClick(panelId)}
+              onHoverStart={() => setHoveredPanel(panelId)}
+              onHoverEnd={() => setHoveredPanel(null)}
+              className={cn(
+                "relative overflow-hidden cursor-pointer h-48 md:h-auto border-b md:border-b-0 md:border-r border-gray-200 last:border-b-0 last:md:border-r-0",
+                isActive && "z-10"
+              )}
+              style={{
+                flexBasis: isInactive ? "10%" : isActive ? "70%" : "33.33%",
+                flexGrow: isInactive ? 0.001 : isActive ? 1 : 0.5,
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 100,
+                damping: 20,
+              }}
+            >
+              <motion.div
+                className="absolute inset-0 w-full h-full"
+                initial={{ scale: 1 }}
+                animate={{
+                  scale: isActive ? 1.05 : isHovered ? 1.03 : 1,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20,
+                }}
+              >
+                <Image
+                  src={panelData[panelId].imageUrl}
+                  alt={panelData[panelId].title}
+                  fill
+                  className="object-cover"
+                  data-ai-hint={panelData[panelId].aiHint}
+                  priority
+                />
+              </motion.div>
+
+              <div
+                className={cn(
+                  "absolute inset-0 bg-gradient-to-br opacity-80",
+                  panelData[panelId].gradient
+                )}
+              />
+
+              <div className="relative z-10 flex flex-col justify-end h-full p-6 text-white">
+                <AnimatePresence>
+                  {!activePanel && (
+                    <motion.h3
+                      initial={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-2xl font-bold"
                     >
-                        <motion.div 
-                            className="absolute inset-0 w-full h-full"
-                            initial={{ scale: 1.05 }}
-                            animate={{ scale: isActive ? 1.1 : 1.05 }}
-                            transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                        >
-                            <Image
-                                src={panelData[panelId].imageUrl}
-                                alt={panelData[panelId].title}
-                                fill
-                                className="object-cover"
-                                data-ai-hint={panelData[panelId].aiHint}
-                            />
-                        </motion.div>
-                         <div className="absolute inset-0 bg-black/50" />
-                         <div className="relative z-10 flex flex-col justify-end h-full p-6 text-white">
-                           <AnimatePresence>
-                            {!activePanel && (
-                                <motion.h3 
-                                    initial={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 20 }}
-                                    className="text-2xl font-bold"
-                                >
-                                    {panelData[panelId].title}
-                                </motion.h3>
-                            )}
-                            </AnimatePresence>
-                            
-                           <AnimatePresence>
-                             {isInactive && (
-                                <motion.h3 
-                                  initial={{ opacity: 0, y: 20 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  exit={{ opacity: 0, y: 20 }}
-                                  className="text-2xl font-bold [writing-mode:vertical-rl] rotate-180"
-                                >
-                                    {panelData[panelId].title}
-                                </motion.h3>
-                             )}
-                           </AnimatePresence>
+                      {panelData[panelId].title}
+                    </motion.h3>
+                  )}
+                </AnimatePresence>
 
-                            <AnimatePresence>
-                            {isActive && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 30 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 30 }}
-                                    transition={{ delay: 0.3 }}
-                                    className="space-y-4"
-                                >
-                                    <button onClick={handleClose} className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 p-2 rounded-full z-20 hidden md:block">
-                                        <X className="h-6 w-6 text-white"/>
-                                        <span className="sr-only">Close</span>
-                                    </button>
-                                    <h3 className="text-4xl font-bold">{panelData[panelId].content.title}</h3>
-                                    <p className="text-lg max-w-2xl">{panelData[panelId].content.text}</p>
-                                </motion.div>
-                            )}
-                            </AnimatePresence>
-                         </div>
+                <AnimatePresence>
+                  {isInactive && (
+                    <motion.h3
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-2xl font-bold [writing-mode:vertical-rl] rotate-180"
+                    >
+                      {panelData[panelId].title}
+                    </motion.h3>
+                  )}
+                </AnimatePresence>
+
+                <AnimatePresence>
+                  {isActive && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 30 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 15,
+                        delay: 0.2,
+                      }}
+                      className="space-y-6"
+                    >
+                      <button
+                        onClick={handleClose}
+                        className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 p-2 rounded-full z-20 transition-all duration-300 hover:rotate-90"
+                        aria-label="Close panel"
+                      >
+                        <X className="h-6 w-6 text-white" />
+                        <span className="sr-only">Close</span>
+                      </button>
+                      <motion.h3
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="text-4xl font-bold max-w-lg"
+                      >
+                        {panelData[panelId].content.title}
+                      </motion.h3>
+                      <motion.p
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="text-lg max-w-2xl text-white/90"
+                      >
+                        {panelData[panelId].content.text}
+                      </motion.p>
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                      >
+                        <Button variant="secondary" size="lg">Learn more</Button>
+                      </motion.div>
                     </motion.div>
-                );
-            })}
-        </div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
     </div>
   );
 }

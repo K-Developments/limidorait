@@ -8,17 +8,17 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getAboutContent, updateAboutContent, AboutContent, uploadImageAndGetURL } from '@/services/firestore';
+import { getAboutContent, updateAboutContent, AboutContent, uploadImageAndGetURL, InteractivePanelContent } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
+
+type PanelKey = 'faq' | 'testimonials' | 'solutions';
 
 export default function AdminAboutPage() {
   const { toast } = useToast();
   const [aboutContent, setAboutContent] = useState<AboutContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isUploadingHero, setIsUploadingHero] = useState(false);
-  const [isUploadingConcepts, setIsUploadingConcepts] = useState(false);
-  const [isUploadingWorkflow, setIsUploadingWorkflow] = useState(false);
+  const [isUploading, setIsUploading] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -39,79 +39,53 @@ export default function AdminAboutPage() {
     fetchContent();
   }, [toast]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, section: keyof AboutContent, field?: string) => {
     const { name, value } = e.target;
     if (aboutContent) {
-      setAboutContent({ ...aboutContent, [name]: value });
+        setAboutContent({ ...aboutContent, [name]: value });
     }
   };
 
-  const handleHeroImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: keyof AboutContent | `interactivePanels.${PanelKey}`) => {
     if (e.target.files && e.target.files[0] && aboutContent) {
-      const file = e.target.files[0];
-      setIsUploadingHero(true);
-      try {
-        const { url } = await uploadImageAndGetURL(file);
-        setAboutContent({ ...aboutContent, heroImageUrl: url });
-        toast({
-            title: "Success!",
-            description: "Image uploaded successfully. Click 'Save All Changes' to apply.",
-        });
-      } catch (error) {
-        toast({
-          title: "Upload Error",
-          description: "Failed to upload hero image. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsUploadingHero(false);
-      }
+        const file = e.target.files[0];
+        setIsUploading(prev => ({ ...prev, [fieldName]: true }));
+        try {
+            const { url } = await uploadImageAndGetURL(file);
+            if (fieldName.startsWith('interactivePanels.')) {
+              const panelKey = fieldName.split('.')[1] as PanelKey;
+              handlePanelChange(panelKey, 'imageUrl', url);
+            } else {
+              setAboutContent({ ...aboutContent, [fieldName]: url });
+            }
+            toast({
+                title: "Success!",
+                description: "Image uploaded successfully. Click 'Save All Changes' to apply.",
+            });
+        } catch (error) {
+            toast({
+                title: "Upload Error",
+                description: `Failed to upload image for ${fieldName}. Please try again.`,
+                variant: "destructive",
+            });
+        } finally {
+            setIsUploading(prev => ({ ...prev, [fieldName]: false }));
+        }
     }
   };
 
-  const handleConceptsImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0] && aboutContent) {
-      const file = e.target.files[0];
-      setIsUploadingConcepts(true);
-      try {
-        const { url } = await uploadImageAndGetURL(file);
-        setAboutContent({ ...aboutContent, conceptsImageUrl: url });
-        toast({
-            title: "Success!",
-            description: "Image uploaded successfully. Click 'Save All Changes' to apply.",
+  const handlePanelChange = (panel: PanelKey, field: keyof InteractivePanelContent, value: string) => {
+    if (aboutContent) {
+        setAboutContent({
+            ...aboutContent,
+            interactivePanels: {
+                ...aboutContent.interactivePanels,
+                [panel]: {
+                    ...aboutContent.interactivePanels[panel],
+                    [field]: value
+                }
+            }
         });
-      } catch (error) {
-        toast({
-          title: "Upload Error",
-          description: "Failed to upload concepts image. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsUploadingConcepts(false);
-      }
-    }
-  };
-
-  const handleWorkflowImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0] && aboutContent) {
-      const file = e.target.files[0];
-      setIsUploadingWorkflow(true);
-      try {
-        const { url } = await uploadImageAndGetURL(file);
-        setAboutContent({ ...aboutContent, workflowImageUrl: url });
-        toast({
-            title: "Success!",
-            description: "Image uploaded successfully. Click 'Save All Changes' to apply.",
-        });
-      } catch (error) {
-        toast({
-          title: "Upload Error",
-          description: "Failed to upload workflow image. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsUploadingWorkflow(false);
-      }
     }
   };
 
@@ -138,40 +112,20 @@ export default function AdminAboutPage() {
     return (
       <div className="space-y-8">
         <h1 className="text-3xl font-bold">About Page Management</h1>
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-8 w-1/2" />
-            <Skeleton className="h-4 w-3/4" />
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-48 w-full" />
-            <Skeleton className="h-10 w-24" />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-8 w-1/2" />
-            <Skeleton className="h-4 w-3/4" />
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-24 w-full" />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-8 w-1/2" />
-            <Skeleton className="h-4 w-3/4" />
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-48 w-full" />
-            <Skeleton className="h-10 w-24" />
-          </CardContent>
-        </Card>
+        {[...Array(4)].map((_, i) => (
+          <Card key={i}>
+            <CardHeader>
+              <Skeleton className="h-8 w-1/2" />
+              <Skeleton className="h-4 w-3/4" />
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-48 w-full" />
+              <Skeleton className="h-10 w-24" />
+            </CardContent>
+          </Card>
+        ))}
       </div>
     );
   }
@@ -192,7 +146,7 @@ export default function AdminAboutPage() {
                 id="heroTitle"
                 name="heroTitle"
                 value={aboutContent?.heroTitle || ''}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, 'heroTitle')}
               />
             </div>
             <div className="space-y-2">
@@ -201,7 +155,7 @@ export default function AdminAboutPage() {
                 id="heroSubtitle"
                 name="heroSubtitle"
                 value={aboutContent?.heroSubtitle || ''}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, 'heroSubtitle')}
                 className="min-h-[100px]"
               />
             </div>
@@ -217,14 +171,14 @@ export default function AdminAboutPage() {
                     id="heroImageUrl"
                     name="heroImageUrl"
                     value={aboutContent?.heroImageUrl || ''}
-                    onChange={handleInputChange}
+                    onChange={(e) => handleInputChange(e, 'heroImageUrl')}
                     placeholder="https://example.com/image.png"
                 />
             </div>
              <div className="space-y-2">
                 <Label htmlFor="hero-image-upload">Or Upload a New Hero Image</Label>
-                <Input id="hero-image-upload" type="file" onChange={handleHeroImageUpload} accept="image/*" disabled={isUploadingHero}/>
-                {isUploadingHero && <p>Uploading...</p>}
+                <Input id="hero-image-upload" type="file" onChange={(e) => handleImageUpload(e, 'heroImageUrl')} accept="image/*" disabled={isUploading['heroImageUrl']}/>
+                {isUploading['heroImageUrl'] && <p>Uploading...</p>}
             </div>
           </CardContent>
         </Card>
@@ -241,7 +195,7 @@ export default function AdminAboutPage() {
                 id="aboutTitle"
                 name="aboutTitle"
                 value={aboutContent?.aboutTitle || ''}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, 'aboutTitle')}
               />
             </div>
             <div className="space-y-2">
@@ -250,7 +204,7 @@ export default function AdminAboutPage() {
                 id="aboutDescription"
                 name="aboutDescription"
                 value={aboutContent?.aboutDescription || ''}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, 'aboutDescription')}
                 className="min-h-[150px]"
               />
             </div>
@@ -269,7 +223,7 @@ export default function AdminAboutPage() {
                 id="conceptsTitle"
                 name="conceptsTitle"
                 value={aboutContent?.conceptsTitle || ''}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, 'conceptsTitle')}
               />
             </div>
             <div className="space-y-2">
@@ -278,7 +232,7 @@ export default function AdminAboutPage() {
                 id="conceptsDescription"
                 name="conceptsDescription"
                 value={aboutContent?.conceptsDescription || ''}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, 'conceptsDescription')}
                 className="min-h-[150px]"
               />
             </div>
@@ -288,7 +242,7 @@ export default function AdminAboutPage() {
                 id="conceptsLink"
                 name="conceptsLink"
                 value={aboutContent?.conceptsLink || ''}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, 'conceptsLink')}
                 placeholder="/portfolio"
               />
             </div>
@@ -304,14 +258,14 @@ export default function AdminAboutPage() {
                     id="conceptsImageUrl"
                     name="conceptsImageUrl"
                     value={aboutContent?.conceptsImageUrl || ''}
-                    onChange={handleInputChange}
+                    onChange={(e) => handleInputChange(e, 'conceptsImageUrl')}
                     placeholder="https://example.com/image.png"
                 />
             </div>
              <div className="space-y-2">
                 <Label htmlFor="concepts-image-upload">Or Upload a New Concepts Image</Label>
-                <Input id="concepts-image-upload" type="file" onChange={handleConceptsImageUpload} accept="image/*" disabled={isUploadingConcepts}/>
-                {isUploadingConcepts && <p>Uploading...</p>}
+                <Input id="concepts-image-upload" type="file" onChange={(e) => handleImageUpload(e, 'conceptsImageUrl')} accept="image/*" disabled={isUploading['conceptsImageUrl']}/>
+                {isUploading['conceptsImageUrl'] && <p>Uploading...</p>}
             </div>
           </CardContent>
         </Card>
@@ -328,7 +282,7 @@ export default function AdminAboutPage() {
                 id="workflowTitle"
                 name="workflowTitle"
                 value={aboutContent?.workflowTitle || ''}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, 'workflowTitle')}
               />
             </div>
             <div className="space-y-2">
@@ -337,7 +291,7 @@ export default function AdminAboutPage() {
                 id="workflowDescription"
                 name="workflowDescription"
                 value={aboutContent?.workflowDescription || ''}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, 'workflowDescription')}
                 className="min-h-[150px]"
               />
             </div>
@@ -347,7 +301,7 @@ export default function AdminAboutPage() {
                 id="workflowLink"
                 name="workflowLink"
                 value={aboutContent?.workflowLink || ''}
-                onChange={handleInputChange}
+                onChange={(e) => handleInputChange(e, 'workflowLink')}
                 placeholder="/contact"
               />
             </div>
@@ -363,15 +317,54 @@ export default function AdminAboutPage() {
                     id="workflowImageUrl"
                     name="workflowImageUrl"
                     value={aboutContent?.workflowImageUrl || ''}
-                    onChange={handleInputChange}
+                    onChange={(e) => handleInputChange(e, 'workflowImageUrl')}
                     placeholder="https://example.com/image.png"
                 />
             </div>
              <div className="space-y-2">
                 <Label htmlFor="workflow-image-upload">Or Upload a New Workflow Image</Label>
-                <Input id="workflow-image-upload" type="file" onChange={handleWorkflowImageUpload} accept="image/*" disabled={isUploadingWorkflow}/>
-                {isUploadingWorkflow && <p>Uploading...</p>}
+                <Input id="workflow-image-upload" type="file" onChange={(e) => handleImageUpload(e, 'workflowImageUrl')} accept="image/*" disabled={isUploading['workflowImageUrl']}/>
+                {isUploading['workflowImageUrl'] && <p>Uploading...</p>}
             </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle>Interactive Panels Section</CardTitle>
+            <CardDescription>Update content and images for the interactive panels (FAQs, Testimonials, Solutions).</CardDescription>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {(['faq', 'testimonials', 'solutions'] as PanelKey[]).map(panelKey => (
+              <Card key={panelKey} className="p-4 space-y-4">
+                <h4 className="text-lg font-semibold capitalize">{panelKey}</h4>
+                 <div className="space-y-2">
+                    <Label htmlFor={`${panelKey}-title`}>Title</Label>
+                    <Input id={`${panelKey}-title`} value={aboutContent?.interactivePanels[panelKey]?.title || ''} onChange={(e) => handlePanelChange(panelKey, 'title', e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`${panelKey}-description`}>Description</Label>
+                    <Textarea id={`${panelKey}-description`} value={aboutContent?.interactivePanels[panelKey]?.description || ''} onChange={(e) => handlePanelChange(panelKey, 'description', e.target.value)} className="min-h-[120px]"/>
+                  </div>
+                   <div className="space-y-2">
+                      <Label>Current Image</Label>
+                      <Image src={aboutContent?.interactivePanels[panelKey]?.imageUrl || 'https://placehold.co/400x400.png'} alt={`${panelKey} panel image`} width={150} height={150} className="object-cover rounded-md" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`${panelKey}-imageUrl`}>Image URL</Label>
+                    <Input id={`${panelKey}-imageUrl`} value={aboutContent?.interactivePanels[panelKey]?.imageUrl || ''} onChange={(e) => handlePanelChange(panelKey, 'imageUrl', e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`${panelKey}-imageHint`}>Image AI Hint</Label>
+                    <Input id={`${panelKey}-imageHint`} value={aboutContent?.interactivePanels[panelKey]?.imageHint || ''} onChange={(e) => handlePanelChange(panelKey, 'imageHint', e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`${panelKey}-image-upload`}>Or Upload New Image</Label>
+                    <Input id={`${panelKey}-image-upload`} type="file" onChange={(e) => handleImageUpload(e, `interactivePanels.${panelKey}`)} accept="image/*" disabled={isUploading[`interactivePanels.${panelKey}`]} />
+                    {isUploading[`interactivePanels.${panelKey}`] && <p>Uploading...</p>}
+                  </div>
+              </Card>
+            ))}
           </CardContent>
         </Card>
 
