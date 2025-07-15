@@ -1,6 +1,6 @@
 
-import { createChatBotMessage, IConfig } from 'react-chatbot-kit';
-import Link from 'next/link';
+import { createChatBotMessage } from 'react-chatbot-kit';
+import type { IConfig } from 'react-chatbot-kit';
 import ActionProvider from './chatbot-actions';
 
 const config: IConfig = {

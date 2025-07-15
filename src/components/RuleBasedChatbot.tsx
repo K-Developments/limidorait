@@ -1,20 +1,17 @@
 "use client";
 
 import Chatbot from 'react-chatbot-kit';
-import config from '@/lib/chatbot-config';
+import config from '@/lib/chatbot-config.tsx';
 import MessageParser from '@/lib/chatbot-parser';
 import ActionProvider from '@/lib/chatbot-actions';
 import { X } from 'lucide-react';
 import { Button } from './ui/button';
-import { useRouter } from 'next/navigation';
 
 interface RuleBasedChatbotProps {
   onClose: () => void;
 }
 
 const RuleBasedChatbot = ({ onClose }: RuleBasedChatbotProps) => {
-  const router = useRouter();
-
   return (
     <div className="relative w-full h-full p-0">
       <Button 
@@ -28,7 +25,7 @@ const RuleBasedChatbot = ({ onClose }: RuleBasedChatbotProps) => {
       </Button>
       <div className="w-full h-full">
         <Chatbot
-          config={config(router)}
+          config={config}
           messageParser={MessageParser}
           actionProvider={ActionProvider}
         />

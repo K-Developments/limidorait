@@ -1,15 +1,11 @@
 
-import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-
 class ActionProvider {
     createChatBotMessage: any;
     setState: any;
-    router: AppRouterInstance;
     
-    constructor(createChatBotMessage: any, setStateFunc: any, router: AppRouterInstance) {
+    constructor(createChatBotMessage: any, setStateFunc: any) {
         this.createChatBotMessage = createChatBotMessage;
         this.setState = setStateFunc;
-        this.router = router;
     }
 
     handleHello() {
@@ -35,11 +31,12 @@ class ActionProvider {
         const path = pathMap[page.toLowerCase()];
 
         if(path) {
-            const botMessage = this.createChatBotMessage(`Navigating you to the ${page} page.`);
+            const botMessage = this.createChatBotMessage(
+              `Of course. <a href="${path}" style="color: hsl(var(--primary)); text-decoration: underline;">Click here to go to the ${page} page.</a>`
+            );
             this.updateChatbotState(botMessage);
-            this.router.push(path);
         } else {
-            const botMessage = this.createChatBotMessage(`I'm sorry, I can't navigate to the '${page}' page. I can navigate to: home, about, portfolio, contact, or faq.`);
+            const botMessage = this.createChatBotMessage(`I'm sorry, I can't navigate to the '${page}' page. I can provide links for: home, about, portfolio, contact, or faq.`);
             this.updateChatbotState(botMessage);
         }
     }
