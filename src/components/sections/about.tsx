@@ -64,14 +64,18 @@ export function About() {
               transition={{ duration: 0.6 }}
               className="w-full"
             >
-              <Image
-                src="https://placehold.co/400x400.png"
-                alt="Limidora Concepts"
-                width={400}
-                height={400}
-                className="rounded-lg object-cover w-full h-auto aspect-square"
-                data-ai-hint="abstract technology design"
-              />
+              {isLoading ? (
+                <Skeleton className="w-full h-auto aspect-square rounded-lg" />
+              ) : (
+                <Image
+                  src={content?.conceptsImageUrl || "https://placehold.co/400x400.png"}
+                  alt="Limidora Concepts"
+                  width={400}
+                  height={400}
+                  className="rounded-lg object-cover w-full h-auto aspect-square"
+                  data-ai-hint="abstract technology design"
+                />
+              )}
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 50 }}
@@ -80,10 +84,19 @@ export function About() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="space-y-4 mt-6 md:mt-0 md:absolute md:right-0 md:w-3/5 md:bg-background/80 md:backdrop-blur-sm md:p-8 md:rounded-lg md:-ml-16"
             >
-              <h3 className="text-3xl font-bold tracking-tight">Limidora Concepts</h3>
-              <p className="text-muted-foreground md:text-lg">
-                We provide solutions for businesses of all types and sizes. Whether your business is large or small, our concepts are designed to integrate modern technology seamlessly. In today's world, every business needs to adapt and evolve. We create tailored technological solutions to improve your processes, reach, and overall success.
-              </p>
+              {isLoading ? (
+                <>
+                  <Skeleton className="h-9 w-1/2" />
+                  <Skeleton className="h-24 w-full" />
+                </>
+              ) : (
+                <>
+                  <h3 className="text-3xl font-bold tracking-tight">{content?.conceptsTitle}</h3>
+                  <p className="text-muted-foreground md:text-lg">
+                    {content?.conceptsDescription}
+                  </p>
+                </>
+              )}
             </motion.div>
           </div>
         </div>

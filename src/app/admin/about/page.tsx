@@ -16,7 +16,8 @@ export default function AdminAboutPage() {
   const { toast } = useToast();
   const [aboutContent, setAboutContent] = useState<AboutContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
+  const [isUploadingHero, setIsUploadingHero] = useState(false);
+  const [isUploadingConcepts, setIsUploadingConcepts] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -44,15 +45,13 @@ export default function AdminAboutPage() {
     }
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleHeroImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0] && aboutContent) {
       const file = e.target.files[0];
-      setIsUploading(true);
+      setIsUploadingHero(true);
       try {
         const { url } = await uploadImageAndGetURL(file);
-        const updatedContent = { ...aboutContent, heroImageUrl: url };
-        setAboutContent(updatedContent);
-        
+        setAboutContent({ ...aboutContent, heroImageUrl: url });
         toast({
             title: "Success!",
             description: "Image uploaded successfully. Click 'Save All Changes' to apply.",
@@ -60,11 +59,34 @@ export default function AdminAboutPage() {
       } catch (error) {
         toast({
           title: "Upload Error",
-          description: "Failed to upload image. Please try again.",
+          description: "Failed to upload hero image. Please try again.",
           variant: "destructive",
         });
       } finally {
-        setIsUploading(false);
+        setIsUploadingHero(false);
+      }
+    }
+  };
+
+  const handleConceptsImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0] && aboutContent) {
+      const file = e.target.files[0];
+      setIsUploadingConcepts(true);
+      try {
+        const { url } = await uploadImageAndGetURL(file);
+        setAboutContent({ ...aboutContent, conceptsImageUrl: url });
+        toast({
+            title: "Success!",
+            description: "Image uploaded successfully. Click 'Save All Changes' to apply.",
+        });
+      } catch (error) {
+        toast({
+          title: "Upload Error",
+          description: "Failed to upload concepts image. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsUploadingConcepts(false);
       }
     }
   };
@@ -112,6 +134,18 @@ export default function AdminAboutPage() {
           <CardContent className="space-y-6">
             <Skeleton className="h-10 w-full" />
             <Skeleton className="h-24 w-full" />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-8 w-1/2" />
+            <Skeleton className="h-4 w-3/4" />
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-48 w-full" />
+            <Skeleton className="h-10 w-24" />
           </CardContent>
         </Card>
       </div>
@@ -164,9 +198,9 @@ export default function AdminAboutPage() {
                 />
             </div>
              <div className="space-y-2">
-                <Label htmlFor="image-upload">Or Upload a New Hero Image</Label>
-                <Input id="image-upload" type="file" onChange={handleImageUpload} accept="image/*" disabled={isUploading}/>
-                {isUploading && <p>Uploading...</p>}
+                <Label htmlFor="hero-image-upload">Or Upload a New Hero Image</Label>
+                <Input id="hero-image-upload" type="file" onChange={handleHeroImageUpload} accept="image/*" disabled={isUploadingHero}/>
+                {isUploadingHero && <p>Uploading...</p>}
             </div>
           </CardContent>
         </Card>
@@ -195,6 +229,55 @@ export default function AdminAboutPage() {
                 onChange={handleInputChange}
                 className="min-h-[150px]"
               />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Limidora Concepts Section</CardTitle>
+            <CardDescription>Update the content for the 'Concepts' section on the About page.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="conceptsTitle">Concepts Title</Label>
+              <Input
+                id="conceptsTitle"
+                name="conceptsTitle"
+                value={aboutContent?.conceptsTitle || ''}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="conceptsDescription">Concepts Description</Label>
+              <Textarea
+                id="conceptsDescription"
+                name="conceptsDescription"
+                value={aboutContent?.conceptsDescription || ''}
+                onChange={handleInputChange}
+                className="min-h-[150px]"
+              />
+            </div>
+            <div className="space-y-2">
+                <Label>Current Concepts Image</Label>
+                <div className="relative group w-full max-w-sm aspect-square">
+                  <Image src={aboutContent?.conceptsImageUrl || 'https://placehold.co/400x400.png'} alt="Limidora concepts image" layout="fill" className="object-cover rounded-md"/>
+                </div>
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="conceptsImageUrl">Image URL</Label>
+                <Input
+                    id="conceptsImageUrl"
+                    name="conceptsImageUrl"
+                    value={aboutContent?.conceptsImageUrl || ''}
+                    onChange={handleInputChange}
+                    placeholder="https://example.com/image.png"
+                />
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="concepts-image-upload">Or Upload a New Concepts Image</Label>
+                <Input id="concepts-image-upload" type="file" onChange={handleConceptsImageUpload} accept="image/*" disabled={isUploadingConcepts}/>
+                {isUploadingConcepts && <p>Uploading...</p>}
             </div>
           </CardContent>
         </Card>

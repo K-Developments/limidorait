@@ -41,6 +41,9 @@ export interface AboutContent {
   heroImageUrl: string;
   aboutTitle: string;
   aboutDescription: string;
+  conceptsTitle: string;
+  conceptsDescription: string;
+  conceptsImageUrl: string;
 }
 
 const HERO_CONTENT_DOC_ID = 'heroContent';
@@ -93,6 +96,9 @@ const defaultAboutContent: AboutContent = {
   heroImageUrl: "https://placehold.co/1600x640.png",
   aboutTitle: "About Limidora",
   aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.",
+  conceptsTitle: "Limidora Concepts",
+  conceptsDescription: "We provide solutions for businesses of all types and sizes. Whether your business is large or small, our concepts are designed to integrate modern technology seamlessly. In today's world, every business needs to adapt and evolve. We create tailored technological solutions to improve your processes, reach, and overall success.",
+  conceptsImageUrl: "https://placehold.co/400x400.png",
 };
 
 // Deep merge utility to combine existing and new content
