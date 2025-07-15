@@ -53,7 +53,7 @@ export function Header() {
       <AnimatePresence>
         {!scrolled && (
           <motion.div
-            className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
+            className="fixed top-4 left-0 right-0 flex justify-center z-50"
             variants={topBlockVariants}
             initial="initial"
             exit="exit"
