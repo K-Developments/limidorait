@@ -8,6 +8,7 @@ import { getAboutContent, AboutContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { InteractivePanels } from "./interactive-panels";
 
 export function About() {
   const [content, setContent] = useState<AboutContent | null>(null);
@@ -28,8 +29,8 @@ export function About() {
   }, []);
 
   return (
-    <section id="about" className="w-full pt-12 bg-card relative">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="about" className="w-full bg-card relative">
+      <div className="container mx-auto px-4 md:px-6 pt-12">
         <div className="mb-8">
           <nav className="flex items-center text-sm text-muted-foreground">
             <Link href="/" className="hover:text-primary transition-colors">Home</Link>
@@ -153,6 +154,9 @@ export function About() {
           </div>
         </div>
 
+      </div>
+       <div className="py-12 md:py-16">
+          <InteractivePanels />
       </div>
     </section>
   );
