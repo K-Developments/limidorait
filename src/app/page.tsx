@@ -22,7 +22,7 @@ import "react-chatbot-kit/build/main.css";
 
 const RuleBasedChatbot = dynamic(() => import('@/components/RuleBasedChatbot'), {
   ssr: false,
-  loading: () => <Skeleton className="w-full h-96" />
+  loading: () => <Skeleton className="w-full h-full" />
 });
 
 const iconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
@@ -59,192 +59,181 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
   useEffect(() => {
     if (isLoading || !heroRef.current || !heroImageRef.current || !heroContentRef.current) return;
 
-    const tl = gsap.timeline({ delay: 0.3 });
-    
     let ctx = gsap.context(() => {
-      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+        if (isMobile) return;
 
-      if (isMobile) {
-        gsap.set(heroImageRef.current, { height: "auto" });
-        tl.to(heroImageRef.current, {
-          height: "auto",
-          duration: 1.2,
-          ease: "power3.inOut",
-        });
-      } else {
         gsap.set(heroImageRef.current, { width: "0%" });
-        tl.to(heroImageRef.current, {
-          width: "50vw",
-          duration: 1.2,
-          ease: "power3.inOut",
-        });
-      }
-      
-      gsap.set(heroContentRef.current, { opacity: 0, y: 30 });
-      tl.to(heroContentRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: "power3.out",
-      }, "-=0.8");
+        gsap.set(heroContentRef.current, { opacity: 0, x: 50 });
 
+        const tl = gsap.timeline({ delay: 0.3 });
+        tl.to(heroImageRef.current, {
+            width: "50%",
+            duration: 1.2,
+            ease: "power3.inOut",
+        })
+        .to(heroContentRef.current, {
+            opacity: 1,
+            x: 0,
+            duration: 1,
+            ease: "power3.out",
+        }, "-=0.8");
     }, heroRef);
 
     return () => {
-      ctx.revert();
+        ctx.revert();
     };
   }, [isLoading]);
 
   return (
-    <section ref={heroRef} className="hero-section relative min-h-screen flex items-center overflow-hidden">
-      <ParticlesWrapper />
-      <div className="container mx-auto px-6 relative z-10 flex justify-start">
-        <div ref={heroContentRef} className="w-full max-w-3xl hero-content-container text-left">
+    <section ref={heroRef} className="hero-section relative min-h-screen w-full flex items-center overflow-hidden">
+        <ParticlesWrapper />
+        
+        <div ref={heroImageRef} className="hero-image-container relative w-1/2 h-screen">
           {isLoading ? (
-            <Skeleton className="w-full h-[50vh]" />
-          ) : showChatbot ? (
-            <div className="w-full h-[70vh] flex flex-col">
-              <RuleBasedChatbot onClose={() => setShowChatbot(false)} />
-            </div>
+            <Skeleton className="w-full h-full"/>
           ) : (
-            <>
-              <motion.h1 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-foreground"
-              >
-                {content?.title}
-              </motion.h1>
-              <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-xl md:text-2xl mb-6 max-w-2xl text-muted-foreground"
-              >
-                {content?.subtitle}
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="flex gap-4 mb-10 justify-start"
-              >
-                <Button asChild variant="outline" size="icon">
-                  <Link href="#" aria-label="Twitter">
-                    <Twitter className="h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="icon">
-                  <Link href="#" aria-label="LinkedIn">
-                    <Linkedin className="h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="icon">
-                  <Link href="#" aria-label="Facebook">
-                    <Facebook className="h-5 w-5" />
-                  </Link>
-                </Button>
-                 <Button asChild variant="outline" size="icon">
-                  <Link href="#" aria-label="WhatsApp">
-                    <WhatsAppIcon className="h-5 w-5" />
-                  </Link>
-                </Button>
-              </motion.div>
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="flex flex-wrap gap-4 justify-start"
-              >
-                <Button asChild size="lg">
-                  <Link href={content?.primaryButton.link || '#'}>{content?.primaryButton.text}</Link>
-                </Button>
-                <Button asChild variant="secondary" size="lg">
-                  <Link href={content?.secondaryButton.link || '#'}>{content?.secondaryButton.text}</Link>
-                </Button>
-              </motion.div>
-            </>
-          )}
-        </div>
-      </div>
-      
-      <div ref={heroImageRef} className="hero-image absolute left-0 bottom-0 h-full flex flex-col justify-end">
-        {isLoading ? (
-          <Skeleton className="w-full h-full"/>
-        ) : (
-          <div className="relative h-full w-full">
-            <Swiper
-              modules={[EffectFade, Autoplay]}
-              effect="fade"
-              loop={true}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}
-              className="h-full w-full"
-            >
-              {(content?.imageUrls || []).map((url, index) => (
-                <SwiperSlide key={index} className="relative">
-                  <Image 
-                    src={url} 
-                    alt={`Creative work ${index + 1}`} 
-                    fill 
-                    priority
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/10 to-transparent"></div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            <div className="absolute bottom-0 left-0 w-full z-10">
+            <div className="relative h-full w-full">
               <Swiper
-                modules={[Autoplay]}
-                spaceBetween={0}
-                slidesPerView={2}
-                breakpoints={{
-                  768: {
-                    slidesPerView: 4,
-                    spaceBetween: 0
-                  },
-                }}
+                modules={[EffectFade, Autoplay]}
+                effect="fade"
                 loop={true}
                 autoplay={{
-                  delay: 3000,
+                  delay: 5000,
                   disableOnInteraction: false,
-                  reverseDirection: true,
                 }}
-                className="w-full"
+                className="h-full w-full"
               >
-                {(content?.serviceSlides || []).map((slide, index) => {
-                  const Icon = iconMap[slide.text];
-                  return (
-                    <SwiperSlide key={index} className="border-r border-white/20 last:border-r-0">
-                      <div className="aspect-square relative group overflow-hidden">
-                        <Image 
-                          src={slide.image} 
-                          alt={slide.text} 
-                          fill 
-                          className="object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
-                          data-ai-hint={slide.hint}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-center justify-center p-4">
-                          {Icon && (
-                            <Icon className="w-12 h-12 text-white/80 transition-opacity duration-300 group-hover:opacity-0" />
-                          )}
-                          <h3 className="text-white text-lg font-bold absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                            {slide.text}
-                          </h3>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  );
-                })}
+                {(content?.imageUrls || []).map((url, index) => (
+                  <SwiperSlide key={index} className="relative">
+                    <Image 
+                      src={url} 
+                      alt={`Creative work ${index + 1}`} 
+                      fill 
+                      priority
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/10 to-transparent"></div>
+                  </SwiperSlide>
+                ))}
               </Swiper>
+              <div className="absolute bottom-0 left-0 w-full z-10">
+                <Swiper
+                  modules={[Autoplay]}
+                  spaceBetween={0}
+                  slidesPerView={2}
+                  breakpoints={{
+                    768: {
+                      slidesPerView: 4,
+                      spaceBetween: 0
+                    },
+                  }}
+                  loop={true}
+                  autoplay={{
+                    delay: 3000,
+                    disableOnInteraction: false,
+                    reverseDirection: true,
+                  }}
+                  className="w-full"
+                >
+                  {(content?.serviceSlides || []).map((slide, index) => {
+                    const Icon = iconMap[slide.text];
+                    return (
+                      <SwiperSlide key={index} className="border-r border-white/20 last:border-r-0">
+                        <div className="aspect-square relative group overflow-hidden">
+                          <Image 
+                            src={slide.image} 
+                            alt={slide.text} 
+                            fill 
+                            className="object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                            data-ai-hint={slide.hint}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-center justify-center p-4">
+                            {Icon && (
+                              <Icon className="w-12 h-12 text-white/80 transition-opacity duration-300 group-hover:opacity-0" />
+                            )}
+                            <h3 className="text-white text-lg font-bold absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                              {slide.text}
+                            </h3>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                    );
+                  })}
+                </Swiper>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+
+        <div ref={heroContentRef} className="hero-content-container relative w-1/2 h-full flex items-center justify-center px-12 z-10">
+             {isLoading ? (
+                <Skeleton className="w-full h-96" />
+             ) : showChatbot ? (
+                <div className="w-full h-[70vh] flex flex-col">
+                    <RuleBasedChatbot onClose={() => setShowChatbot(false)} />
+                </div>
+             ) : (
+                <div className="w-full max-w-2xl text-left">
+                  <motion.h1 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-foreground"
+                  >
+                    {content?.title}
+                  </motion.h1>
+                  <motion.p 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                    className="text-xl md:text-2xl mb-6 max-w-2xl text-muted-foreground"
+                  >
+                    {content?.subtitle}
+                  </motion.p>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.5 }}
+                    className="flex gap-4 mb-10 justify-start"
+                  >
+                    <Button asChild variant="outline" size="icon">
+                      <Link href="#" aria-label="Twitter">
+                        <Twitter className="h-5 w-5" />
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" size="icon">
+                      <Link href="#" aria-label="LinkedIn">
+                        <Linkedin className="h-5 w-5" />
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" size="icon">
+                      <Link href="#" aria-label="Facebook">
+                        <Facebook className="h-5 w-5" />
+                      </Link>
+                    </Button>
+                     <Button asChild variant="outline" size="icon">
+                      <Link href="#" aria-label="WhatsApp">
+                        <WhatsAppIcon className="h-5 w-5" />
+                      </Link>
+                    </Button>
+                  </motion.div>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                    className="flex flex-wrap gap-4 justify-start"
+                  >
+                    <Button asChild size="lg">
+                      <Link href={content?.primaryButton.link || '#'}>{content?.primaryButton.text}</Link>
+                    </Button>
+                    <Button asChild variant="secondary" size="lg">
+                      <Link href={content?.secondaryButton.link || '#'}>{content?.secondaryButton.text}</Link>
+                    </Button>
+                  </motion.div>
+                </div>
+             )}
+        </div>
     </section>
   );
 };

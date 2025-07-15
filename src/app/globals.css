@@ -113,38 +113,35 @@ html{
         }
     }
 
-    .hero-image {
-        will-change: width, height, transform;
+    .hero-image-container, .hero-content-container {
+        will-change: width, height, transform, opacity;
     }
     
-    .hero-content-container {
-        will-change: transform, opacity;
-    }
-
     @media (max-width: 768px) {
         .hero-section {
+          flex-direction: column-reverse;
+          min-height: auto;
           padding-top: 5rem;
           padding-bottom: 2rem;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-          min-height: auto;
         }
         
         .hero-content-container {
-          max-width: 100%;
+            width: 100% !important;
+            max-width: 100%;
+            padding: 0 1.5rem;
+            text-align: center;
+        }
+
+        .hero-content-container > div {
+          align-items: center;
           text-align: center;
-          margin-bottom: 2rem;
         }
       
-        .hero-image {
+        .hero-image-container {
           position: relative !important;
           width: 100% !important;
-          aspect-ratio: 4/5;
+          height: 80vh !important;
           margin-top: 2rem;
-          bottom: auto !important;
-          right: auto !important;
           display: block !important;
         }
     }
