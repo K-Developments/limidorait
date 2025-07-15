@@ -6,6 +6,8 @@ import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getAboutContent, AboutContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 export function About() {
   const [content, setContent] = useState<AboutContent | null>(null);
@@ -52,6 +54,38 @@ export function About() {
             </p>
           </div>
         )}
+
+        <div className="py-12 md:py-16">
+          <div className="grid gap-8 md:grid-cols-2 md:gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <Image
+                src="https://placehold.co/400x400.png"
+                alt="Limidora Concepts"
+                width={400}
+                height={400}
+                className="rounded-lg object-cover w-full h-auto max-w-[250px] mx-auto md:max-w-[400px]"
+                data-ai-hint="abstract technology design"
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="space-y-4 text-center md:text-left"
+            >
+              <h3 className="text-3xl font-bold tracking-tight">Limidora Concepts</h3>
+              <p className="text-muted-foreground md:text-lg">
+                We provide solutions for businesses of all types and sizes. Whether your business is large or small, our concepts are designed to integrate modern technology seamlessly. In today's world, every business needs to adapt and evolve. We create tailored technological solutions to improve your processes, reach, and overall success.
+              </p>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );
