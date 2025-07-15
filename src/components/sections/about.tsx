@@ -62,13 +62,14 @@ export function About() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
+              className="w-full"
             >
               <Image
                 src="https://placehold.co/400x400.png"
                 alt="Limidora Concepts"
                 width={400}
                 height={400}
-                className="rounded-lg object-cover w-full h-auto max-w-[250px] mx-auto md:max-w-[400px]"
+                className="rounded-lg object-cover w-full h-auto aspect-square"
                 data-ai-hint="abstract technology design"
               />
             </motion.div>
