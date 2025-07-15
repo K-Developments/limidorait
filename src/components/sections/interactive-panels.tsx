@@ -56,7 +56,7 @@ export function InteractivePanels() {
   return (
     <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col md:flex-row md:h-[400px] rounded-lg overflow-hidden border">
-            {panels.map((panelId, index) => {
+            {panels.map((panelId) => {
                 const isActive = activePanel === panelId;
                 const isInactive = activePanel && !isActive;
 
@@ -72,7 +72,7 @@ export function InteractivePanels() {
                             flexBasis: isInactive ? '10%' : isActive ? '80%' : '33.33%',
                             flexGrow: isInactive ? 0.001 : isActive ? 1 : 0.5,
                         }}
-                        transition={{ duration: 0.7, type: "spring" }}
+                        transition={{ type: "spring", stiffness: 100, damping: 20 }}
                     >
                         <motion.div 
                             className="absolute inset-0 w-full h-full"
