@@ -7,8 +7,23 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { getFaqContent, FaqContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
 export function Faq() {
+  const { toast } = useToast();
   const [content, setContent] = useState<FaqContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,6 +40,15 @@ export function Faq() {
     };
     fetchContent();
   }, []);
+
+  const handleQuestionSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    toast({
+      title: "Question Sent!",
+      description: "Thanks for reaching out. We'll get back to you soon.",
+    });
+    (e.target as HTMLFormElement).reset();
+  };
 
   if (isLoading) {
     return (
@@ -81,6 +105,42 @@ export function Faq() {
             ))}
             </Accordion>
         </motion.div>
+        <div className="text-center mt-12">
+           <Dialog>
+              <DialogTrigger asChild>
+                <Button size="lg">Ask a Question</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Ask Your Question</DialogTitle>
+                  <DialogDescription>
+                    Can't find the answer you're looking for? Fill out the form below and we'll get back to you.
+                  </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleQuestionSubmit}>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="email" className="text-right">
+                        Email
+                      </Label>
+                      <Input id="email" type="email" required className="col-span-3" placeholder="your@email.com" />
+                    </div>
+                    <div className="grid grid-cols-4 items-start gap-4">
+                      <Label htmlFor="question" className="text-right pt-2">
+                        Question
+                      </Label>
+                      <Textarea id="question" required className="col-span-3 min-h-[120px]" placeholder="What would you like to know?" />
+                    </div>
+                  </div>
+                   <div className="flex justify-end">
+                      <DialogClose asChild>
+                          <Button type="submit">Submit Question</Button>
+                      </DialogClose>
+                    </div>
+                </form>
+              </DialogContent>
+            </Dialog>
+        </div>
       </div>
     </section>
   );
