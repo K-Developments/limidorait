@@ -102,7 +102,7 @@ export function About() {
         </div>
 
         <div className="py-12 md:py-16">
-          <div className="relative md:grid md:grid-cols-2 md:gap-8 md:items-center">
+          <div className="flex flex-col-reverse md:relative md:grid md:grid-cols-2 md:gap-8 md:items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
