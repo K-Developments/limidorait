@@ -90,13 +90,13 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
   return (
     <section ref={heroRef} className="hero-section relative min-h-screen flex items-center overflow-hidden">
       <ParticlesWrapper />
-      <div className="container mx-auto px-6 relative z-10">
-        <div ref={heroContentRef} className="max-w-3xl hero-content-container">
+      <div className="container mx-auto px-6 relative z-10 flex justify-end">
+        <div ref={heroContentRef} className="max-w-3xl hero-content-container text-left md:text-right">
           {isLoading ? (
             <>
               <Skeleton className="h-16 w-full mb-6" />
-              <Skeleton className="h-10 w-3/4 mb-10" />
-              <div className="flex flex-wrap gap-4">
+              <Skeleton className="h-10 w-3/4 mb-10 ml-auto" />
+              <div className="flex flex-wrap gap-4 justify-end">
                 <Skeleton className="h-12 w-32" />
                 <Skeleton className="h-12 w-32" />
               </div>
@@ -115,7 +115,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-xl md:text-2xl mb-6 max-w-2xl text-muted-foreground"
+                className="text-xl md:text-2xl mb-6 max-w-2xl text-muted-foreground ml-auto"
               >
                 {content?.subtitle}
               </motion.p>
@@ -123,7 +123,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
-                className="flex gap-4 mb-10"
+                className="flex gap-4 mb-10 justify-start md:justify-end"
               >
                 <Button asChild variant="outline" size="icon">
                   <Link href="#" aria-label="Twitter">
@@ -150,7 +150,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="flex flex-wrap gap-4"
+                className="flex flex-wrap gap-4 justify-start md:justify-end"
               >
                 <Button asChild size="lg">
                   <Link href={content?.primaryButton.link || '#'}>{content?.primaryButton.text}</Link>
@@ -164,7 +164,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
         </div>
       </div>
       
-      <div ref={heroImageRef} className="hero-image absolute right-0 bottom-0 h-full flex flex-col justify-end">
+      <div ref={heroImageRef} className="hero-image absolute left-0 bottom-0 h-full flex flex-col justify-end">
         {isLoading ? (
           <Skeleton className="w-full h-full"/>
         ) : (
