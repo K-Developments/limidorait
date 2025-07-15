@@ -35,10 +35,17 @@ export interface HeroContent {
   secondaryButton: ButtonContent;
 }
 
+export interface AboutContent {
+  heroTitle: string;
+  heroSubtitle: string;
+  heroImageUrl: string;
+}
+
 const HERO_CONTENT_DOC_ID = 'heroContent';
+const ABOUT_CONTENT_DOC_ID = 'aboutContent';
 const CONTENT_COLLECTION_ID = 'homepage';
 
-const defaultContent: HeroContent = {
+const defaultHeroContent: HeroContent = {
     title: "We Create Digital Experiences That Matter",
     subtitle: "Award-winning creative agency focused on branding, web design and development",
     imageUrls: [
@@ -78,6 +85,12 @@ const defaultContent: HeroContent = {
     }
 };
 
+const defaultAboutContent: AboutContent = {
+  heroTitle: "About Limidora",
+  heroSubtitle: "We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences.",
+  heroImageUrl: "https://placehold.co/1600x640.png"
+};
+
 // Deep merge utility to combine existing and new content
 const deepMerge = (target: any, source: any) => {
     const output = { ...target };
@@ -110,10 +123,10 @@ export const getHeroContent = async (): Promise<HeroContent> => {
   if (docSnap.exists()) {
     const data = docSnap.data();
     // Deep merge to ensure nested objects are handled correctly and defaults are applied
-    return deepMerge(defaultContent, data) as HeroContent;
+    return deepMerge(defaultHeroContent, data) as HeroContent;
   } else {
     // Return default content if document doesn't exist
-    return defaultContent;
+    return defaultHeroContent;
   }
 };
 
@@ -131,6 +144,34 @@ export const updateHeroContent = async (content: HeroContent): Promise<void> => 
   }
 };
 
+// Function to get about content from Firestore
+export const getAboutContent = async (): Promise<AboutContent> => {
+  const docRef = doc(db, CONTENT_COLLECTION_ID, ABOUT_CONTENT_DOC_ID);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    return deepMerge(defaultAboutContent, data) as AboutContent;
+  } else {
+    return defaultAboutContent;
+  }
+};
+
+// Function to update about content in Firestore
+export const updateAboutContent = async (content: AboutContent): Promise<void> => {
+  const docRef = doc(db, CONTENT_COLLECTION_ID, ABOUT_CONTENT_DOC_ID);
+  try {
+    const existingDoc = await getDoc(docRef);
+    const existingData = existingDoc.exists() ? existingDoc.data() : {};
+    const mergedContent = deepMerge(existingData, content);
+    await setDoc(docRef, mergedContent);
+  } catch (error) {
+    console.error("Error updating about content: ", error);
+    throw new Error("Could not update about content.");
+  }
+};
+
+
 // Function to upload an image and get URL
 export const uploadImageAndGetURL = async (imageFile: File): Promise<{
   url: string;
@@ -140,7 +181,7 @@ export const uploadImageAndGetURL = async (imageFile: File): Promise<{
     throw new Error("No image file provided.");
   }
 
-  const storageRef = ref(storage, `hero-images/${Date.now()}_${imageFile.name}`);
+  const storageRef = ref(storage, `page-images/${Date.now()}_${imageFile.name}`);
   
   try {
     const snapshot = await uploadBytes(storageRef, imageFile);
