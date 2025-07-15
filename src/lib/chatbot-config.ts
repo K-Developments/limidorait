@@ -1,7 +1,8 @@
 
 import { createChatBotMessage, type IConfig } from 'react-chatbot-kit';
+import type { NextRouter } from 'next/router';
 
-const config: IConfig = {
+const config = (router: NextRouter): IConfig => ({
   initialMessages: [createChatBotMessage(`Welcome to Limidora! How can I help you today?`)],
   botName: 'LimidoraAssistant',
   customStyles: {
@@ -19,6 +20,9 @@ const config: IConfig = {
         border: 'none',
         background: 'transparent',
     },
+    chatInnerContainer: {
+      backgroundColor: 'transparent',
+    },
     messagesContainer: {
         height: '100%',
         background: 'transparent',
@@ -33,6 +37,9 @@ const config: IConfig = {
       backgroundColor: 'transparent',
     }
   },
-};
+   state: {
+    router: router,
+  },
+});
 
 export default config;

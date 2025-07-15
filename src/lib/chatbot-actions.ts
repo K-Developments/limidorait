@@ -1,11 +1,15 @@
 
+import type { NextRouter } from 'next/router';
+
 class ActionProvider {
     createChatBotMessage: any;
     setState: any;
+    router: any;
     
-    constructor(createChatBotMessage: any, setStateFunc: any) {
+    constructor(createChatBotMessage: any, setStateFunc: any, router: NextRouter) {
         this.createChatBotMessage = createChatBotMessage;
         this.setState = setStateFunc;
+        this.router = router;
     }
 
     handleHello() {
@@ -20,8 +24,28 @@ class ActionProvider {
         this.updateChatbotState(botMessage);
     }
 
+    handleNavigation(page: string) {
+        const pathMap: { [key: string]: string } = {
+            'about': '/about',
+            'portfolio': '/portfolio',
+            'contact': '/contact',
+            'faq': '/faq',
+            'home': '/'
+        };
+        const path = pathMap[page.toLowerCase()];
+
+        if(path) {
+            const botMessage = this.createChatBotMessage(`Navigating you to the ${page} page.`);
+            this.updateChatbotState(botMessage);
+            this.router.push(path);
+        } else {
+            const botMessage = this.createChatBotMessage(`I'm sorry, I can't navigate to the '${page}' page. I can navigate to: home, about, portfolio, contact, or faq.`);
+            this.updateChatbotState(botMessage);
+        }
+    }
+
     handleDefault() {
-        const botMessage = this.createChatBotMessage("I'm not sure how to respond to that. You can ask me about our 'services', 'portfolio', or 'contact' information.");
+        const botMessage = this.createChatBotMessage("I'm not sure how to respond to that. You can ask me to 'navigate to a page' or ask about 'services', 'portfolio', or 'contact' information.");
         this.updateChatbotState(botMessage);
     }
     

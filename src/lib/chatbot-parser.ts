@@ -17,7 +17,14 @@ class MessageParser {
             this.actionProvider.handleContact();
         } else if (lowerCaseMessage.includes('portfolio') || lowerCaseMessage.includes('work')) {
             this.actionProvider.handlePortfolio();
-        } else {
+        } else if (lowerCaseMessage.includes('navigate to')) {
+            const page = lowerCaseMessage.split('navigate to')[1].trim();
+            this.actionProvider.handleNavigation(page);
+        } else if (lowerCaseMessage.startsWith('go to')) {
+            const page = lowerCaseMessage.split('go to')[1].trim();
+            this.actionProvider.handleNavigation(page);
+        }
+        else {
             this.actionProvider.handleDefault();
         }
     }

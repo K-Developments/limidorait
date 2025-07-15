@@ -159,16 +159,66 @@ html{
     padding:0 !important;
 }
 .react-chatbot-kit-chat-bot-message {
-    margin-left: inherit !important;
-    font-size: 1.1rem !important;
-    color: hsl(var(--foreground)) !important;
-    background: hsla(var(--primary) / 0.1) !important;
-    border: 1px solid hsla(var(--primary) / 0.3) !important;
-    padding: 1rem !important;
-    border-radius: 0.75rem !important;
-    backdrop-filter: blur(5px) !important;
-    -webkit-backdrop-filter: blur(5px) !important;
-    box-shadow: 0 4px 6px hsla(var(--primary) / 0.1);
+  margin-left: inherit !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  color: hsl(var(--foreground)) !important;
+  background: hsla(var(--primary) / 0.08) !important;
+  border: 1px solid hsla(var(--primary) / 0.15) !important;
+  padding: 1.25rem !important;
+  border-radius: 1.25rem 1.25rem 1.25rem 0.25rem !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  box-shadow: 
+      0 2px 4px hsla(var(--primary) / 0.05),
+      0 4px 12px hsla(var(--primary) / 0.08) !important;
+  transition: all 0.2s ease-out !important;
+  max-width: 85% !important;
+}
+
+.react-chatbot-kit-chat-bot-message-container {
+  align-items: flex-start !important;
+}
+
+/* Add a subtle floating effect on hover */
+.react-chatbot-kit-chat-bot-message:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 
+      0 4px 6px hsla(var(--primary) / 0.1),
+      0 8px 16px hsla(var(--primary) / 0.12) !important;
+}
+
+/* Modern message arrow/triangle */
+.react-chatbot-kit-chat-bot-message-arrow {
+  width: 0 !important;
+  height: 0 !important;
+  border-right: 8px solid hsla(var(--primary) / 0.15) !important;
+  border-top: 8px solid transparent !important;
+  border-bottom: 8px solid transparent !important;
+  left: -8px !important;
+}
+
+/* Typing animation for modern feel */
+@keyframes modernTyping {
+  0% { opacity: 0.4; transform: translateY(2px); }
+  50% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0.4; transform: translateY(2px); }
+}
+
+.react-chatbot-kit-chat-bot-message::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: hsl(var(--primary));
+  margin-right: 6px;
+  opacity: 0;
+  animation: modernTyping 1.5s infinite;
+}
+
+.react-chatbot-kit-chat-bot-loading .react-chatbot-kit-chat-bot-message::before {
+  opacity: 1;
 }
 .react-chatbot-kit-chat-container{
   width: 100% !important;
