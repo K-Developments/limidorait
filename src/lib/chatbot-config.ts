@@ -1,6 +1,5 @@
 
-import { createChatBotMessage } from 'react-chatbot-kit';
-import type { IConfig } from 'react-chatbot-kit';
+import { createChatBotMessage, IConfig } from 'react-chatbot-kit';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import ActionProvider from './chatbot-actions';
 
@@ -21,6 +20,9 @@ const config = (router: AppRouterInstance): IConfig => ({
         boxShadow: 'none',
         border: 'none',
         background: 'transparent',
+    },
+    chatInnerContainer: {
+        backgroundColor: 'transparent',
     },
     messagesContainer: {
         height: '100%',
