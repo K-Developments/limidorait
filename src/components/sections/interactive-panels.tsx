@@ -79,7 +79,7 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
 
   const handleClose = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // No-op to prevent closing the active panel
+    // This now only prevents clicks inside the expanded panel from changing the active panel.
   };
 
   if (isLoading || !panelData) {
@@ -154,9 +154,9 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
                 )}
               />
 
-              <div className="relative z-10 flex flex-col justify-end h-full p-6 text-white">
+              <div className="relative z-10 flex flex-col justify-end h-full p-6 text-white" onClick={handleClose}>
                 <AnimatePresence>
-                  {!activePanel && (
+                  {!isActive && (
                     <motion.h3
                       initial={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
@@ -196,14 +196,6 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
                       }}
                       className="space-y-6"
                     >
-                      <button
-                        onClick={handleClose}
-                        className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 p-2 rounded-full z-20 transition-all duration-300 hover:rotate-90"
-                        aria-label="Close panel"
-                      >
-                        <X className="h-6 w-6 text-white" />
-                        <span className="sr-only">Close</span>
-                      </button>
                       <motion.h3
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
