@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { MobileNav } from './mobile-nav';
@@ -15,11 +15,10 @@ export function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     
-    // Disable scrolling when mobile menu is open
     if (menuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -28,7 +27,7 @@ export function Header() {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      document.body.style.overflow = ''; // Ensure scroll is re-enabled on component unmount
+      document.body.style.overflow = ''; 
     };
   }, [menuOpen]);
 
@@ -39,78 +38,110 @@ export function Header() {
     { name: 'About', href: '/about' },
   ];
 
+  const topBlockVariants = {
+    initial: { y: 0, opacity: 1 },
+    exit: { y: -100, opacity: 0 },
+  };
+
+  const navBarVariants = {
+    initial: { y: -100, opacity: 0 },
+    animate: { y: 0, opacity: 1 },
+  };
+
   return (
     <>
-      <motion.header
-        className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-          scrolled ? 'bg-card/80 backdrop-blur-sm' : 'bg-transparent'
+      <AnimatePresence>
+        {!scrolled && (
+          <motion.div
+            className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
+            variants={topBlockVariants}
+            initial="initial"
+            exit="exit"
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <div className="bg-card text-card-foreground shadow-lg px-4 py-2">
+              <span className="text-xl font-bold">Limidora</span>
+            </div>
+          </motion.div>
         )}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
-      >
-        <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="text-2xl font-bold text-foreground transition-colors hover:text-primary">
-            Limidora
-          </Link>
-          <nav className="hidden md:flex items-center space-x-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-              >
-                {item.name}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {scrolled && (
+          <motion.header
+            className={cn(
+              'fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-card/80 backdrop-blur-sm'
+            )}
+            variants={navBarVariants}
+            initial="initial"
+            animate="animate"
+            exit="initial"
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
+              <Link href="/" className="text-2xl font-bold text-foreground transition-colors hover:text-primary">
+                Limidora
               </Link>
-            ))}
-          </nav>
-          <div className="hidden md:flex items-center gap-4">
-            <Button asChild>
-              <Link href="/contact">Get in Touch</Link>
-            </Button>
-            <Link href="/admin" aria-label="Admin Page">
-                <User className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors" />
-            </Link>
-          </div>
-          <div className="md:hidden">
-            <button
-              onClick={toggleMenu}
-              className="z-50 p-2 relative"
-              aria-label="Toggle menu"
-            >
-              <motion.div
-                animate={menuOpen ? "open" : "closed"}
-                initial={false}
-                className="w-6 h-5 flex flex-col justify-between"
-              >
-                <motion.span
-                  variants={{
-                    closed: { rotate: 0, y: 0 },
-                    open: { rotate: 45, y: 9 },
-                  }}
-                  className="block h-0.5 w-full bg-foreground"
-                ></motion.span>
-                <motion.span
-                   variants={{
-                    closed: { opacity: 1 },
-                    open: { opacity: 0 },
-                  }}
-                  className="block h-0.5 w-full bg-foreground"
-                ></motion.span>
-                <motion.span
-                   variants={{
-                    closed: { rotate: 0, y: 0 },
-                    open: { rotate: -45, y: -9 },
-                  }}
-                  className="block h-0.5 w-full bg-foreground"
-                ></motion.span>
-              </motion.div>
-            </button>
-          </div>
-        </div>
-      </motion.header>
-      <MobileNav navItems={navItems} isOpen={menuOpen} onClose={toggleMenu} />
+              <nav className="hidden md:flex items-center space-x-6">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </nav>
+              <div className="hidden md:flex items-center gap-4">
+                <Button asChild>
+                  <Link href="/contact">Get in Touch</Link>
+                </Button>
+                <Link href="/admin" aria-label="Admin Page">
+                    <User className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors" />
+                </Link>
+              </div>
+              <div className="md:hidden">
+                <button
+                  onClick={toggleMenu}
+                  className="z-50 p-2 relative"
+                  aria-label="Toggle menu"
+                >
+                  <motion.div
+                    animate={menuOpen ? "open" : "closed"}
+                    initial={false}
+                    className="w-6 h-5 flex flex-col justify-between"
+                  >
+                    <motion.span
+                      variants={{
+                        closed: { rotate: 0, y: 0 },
+                        open: { rotate: 45, y: 9 },
+                      }}
+                      className="block h-0.5 w-full bg-foreground"
+                    ></motion.span>
+                    <motion.span
+                       variants={{
+                        closed: { opacity: 1 },
+                        open: { opacity: 0 },
+                      }}
+                      className="block h-0.5 w-full bg-foreground"
+                    ></motion.span>
+                    <motion.span
+                       variants={{
+                        closed: { rotate: 0, y: 0 },
+                        open: { rotate: -45, y: -9 },
+                      }}
+                      className="block h-0.5 w-full bg-foreground"
+                    ></motion.span>
+                  </motion.div>
+                </button>
+              </div>
+            </div>
+          </motion.header>
+        )}
+      </AnimatePresence>
+
+      <MobileNav navItems={navItems} isOpen={menuOpen && scrolled} onClose={toggleMenu} />
     </>
   );
 }
