@@ -56,7 +56,7 @@ export function About() {
           </div>
         )}
 
-        <div className="py-12 md:py-16">
+        <div className="py-8 md:py-12">
           <div className="relative md:grid md:grid-cols-2 md:gap-8 md:items-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -105,7 +105,7 @@ export function About() {
           </div>
         </div>
 
-        <div className="py-12 md:py-16">
+        <div className="py-8 md:py-12">
           <div className="flex flex-col-reverse md:relative md:grid md:grid-cols-2 md:gap-8 md:items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -155,7 +155,7 @@ export function About() {
         </div>
 
       </div>
-       <div className="py-12 md:py-16">
+       <div className="py-8 md:py-12">
           <InteractivePanels content={content} />
       </div>
     </section>
