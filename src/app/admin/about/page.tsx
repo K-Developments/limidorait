@@ -18,6 +18,7 @@ export default function AdminAboutPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isUploadingHero, setIsUploadingHero] = useState(false);
   const [isUploadingConcepts, setIsUploadingConcepts] = useState(false);
+  const [isUploadingWorkflow, setIsUploadingWorkflow] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -87,6 +88,29 @@ export default function AdminAboutPage() {
         });
       } finally {
         setIsUploadingConcepts(false);
+      }
+    }
+  };
+
+  const handleWorkflowImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0] && aboutContent) {
+      const file = e.target.files[0];
+      setIsUploadingWorkflow(true);
+      try {
+        const { url } = await uploadImageAndGetURL(file);
+        setAboutContent({ ...aboutContent, workflowImageUrl: url });
+        toast({
+            title: "Success!",
+            description: "Image uploaded successfully. Click 'Save All Changes' to apply.",
+        });
+      } catch (error) {
+        toast({
+          title: "Upload Error",
+          description: "Failed to upload workflow image. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsUploadingWorkflow(false);
       }
     }
   };
@@ -278,6 +302,55 @@ export default function AdminAboutPage() {
                 <Label htmlFor="concepts-image-upload">Or Upload a New Concepts Image</Label>
                 <Input id="concepts-image-upload" type="file" onChange={handleConceptsImageUpload} accept="image/*" disabled={isUploadingConcepts}/>
                 {isUploadingConcepts && <p>Uploading...</p>}
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle>Our Workflow Section</CardTitle>
+            <CardDescription>Update the content for the 'Workflow' section on the About page.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="workflowTitle">Workflow Title</Label>
+              <Input
+                id="workflowTitle"
+                name="workflowTitle"
+                value={aboutContent?.workflowTitle || ''}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="workflowDescription">Workflow Description</Label>
+              <Textarea
+                id="workflowDescription"
+                name="workflowDescription"
+                value={aboutContent?.workflowDescription || ''}
+                onChange={handleInputChange}
+                className="min-h-[150px]"
+              />
+            </div>
+            <div className="space-y-2">
+                <Label>Current Workflow Image</Label>
+                <div className="relative group w-full max-w-sm aspect-square">
+                  <Image src={aboutContent?.workflowImageUrl || 'https://placehold.co/400x400.png'} alt="Our workflow image" layout="fill" className="object-cover rounded-md"/>
+                </div>
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="workflowImageUrl">Image URL</Label>
+                <Input
+                    id="workflowImageUrl"
+                    name="workflowImageUrl"
+                    value={aboutContent?.workflowImageUrl || ''}
+                    onChange={handleInputChange}
+                    placeholder="https://example.com/image.png"
+                />
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="workflow-image-upload">Or Upload a New Workflow Image</Label>
+                <Input id="workflow-image-upload" type="file" onChange={handleWorkflowImageUpload} accept="image/*" disabled={isUploadingWorkflow}/>
+                {isUploadingWorkflow && <p>Uploading...</p>}
             </div>
           </CardContent>
         </Card>
