@@ -14,14 +14,17 @@ interface RuleBasedChatbotProps {
 
 const RuleBasedChatbot = ({ onClose }: RuleBasedChatbotProps) => {
   return (
-    <div className="relative w-full h-full p-4 rounded-lg flex flex-col">
-       <div className="flex justify-between items-center pb-2 border-b border-white/20 mb-2">
-            <h3 className="font-bold text-lg text-white">Limidora Assistant</h3>
-            <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close chat">
-                <X className="h-5 w-5 text-white/80" />
-            </Button>
-       </div>
-       <div className="flex-grow overflow-y-auto">
+    <div className="relative w-full h-full flex flex-col">
+       <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onClose} 
+            aria-label="Close chat"
+            className="absolute top-2 right-2 z-20 text-foreground hover:bg-white/20"
+        >
+            <X className="h-5 w-5" />
+        </Button>
+       <div className="flex-grow overflow-y-auto w-full h-full">
         <Chatbot
             config={config}
             messageParser={MessageParser}
