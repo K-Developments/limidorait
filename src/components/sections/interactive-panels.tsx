@@ -81,7 +81,7 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
   if (isLoading || !panelData) {
     return (
         <div className="container mx-auto px-4 md:px-6 py-12">
-            <div className="flex flex-col md:flex-row md:h-[500px] rounded-xl overflow-hidden border border-gray-200 shadow-lg">
+            <div className="flex flex-col md:flex-row md:h-[500px] overflow-hidden border border-gray-200 shadow-lg">
                 <Skeleton className="w-full h-48 md:h-auto" />
                 <Skeleton className="w-full h-48 md:h-auto" />
                 <Skeleton className="w-full h-48 md:h-auto" />
@@ -94,7 +94,7 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
-      <div className="flex flex-col md:flex-row md:h-[500px] rounded-xl overflow-hidden border border-gray-200 shadow-lg">
+      <div className="flex flex-col md:flex-row md:h-[500px] overflow-hidden border border-gray-200 shadow-lg">
         {panels.map((panelId) => {
           const isActive = activePanel === panelId;
           const isInactive = activePanel !== null && !isActive;
@@ -208,7 +208,7 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
                       >
-                        <Button variant="secondary" size="lg">Learn more</Button>
+                        <Button variant="default" size="lg">Learn more</Button>
                       </motion.div>
                     </motion.div>
                   )}
