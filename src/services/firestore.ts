@@ -39,6 +39,8 @@ export interface AboutContent {
   heroTitle: string;
   heroSubtitle: string;
   heroImageUrl: string;
+  aboutTitle: string;
+  aboutDescription: string;
 }
 
 const HERO_CONTENT_DOC_ID = 'heroContent';
@@ -88,7 +90,9 @@ const defaultHeroContent: HeroContent = {
 const defaultAboutContent: AboutContent = {
   heroTitle: "About Limidora",
   heroSubtitle: "We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences.",
-  heroImageUrl: "https://placehold.co/1600x640.png"
+  heroImageUrl: "https://placehold.co/1600x640.png",
+  aboutTitle: "About Limidora",
+  aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.",
 };
 
 // Deep merge utility to combine existing and new content

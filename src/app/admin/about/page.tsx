@@ -104,6 +104,16 @@ export default function AdminAboutPage() {
             <Skeleton className="h-10 w-24" />
           </CardContent>
         </Card>
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-8 w-1/2" />
+            <Skeleton className="h-4 w-3/4" />
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-24 w-full" />
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -157,6 +167,34 @@ export default function AdminAboutPage() {
                 <Label htmlFor="image-upload">Or Upload a New Hero Image</Label>
                 <Input id="image-upload" type="file" onChange={handleImageUpload} accept="image/*" disabled={isUploading}/>
                 {isUploading && <p>Uploading...</p>}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>About Section Content</CardTitle>
+            <CardDescription>Update the title and description for the main content area on the About page.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="aboutTitle">Title</Label>
+              <Input
+                id="aboutTitle"
+                name="aboutTitle"
+                value={aboutContent?.aboutTitle || ''}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="aboutDescription">Description</Label>
+              <Textarea
+                id="aboutDescription"
+                name="aboutDescription"
+                value={aboutContent?.aboutDescription || ''}
+                onChange={handleInputChange}
+                className="min-h-[150px]"
+              />
             </div>
           </CardContent>
         </Card>
