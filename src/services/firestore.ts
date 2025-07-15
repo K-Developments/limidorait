@@ -1,6 +1,6 @@
 
 import { db, storage } from '@/lib/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp, getDocs, deleteDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export interface ServiceSlide {
@@ -78,10 +78,18 @@ export interface FaqContent {
   faqs: FaqItem[];
 }
 
+export interface SubmittedQuestion {
+    id: string;
+    email: string;
+    question: string;
+    submittedAt: Date;
+}
+
 const HERO_CONTENT_DOC_ID = 'heroContent';
 const ABOUT_CONTENT_DOC_ID = 'aboutContent';
 const FAQ_CONTENT_DOC_ID = 'faqContent';
 const CONTENT_COLLECTION_ID = 'homepage';
+const SUBMITTED_QUESTIONS_COLLECTION_ID = 'submittedQuestions';
 
 const defaultHeroContent: HeroContent = {
     title: "We Create Digital Experiences That Matter",
@@ -322,4 +330,43 @@ export const uploadImageAndGetURL = async (imageFile: File): Promise<{
     console.error("Error uploading image: ", error);
     throw new Error("Could not upload image.");
   }
+};
+
+// Function to submit a new question
+export const submitQuestion = async (data: { email: string; question: string }): Promise<void> => {
+    try {
+        await addDoc(collection(db, SUBMITTED_QUESTIONS_COLLECTION_ID), {
+            ...data,
+            submittedAt: serverTimestamp(),
+            status: 'new',
+        });
+    } catch (error) {
+        console.error("Error submitting question: ", error);
+        throw new Error("Could not submit question.");
+    }
+};
+
+// Function to get all submitted questions
+export const getSubmittedQuestions = async (): Promise<SubmittedQuestion[]> => {
+    const questionsCol = collection(db, SUBMITTED_QUESTIONS_COLLECTION_ID);
+    const snapshot = await getDocs(questionsCol);
+    return snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+            id: doc.id,
+            email: data.email,
+            question: data.question,
+            submittedAt: data.submittedAt?.toDate(),
+        };
+    });
+};
+
+// Function to delete a submitted question
+export const deleteSubmittedQuestion = async (id: string): Promise<void> => {
+    try {
+        await deleteDoc(doc(db, SUBMITTED_QUESTIONS_COLLECTION_ID, id));
+    } catch (error) {
+        console.error("Error deleting submitted question: ", error);
+        throw new Error("Could not delete submitted question.");
+    }
 };

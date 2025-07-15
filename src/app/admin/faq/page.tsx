@@ -8,33 +8,39 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getFaqContent, updateFaqContent, FaqContent, FaqItem, uploadImageAndGetURL } from '@/services/firestore';
+import { getFaqContent, updateFaqContent, FaqContent, FaqItem, uploadImageAndGetURL, getSubmittedQuestions, SubmittedQuestion, deleteSubmittedQuestion } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
-import { X, PlusCircle } from 'lucide-react';
+import { X, PlusCircle, Trash2 } from 'lucide-react';
 
 export default function AdminFaqPage() {
   const { toast } = useToast();
   const [faqContent, setFaqContent] = useState<FaqContent | null>(null);
+  const [submittedQuestions, setSubmittedQuestions] = useState<SubmittedQuestion[]>([]);
+  const [newAnswers, setNewAnswers] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
 
+  const fetchContent = async () => {
+    setIsLoading(true);
+    try {
+      const content = await getFaqContent();
+      const questions = await getSubmittedQuestions();
+      setFaqContent(content);
+      setSubmittedQuestions(questions);
+    } catch (error) {
+      console.error("Failed to fetch FAQ content:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load content from the database.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const content = await getFaqContent();
-        setFaqContent(content);
-      } catch (error) {
-        console.error("Failed to fetch FAQ content:", error);
-        toast({
-          title: "Error",
-          description: "Failed to load FAQ content from the database.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchContent();
   }, [toast]);
 
@@ -89,6 +95,35 @@ export default function AdminFaqPage() {
       setFaqContent({ ...faqContent, faqs: updatedFaqs });
     }
   };
+
+  const handleAddToFaqs = async (question: SubmittedQuestion) => {
+    const answer = newAnswers[question.id];
+    if (!answer || !faqContent) {
+        toast({ title: "Error", description: "Please provide an answer before adding.", variant: "destructive" });
+        return;
+    }
+    const newFaqItem: FaqItem = { question: question.question, answer };
+    const updatedFaqs = [...faqContent.faqs, newFaqItem];
+    
+    try {
+        await updateFaqContent({ ...faqContent, faqs: updatedFaqs });
+        await handleDeleteSubmitted(question.id); // Remove from submitted questions
+        toast({ title: "Success!", description: "FAQ added and updated successfully." });
+    } catch (error) {
+        toast({ title: "Error", description: "Could not add FAQ.", variant: "destructive" });
+    }
+  };
+
+  const handleDeleteSubmitted = async (id: string) => {
+    try {
+        await deleteSubmittedQuestion(id);
+        setSubmittedQuestions(prev => prev.filter(q => q.id !== id));
+        toast({ title: "Success", description: "Submitted question has been deleted." });
+    } catch (error) {
+        toast({ title: "Error", description: "Could not delete question.", variant: "destructive" });
+    }
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -171,6 +206,40 @@ export default function AdminFaqPage() {
               <Textarea id="description" name="description" value={faqContent?.description || ''} onChange={handleInputChange} className="min-h-[100px]" />
             </div>
           </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>Submitted Questions</CardTitle>
+                <CardDescription>Review questions submitted by users, answer them, and add them to the FAQ page.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                {submittedQuestions.length > 0 ? (
+                    submittedQuestions.map(q => (
+                        <Card key={q.id} className="p-4 space-y-3">
+                            <div>
+                                <p className="text-sm text-muted-foreground">From: {q.email}</p>
+                                <p className="font-semibold">{q.question}</p>
+                            </div>
+                            <Textarea
+                                placeholder="Write your answer here..."
+                                value={newAnswers[q.id] || ''}
+                                onChange={e => setNewAnswers({ ...newAnswers, [q.id]: e.target.value })}
+                            />
+                            <div className="flex justify-end gap-2">
+                                <Button type="button" size="sm" onClick={() => handleAddToFaqs(q)} disabled={!newAnswers[q.id]}>
+                                    Add to FAQs
+                                </Button>
+                                <Button type="button" variant="destructive" size="icon" onClick={() => handleDeleteSubmitted(q.id)}>
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        </Card>
+                    ))
+                ) : (
+                    <p className="text-muted-foreground">No new questions have been submitted.</p>
+                )}
+            </CardContent>
         </Card>
 
         <Card>

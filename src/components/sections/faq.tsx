@@ -5,7 +5,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { getFaqContent, FaqContent } from "@/services/firestore";
+import { getFaqContent, FaqContent, submitQuestion } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,13 +41,26 @@ export function Faq() {
     fetchContent();
   }, []);
 
-  const handleQuestionSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleQuestionSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    toast({
-      title: "Question Sent!",
-      description: "Thanks for reaching out. We'll get back to you soon.",
-    });
-    (e.target as HTMLFormElement).reset();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const email = formData.get('email') as string;
+    const question = formData.get('question') as string;
+
+    try {
+        await submitQuestion({ email, question });
+        toast({
+            title: "Question Sent!",
+            description: "Thanks for reaching out. We'll review your question and may add it to our FAQs.",
+        });
+        (e.target as HTMLFormElement).reset();
+    } catch (error) {
+        toast({
+            title: "Submission Error",
+            description: "There was a problem sending your question. Please try again.",
+            variant: "destructive",
+        });
+    }
   };
 
   if (isLoading) {
@@ -123,13 +136,13 @@ export function Faq() {
                       <Label htmlFor="email" className="text-right">
                         Email
                       </Label>
-                      <Input id="email" type="email" required className="col-span-3" placeholder="your@email.com" />
+                      <Input id="email" name="email" type="email" required className="col-span-3" placeholder="your@email.com" />
                     </div>
                     <div className="grid grid-cols-4 items-start gap-4">
                       <Label htmlFor="question" className="text-right pt-2">
                         Question
                       </Label>
-                      <Textarea id="question" required className="col-span-3 min-h-[120px]" placeholder="What would you like to know?" />
+                      <Textarea id="question" name="question" required className="col-span-3 min-h-[120px]" placeholder="What would you like to know?" />
                     </div>
                   </div>
                    <div className="flex justify-end">
