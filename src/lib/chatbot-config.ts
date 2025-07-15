@@ -1,10 +1,11 @@
 
-import { createChatBotMessage, type IConfig } from 'react-chatbot-kit';
+import { createChatBotMessage } from 'react-chatbot-kit';
+import type { IConfig } from 'react-chatbot-kit';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import ActionProvider from './chatbot-actions';
 
 const config = (router: AppRouterInstance): IConfig => ({
-  initialMessages: [createChatBotMessage(`Welcome to Limidora! How can I help you today?`)],
+  initialMessages: [createChatBotMessage("Welcome to Limidora! How can I help you today?")],
   botName: 'LimidoraAssistant',
   customStyles: {
     botMessageBox: {
@@ -35,7 +36,7 @@ const config = (router: AppRouterInstance): IConfig => ({
       backgroundColor: 'transparent',
     }
   },
-  actionProvider: (createChatBotMessage, setStateFunc, createClientMessage, stateRef, createCustomMessage) => {
+  actionProvider: (createChatBotMessage: any, setStateFunc: any, createClientMessage: any, stateRef: any, createCustomMessage: any) => {
     return new ActionProvider(createChatBotMessage, setStateFunc, router);
   },
 });
