@@ -4,7 +4,7 @@ import { AboutHero } from "@/components/sections/about-hero";
 
 export default function AboutPage() {
     return (
-        <div className="pt-20">
+        <div>
             <AboutHero />
             <About />
         </div>
