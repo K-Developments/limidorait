@@ -1,12 +1,12 @@
 
-import type { NextRouter } from 'next/router';
+import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 class ActionProvider {
     createChatBotMessage: any;
     setState: any;
-    router: any;
+    router: AppRouterInstance;
     
-    constructor(createChatBotMessage: any, setStateFunc: any, router: NextRouter) {
+    constructor(createChatBotMessage: any, setStateFunc: any, router: AppRouterInstance) {
         this.createChatBotMessage = createChatBotMessage;
         this.setState = setStateFunc;
         this.router = router;
