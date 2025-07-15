@@ -128,7 +128,7 @@ const defaultAboutContent: AboutContent = {
       description: "Find answers to common questions about our services, processes, and technology. We believe in transparency and are here to provide the clarity you need.",
       imageUrl: "https://images.unsplash.com/photo-1543286386-713bdd548da4?q=80&w=3000&auto=format&fit=crop",
       imageHint: "question mark abstract",
-      link: "#",
+      link: "/faq",
     },
     testimonials: {
       title: "What Our Clients Say",
