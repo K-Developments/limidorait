@@ -20,7 +20,6 @@ interface PanelData {
       title: string;
       text: string;
     };
-    gradient: string;
 }
 
 const getPanelData = (content: AboutContent['interactivePanels'] | null): Record<Panel, PanelData> | null => {
@@ -34,7 +33,6 @@ const getPanelData = (content: AboutContent['interactivePanels'] | null): Record
           title: content.faq.title,
           text: content.faq.description,
         },
-        gradient: "from-purple-600/80 to-indigo-600/80",
       },
       testimonials: {
         title: "Testimonials",
@@ -44,7 +42,6 @@ const getPanelData = (content: AboutContent['interactivePanels'] | null): Record
           title: content.testimonials.title,
           text: content.testimonials.description,
         },
-        gradient: "from-amber-600/80 to-orange-600/80",
       },
       solutions: {
         title: "Solutions",
@@ -54,7 +51,6 @@ const getPanelData = (content: AboutContent['interactivePanels'] | null): Record
           title: content.solutions.title,
           text: content.solutions.description,
         },
-        gradient: "from-emerald-600/80 to-teal-600/80",
       },
     };
 };
@@ -79,7 +75,7 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
 
   const handleClose = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // This now only prevents clicks inside the expanded panel from changing the active panel.
+    // No-op to prevent closing the active panel
   };
 
   if (isLoading || !panelData) {
@@ -102,7 +98,7 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
         {panels.map((panelId) => {
           const isActive = activePanel === panelId;
           const isInactive = activePanel !== null && !isActive;
-          const isHovered = hoveredPanel === panelId && !activePanel;
+          const isHovered = hoveredPanel === panelId && !isActive;
 
           return (
             <motion.div
@@ -147,16 +143,11 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
                 />
               </motion.div>
 
-              <div
-                className={cn(
-                  "absolute inset-0 bg-gradient-to-br opacity-80",
-                  panelData[panelId].gradient
-                )}
-              />
+              <div className="absolute inset-0 bg-black/50" />
 
-              <div className="relative z-10 flex flex-col justify-end h-full p-6 text-white" onClick={handleClose}>
+              <div className="relative z-10 flex flex-col justify-end h-full p-6 text-white">
                 <AnimatePresence>
-                  {!isActive && (
+                  {!activePanel && (
                     <motion.h3
                       initial={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
