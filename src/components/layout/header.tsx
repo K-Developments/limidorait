@@ -60,7 +60,7 @@ export function Header() {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
             <div className="bg-card text-card-foreground shadow-lg px-8 py-4 rounded-bl-lg rounded-br-lg">
-              <span className="text-xl font-bold uppercase">Limidora</span>
+              <span className="text-xl font-bold uppercase" style={{ textShadow: '1px 1px 2px hsla(var(--primary), 0.5), -1px -1px 2px hsl(var(--card))' }}>Limidora</span>
             </div>
           </motion.div>
         )}
