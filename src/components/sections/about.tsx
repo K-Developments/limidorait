@@ -10,7 +10,7 @@ const teamMembers = [
 
 export function About() {
   return (
-    <section id="about" className="w-full py-12 md:py-24 lg:py-32 bg-card relative">
+    <section id="about" className="w-full pt-12 bg-card relative">
         <div className="container mx-auto px-4 md:px-6">
             <div className="mb-8">
                 <nav className="flex items-center text-sm text-muted-foreground">
