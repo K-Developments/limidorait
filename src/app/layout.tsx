@@ -26,8 +26,11 @@ export default function RootLayout({
 
   const navItems = [
     { name: 'Home', href: '/' },
-    { name: 'Portfolio', href: '/portfolio' },
     { name: 'About', href: '/about' },
+    { name: 'Solutions', href: '/solutions' },
+    { name: 'FAQs', href: '/faq' },
+    { name: 'Blog & News', href: '/blog' },
+    { name: 'Careers', href: '/careers' },
   ];
 
   return (
