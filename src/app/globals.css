@@ -100,6 +100,10 @@ html{
       height: 100%;
       z-index: 0;
     }
+
+    body.sidebar-open #main-content-wrapper {
+      pointer-events: none;
+    }
 }
 
 

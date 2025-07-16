@@ -7,8 +7,9 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sidebar } from '@/components/layout/sidebar';
+import { cn } from '@/lib/utils';
 
 const metadata: Metadata = {
   title: 'Limidora Digital | Creative IT Solutions',
@@ -24,6 +25,14 @@ export default function RootLayout({
   const isAdminPage = pathname.startsWith('/admin');
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.classList.add('sidebar-open');
+    } else {
+      document.body.classList.remove('sidebar-open');
+    }
+  }, [isSidebarOpen]);
+
   const navItems = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
@@ -35,8 +44,8 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className="font-body antialiased">
-        <div className="flex min-h-screen flex-col">
+      <body className={cn("font-body antialiased")}>
+        <div id="main-content-wrapper" className="flex min-h-screen flex-col">
           {!isAdminPage && <Header onMenuClick={() => setSidebarOpen(true)} />}
           {!isAdminPage && <Sidebar navItems={navItems} isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />}
           <main className="flex-1">{children}</main>
