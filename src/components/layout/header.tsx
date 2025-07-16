@@ -25,112 +25,109 @@ export function Header({ onMenuClick }: HeaderProps) {
     };
   }, []);
 
-  const topBlockVariants = {
-    initial: { y: 0, opacity: 1 },
-    exit: { y: -100, opacity: 0 },
+  const headerVariants = {
+    top: {
+      backgroundColor: "hsla(var(--card), 0)",
+      backdropFilter: "blur(0px)",
+      height: "8rem",
+    },
+    scrolled: {
+      backgroundColor: "hsla(var(--card) / 0.9)",
+      backdropFilter: "blur(8px)",
+      height: "5rem",
+      borderBottomWidth: "1px",
+      borderBottomColor: "hsl(var(--border) / 0.5)",
+    }
   };
 
-  const navBarVariants = {
-    initial: { y: -100, opacity: 0 },
-    animate: { y: 0, opacity: 1 },
+  const logoVariants = {
+    top: { 
+        y: "2rem", 
+        x: "-50%", 
+        left: "50%",
+        fontSize: "2.25rem",
+        letterSpacing: "0.1em"
+    },
+    scrolled: { 
+        y: 0,
+        x: 0,
+        left: "0",
+        fontSize: "1.5rem",
+        letterSpacing: "0em"
+    }
   };
-
+  
   const hamburgerVariants = {
-    initial: { x: 100, opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: 100, opacity: 0 },
+    top: {
+      top: "2.5rem",
+      right: "1.25rem",
+    },
+    scrolled: {
+      top: "1.5rem",
+      right: "1rem",
+    }
   };
-
 
   return (
-    <>
-      <AnimatePresence>
-        {!scrolled && (
-          <motion.div
-            className="fixed top-0 left-0 right-0 flex justify-center z-50"
-            variants={topBlockVariants}
-            initial="initial"
-            exit="exit"
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-          >
-            <div className="relative group mt-5">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-primary/10 to-primary/30 rounded-bl-lg rounded-br-lg opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative bg-card/90 text-card-foreground shadow-lg px-8 py-4 rounded-bl-lg rounded-br-lg border border-border/50 backdrop-blur-sm group-hover:backdrop-blur-md transition-all duration-300">
+    <motion.header
+        className="fixed top-0 left-0 right-0 z-50 flex items-center"
+        variants={headerVariants}
+        animate={scrolled ? "scrolled" : "top"}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
+      >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative flex justify-between items-center h-full">
+            <motion.div
+                className="absolute top-1/2"
+                variants={logoVariants}
+                animate={scrolled ? "scrolled" : "top"}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                style={{
+                  transform: 'translateY(-50%)',
+                }}
+            >
                 <Link href="/">
                   <span 
-                    className="text-xl font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-headline"
+                    className="font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-headline"
                     style={{
                       textShadow: '0 2px 10px hsla(var(--primary), 0.3)',
-                      letterSpacing: '0.1em'
                     }}
                   >
                     Limidora
                   </span>
                 </Link>
-                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
-       <AnimatePresence>
-        {!scrolled && (
-           <motion.div
-            className="fixed top-5 right-5 z-50"
-            variants={hamburgerVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-          >
-             <button
-                onClick={onMenuClick}
-                className="p-2 rounded-full bg-card/90 backdrop-blur-md hover:bg-primary/10 transition-colors shadow-lg"
-                aria-label="Toggle menu"
-              >
-                <Menu className="h-6 w-6 text-foreground" />
-              </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {scrolled && (
-          <motion.header
-            className={cn(
-              'fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-card/90 backdrop-blur-md border-b border-border/50'
-            )}
-            variants={navBarVariants}
-            initial="initial"
-            animate="animate"
-            exit="initial"
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-          >
-            <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
-              <Link href="/" className="relative group">
-                <span className="text-2xl font-bold text-foreground transition-colors hover:text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-headline">
-                  Limidora
-                </span>
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-primary to-primary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-              </Link>
-             
-              <div className="flex items-center gap-4">
-                 <Button asChild className="hidden md:flex">
-                  <Link href="/contact">Get in Touch</Link>
-                </Button>
-                <button
+            </motion.div>
+            
+            <div className="ml-auto flex items-center gap-4">
+              <AnimatePresence>
+                {scrolled && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 20 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Button asChild className="hidden md:flex">
+                        <Link href="/contact">Get in Touch</Link>
+                      </Button>
+                    </motion.div>
+                )}
+              </AnimatePresence>
+              
+               <motion.button
                   onClick={onMenuClick}
-                  className="p-2 rounded-full hover:bg-primary/10 transition-colors"
+                  className={cn(
+                    "p-2 rounded-full transition-colors",
+                    scrolled ? "hover:bg-primary/10" : "bg-card/90 backdrop-blur-md hover:bg-primary/10 shadow-lg"
+                  )}
                   aria-label="Toggle menu"
+                  variants={hamburgerVariants}
+                  animate={scrolled ? "scrolled" : "top"}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
                 >
                   <Menu className="h-6 w-6 text-foreground" />
-                </button>
-              </div>
+                </motion.button>
             </div>
-          </motion.header>
-        )}
-      </AnimatePresence>
-    </>
+        </div>
+      </motion.header>
   );
 }
