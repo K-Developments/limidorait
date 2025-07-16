@@ -9,13 +9,13 @@ export function Footer() {
           © {new Date().getFullYear()} Limidora Digital. All Rights Reserved.
         </p>
         <div className="flex gap-4 sm:gap-6">
-          <Link href="#" aria-label="Twitter">
+          <Link href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
             <Twitter className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
           </Link>
-          <Link href="#" aria-label="LinkedIn">
+          <Link href="#" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
             <Linkedin className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
           </Link>
-          <Link href="#" aria-label="GitHub">
+          <Link href="#" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
             <Github className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
           </Link>
         </div>

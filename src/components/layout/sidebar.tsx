@@ -64,6 +64,8 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
           variants={backdropVariants}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
           onClick={onClose}
+          aria-modal="true"
+          role="dialog"
         >
           <motion.div
             className="fixed top-0 right-0 h-full w-full max-w-sm bg-background p-6 shadow-2xl overflow-x-hidden"
@@ -90,31 +92,33 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                         className="h-full"
                     >
-                        <nav className="flex flex-col items-start gap-y-2">
-                            {navItems.map((item, index) => (
-                            <motion.div
-                                key={item.name}
-                                initial={{ opacity: 0, x: 50 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.1 * index + 0.2, duration: 0.5, ease: 'easeOut' }}
-                                className="w-full"
-                            >
-                                {item.name === 'Solutions' ? (
-                                    <button onClick={() => setMenu('solutions')} className="flex justify-between items-center py-4 text-2xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b text-left">
-                                        {item.name}
-                                        <ChevronRight className="h-7 w-7" />
-                                    </button>
-                                ) : (
-                                    <Link
-                                    href={item.href || '#'}
-                                    onClick={onClose}
-                                    className="block py-4 text-2xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b"
-                                    >
-                                    {item.name}
-                                    </Link>
-                                )}
-                            </motion.div>
-                            ))}
+                        <nav aria-label="Main Navigation">
+                          <ul className="flex flex-col items-start gap-y-2">
+                              {navItems.map((item, index) => (
+                              <motion.li
+                                  key={item.name}
+                                  initial={{ opacity: 0, x: 50 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: 0.1 * index + 0.2, duration: 0.5, ease: 'easeOut' }}
+                                  className="w-full"
+                              >
+                                  {item.name === 'Solutions' ? (
+                                      <button onClick={() => setMenu('solutions')} className="flex justify-between items-center py-4 text-2xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b text-left">
+                                          {item.name}
+                                          <ChevronRight className="h-7 w-7" />
+                                      </button>
+                                  ) : (
+                                      <Link
+                                      href={item.href || '#'}
+                                      onClick={onClose}
+                                      className="block py-4 text-2xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b"
+                                      >
+                                      {item.name}
+                                      </Link>
+                                  )}
+                              </motion.li>
+                              ))}
+                          </ul>
                         </nav>
                          <motion.div 
                             initial={{ opacity: 0, y: 20 }}
@@ -140,26 +144,28 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
                         className="h-full"
                     >
                         <Button variant="ghost" onClick={() => setMenu('main')} className="mb-4 font-semibold text-lg pl-0 hover:bg-transparent">
-                            <ChevronLeft className="mr-2 h-5 w-5"/> Back
+                            <ChevronLeft className="mr-2 h-5 w-5"/> Back to Main Menu
                         </Button>
-                        <nav className="flex flex-col items-start gap-y-2">
-                            {solutionsNavItems.map((item, index) => (
-                                <motion.div
-                                    key={item.name}
-                                    initial={{ opacity: 0, x: 50 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.1 * index, duration: 0.5, ease: 'easeOut' }}
-                                    className="w-full"
-                                >
-                                    <Link
-                                    href={item.href}
-                                    onClick={onClose}
-                                    className="block py-4 text-xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b"
-                                    >
-                                    {item.name}
-                                    </Link>
-                                </motion.div>
-                            ))}
+                        <nav aria-label="Solutions Navigation">
+                          <ul className="flex flex-col items-start gap-y-2">
+                              {solutionsNavItems.map((item, index) => (
+                                  <motion.li
+                                      key={item.name}
+                                      initial={{ opacity: 0, x: 50 }}
+                                      animate={{ opacity: 1, x: 0 }}
+                                      transition={{ delay: 0.1 * index, duration: 0.5, ease: 'easeOut' }}
+                                      className="w-full"
+                                  >
+                                      <Link
+                                      href={item.href}
+                                      onClick={onClose}
+                                      className="block py-4 text-xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b"
+                                      >
+                                      {item.name}
+                                      </Link>
+                                  </motion.li>
+                              ))}
+                          </ul>
                         </nav>
                     </motion.div>
                 )}

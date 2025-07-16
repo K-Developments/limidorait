@@ -40,12 +40,12 @@ export function FloatingChatbot() {
             transition={{ type: 'spring', stiffness: 200, damping: 25 }}
             className="fixed bottom-24 left-6 w-full max-w-sm h-[500px] bg-background border rounded-lg shadow-2xl z-50 flex flex-col"
           >
-            <div className="flex items-center justify-between p-4 border-b">
+            <header className="flex items-center justify-between p-4 border-b">
                 <h3 className="font-semibold text-lg">Limidora Assistant</h3>
-                <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
+                <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} aria-label="Close Chatbot">
                     <X className="h-5 w-5" />
                 </Button>
-            </div>
+            </header>
             <div className="flex-grow p-4 overflow-y-auto">
                  <Chatbot
                     config={config}

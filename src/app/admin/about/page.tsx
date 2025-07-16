@@ -162,7 +162,7 @@ export default function AdminAboutPage() {
             <div className="space-y-2">
                 <Label>Current Hero Image</Label>
                 <div className="relative group w-full aspect-video">
-                  <Image src={aboutContent?.heroImageUrl || 'https://placehold.co/1600x640.png'} alt="About hero image" layout="fill" className="object-cover rounded-md"/>
+                  <Image src={aboutContent?.heroImageUrl || 'https://placehold.co/1600x640.png'} alt={aboutContent?.heroTitle || 'About hero image'} layout="fill" className="object-cover rounded-md"/>
                 </div>
             </div>
             <div className="space-y-2">
@@ -249,7 +249,7 @@ export default function AdminAboutPage() {
             <div className="space-y-2">
                 <Label>Current Concepts Image</Label>
                 <div className="relative group w-full max-w-sm aspect-square">
-                  <Image src={aboutContent?.conceptsImageUrl || 'https://placehold.co/400x400.png'} alt="Limidora concepts image" layout="fill" className="object-cover rounded-md"/>
+                  <Image src={aboutContent?.conceptsImageUrl || 'https://placehold.co/400x400.png'} alt={aboutContent?.conceptsTitle || 'Limidora concepts image'} layout="fill" className="object-cover rounded-md"/>
                 </div>
             </div>
             <div className="space-y-2">
@@ -308,7 +308,7 @@ export default function AdminAboutPage() {
             <div className="space-y-2">
                 <Label>Current Workflow Image</Label>
                 <div className="relative group w-full max-w-sm aspect-square">
-                  <Image src={aboutContent?.workflowImageUrl || 'https://placehold.co/400x400.png'} alt="Our workflow image" layout="fill" className="object-cover rounded-md"/>
+                  <Image src={aboutContent?.workflowImageUrl || 'https://placehold.co/400x400.png'} alt={aboutContent?.workflowTitle || 'Our workflow image'} layout="fill" className="object-cover rounded-md"/>
                 </div>
             </div>
             <div className="space-y-2">

@@ -124,6 +124,7 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
                 stiffness: 100,
                 damping: 20,
               }}
+              aria-label={`View ${panelData[panelId].title}`}
             >
               <motion.div
                 className="absolute inset-0 w-full h-full"
@@ -139,7 +140,7 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
               >
                 <Image
                   src={panelData[panelId].imageUrl}
-                  alt={panelData[panelId].title}
+                  alt={panelData[panelId].content.title}
                   fill
                   className="object-cover"
                   data-ai-hint={panelData[panelId].aiHint}
@@ -213,7 +214,7 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
                         transition={{ delay: 0.6 }}
                       >
                          <Button asChild variant="default" size="lg">
-                          <Link href={panelData[panelId].link}>Learn more</Link>
+                          <Link href={panelData[panelId].link}>Learn more about {panelData[panelId].title}</Link>
                         </Button>
                       </motion.div>
                     </motion.div>

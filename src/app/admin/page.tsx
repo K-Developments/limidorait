@@ -353,7 +353,7 @@ export default function AdminHomePage() {
                   {(heroContent?.imageUrls || []).map((url, index) => (
                     <div key={index} className="relative group">
                       <Image src={url} alt={`Hero image ${index + 1}`} width={200} height={300} className="object-cover w-full h-auto"/>
-                      <Button variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => handleRemoveImage(index)}>
+                      <Button variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => handleRemoveImage(index)} aria-label={`Remove hero image ${index + 1}`}>
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
@@ -384,7 +384,7 @@ export default function AdminHomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {(heroContent?.serviceSlides || []).map((slide, index) => (
                 <Card key={index} className="relative p-4">
-                  <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-6 w-6" onClick={() => handleRemoveServiceSlide(index)}>
+                  <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-6 w-6" onClick={() => handleRemoveServiceSlide(index)} aria-label={`Remove service slide ${index + 1}`}>
                     <X className="h-4 w-4" />
                   </Button>
                   <div className="flex flex-col gap-4">
@@ -394,7 +394,7 @@ export default function AdminHomePage() {
                     </div>
                     <div className="space-y-2">
                       <Label>Slide Image</Label>
-                      <Image src={slide.image} alt={slide.text} width={100} height={100} className="object-cover aspect-square" />
+                      <Image src={slide.image} alt={slide.text || `Service slide ${index + 1}`} width={100} height={100} className="object-cover aspect-square" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor={`slide-image-url-${index}`}>Image URL</Label>
@@ -438,7 +438,7 @@ export default function AdminHomePage() {
                   </div>
                   <div className="space-y-2">
                     <Label>Image</Label>
-                    <Image src={heroContent?.storiesAndNews?.story.imageUrl || 'https://placehold.co/800x600.png'} alt="Limidora Stories Image" width={200} height={150} className="object-cover" />
+                    <Image src={heroContent?.storiesAndNews?.story.imageUrl || 'https://placehold.co/800x600.png'} alt={heroContent?.storiesAndNews?.story.title || 'Limidora Stories Image'} width={200} height={150} className="object-cover" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="story-image-url">Image URL</Label>
@@ -472,7 +472,7 @@ export default function AdminHomePage() {
                   </div>
                   <div className="space-y-2">
                     <Label>Image</Label>
-                    <Image src={heroContent?.storiesAndNews?.news.imageUrl || 'https://placehold.co/800x600.png'} alt="News & Blog Image" width={200} height={150} className="object-cover" />
+                    <Image src={heroContent?.storiesAndNews?.news.imageUrl || 'https://placehold.co/800x600.png'} alt={heroContent?.storiesAndNews?.news.title || 'News & Blog Image'} width={200} height={150} className="object-cover" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="news-image-url">Image URL</Label>

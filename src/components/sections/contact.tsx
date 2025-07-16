@@ -22,25 +22,25 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="w-full py-12 md:py-24 lg:py-32">
+    <section id="contact" aria-labelledby="contact-heading" className="w-full py-12 md:py-24 lg:py-32">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="space-y-4">
             <div className="inline-block bg-secondary px-3 py-1 text-sm text-secondary-foreground">Contact Us</div>
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-body uppercase">Let's Build Something Great</h2>
+            <h2 id="contact-heading" className="text-3xl font-bold tracking-tighter sm:text-5xl font-body uppercase">Let's Build Something Great</h2>
             <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               Have a project in mind or just want to say hello? Drop us a line. We're excited to hear from you and learn about your ideas.
             </p>
             <div className="flex space-x-4 pt-4">
-              <Link href="#" aria-label="Twitter">
+              <a href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
                 <Twitter className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors" />
-              </Link>
-              <Link href="#" aria-label="LinkedIn">
+              </a>
+              <a href="#" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                 <Linkedin className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors" />
-              </Link>
-              <Link href="#" aria-label="GitHub">
+              </a>
+              <a href="#" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
                 <Github className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors" />
-              </Link>
+              </a>
             </div>
           </div>
           <div className="space-y-4 border bg-card p-6">
@@ -48,11 +48,11 @@ export function Contact() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Name</Label>
-                  <Input id="name" placeholder="Your Name" required />
+                  <Input id="name" placeholder="Your Name" required autoComplete="name" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="your@email.com" required />
+                  <Input id="email" type="email" placeholder="your@email.com" required autoComplete="email" />
                 </div>
               </div>
               <div className="space-y-2">

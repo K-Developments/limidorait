@@ -87,10 +87,10 @@ export function Faq() {
   }
 
   return (
-    <section id="faq" className="w-full bg-background pt-12 pb-12 md:pb-24 lg:pb-32">
+    <section id="faq" aria-labelledby="faq-heading" className="w-full bg-background pt-12 pb-12 md:pb-24 lg:pb-32">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-8">
-            <nav className="flex items-center text-sm text-muted-foreground">
+            <nav aria-label="Breadcrumb" className="flex items-center text-sm text-muted-foreground">
                 <Link href="/" className="hover:text-primary transition-colors">Home</Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
                 {cameFromAbout && (
@@ -110,9 +110,9 @@ export function Faq() {
             className="text-center mb-16"
         >
             <Badge variant="outline" className="mb-4">FAQs</Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 font-body uppercase">
+            <h1 id="faq-heading" className="text-4xl md:text-5xl font-bold text-foreground mb-4 font-body uppercase">
               {content?.title}
-            </h2>
+            </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               {content?.description}
             </p>
@@ -153,7 +153,7 @@ export function Faq() {
                       <Label htmlFor="email" className="text-right">
                         Email
                       </Label>
-                      <Input id="email" name="email" type="email" required className="col-span-3" placeholder="your@email.com" />
+                      <Input id="email" name="email" type="email" required className="col-span-3" placeholder="your@email.com" autoComplete="email" />
                     </div>
                     <div className="grid grid-cols-4 items-start gap-4">
                       <Label htmlFor="question" className="text-right pt-2">

@@ -83,6 +83,7 @@ export function Header({ onMenuClick, scrolled }: HeaderProps) {
                 >
                   Limidora
                 </span>
+                <span className="sr-only">Limidora Home</span>
               </Link>
               
               <div className="flex items-center gap-4">

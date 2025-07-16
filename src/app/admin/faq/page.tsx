@@ -176,7 +176,7 @@ export default function AdminFaqPage() {
             <div className="space-y-2">
               <Label>Current Hero Image</Label>
               <div className="relative group w-full aspect-video">
-                <Image src={faqContent?.heroImageUrl || 'https://placehold.co/1600x640.png'} alt="FAQ hero image" layout="fill" className="object-cover rounded-md" />
+                <Image src={faqContent?.heroImageUrl || 'https://placehold.co/1600x640.png'} alt={faqContent?.heroTitle || 'FAQ hero image'} layout="fill" className="object-cover rounded-md" />
               </div>
             </div>
             <div className="space-y-2">
@@ -230,7 +230,7 @@ export default function AdminFaqPage() {
                                 <Button type="button" size="sm" onClick={() => handleAddToFaqs(q)} disabled={!newAnswers[q.id]}>
                                     Add to FAQs
                                 </Button>
-                                <Button type="button" variant="destructive" size="icon" onClick={() => handleDeleteSubmitted(q.id)}>
+                                <Button type="button" variant="destructive" size="icon" onClick={() => handleDeleteSubmitted(q.id)} aria-label="Delete submitted question">
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
                             </div>
@@ -250,7 +250,7 @@ export default function AdminFaqPage() {
           <CardContent className="space-y-4">
             {faqContent?.faqs.map((faq, index) => (
               <Card key={index} className="p-4 relative">
-                <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-6 w-6" onClick={() => removeFaqItem(index)}>
+                <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-6 w-6" onClick={() => removeFaqItem(index)} aria-label={`Remove FAQ item ${index + 1}`}>
                   <X className="h-4 w-4" />
                 </Button>
                 <div className="space-y-2">

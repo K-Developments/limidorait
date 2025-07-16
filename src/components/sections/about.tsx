@@ -32,7 +32,7 @@ export function About() {
     <section id="about" className="w-full bg-card relative">
       <div className="container mx-auto px-4 md:px-6 pt-12">
         <div className="mb-8">
-          <nav className="flex items-center text-sm text-muted-foreground">
+          <nav aria-label="Breadcrumb" className="flex items-center text-sm text-muted-foreground">
             <Link href="/" className="hover:text-primary transition-colors">Home</Link>
             <ChevronRight className="h-4 w-4 mx-1" />
             <span className="font-medium text-foreground">About</span>
@@ -70,7 +70,7 @@ export function About() {
               ) : (
                 <Image
                   src={content?.conceptsImageUrl || "https://placehold.co/400x400.png"}
-                  alt="Limidora Concepts"
+                  alt={content?.conceptsTitle || "Limidora Concepts"}
                   width={400}
                   height={400}
                   className="rounded-lg object-cover w-full h-auto aspect-square"
@@ -97,7 +97,7 @@ export function About() {
                     {content?.conceptsDescription}
                   </p>
                   <Link href={content?.conceptsLink || '#'} className="inline-flex items-center font-semibold text-primary hover:underline">
-                    Explore <ChevronRight className="w-4 h-4 ml-1" />
+                    Explore Concepts <ChevronRight className="w-4 h-4 ml-1" />
                   </Link>
                 </>
               )}
@@ -126,7 +126,7 @@ export function About() {
                     {content?.workflowDescription}
                   </p>
                   <Link href={content?.workflowLink || '#'} className="inline-flex items-center font-semibold text-primary hover:underline">
-                    Explore <ChevronRight className="w-4 h-4 ml-1" />
+                    Explore Workflow <ChevronRight className="w-4 h-4 ml-1" />
                   </Link>
                 </>
               )}
@@ -143,7 +143,7 @@ export function About() {
               ) : (
                 <Image
                   src={content?.workflowImageUrl || "https://placehold.co/400x400.png"}
-                  alt="Our Workflow"
+                  alt={content?.workflowTitle || "Our Workflow"}
                   width={400}
                   height={400}
                   className="rounded-lg object-cover w-full h-auto aspect-square"

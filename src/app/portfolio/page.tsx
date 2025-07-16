@@ -5,6 +5,12 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { PortfolioCard } from "@/components/PortfolioCard";
 import { projects } from "@/lib/portfolio-data";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Our Portfolio | Limidora Digital',
+  description: 'Explore a selection of our creative work, from e-commerce platforms and mobile apps to corporate rebranding and SaaS dashboards. See the impact we deliver.',
+};
 
 export default function PortfolioPage() {
     return (
@@ -18,9 +24,9 @@ export default function PortfolioPage() {
             className="text-center mb-16"
           >
             <Badge variant="outline" className="mb-4">Our Work</Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 font-body uppercase">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 font-body uppercase">
               Our Portfolio
-            </h2>
+            </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               A glimpse into our creative world and the impact we deliver.
             </p>
