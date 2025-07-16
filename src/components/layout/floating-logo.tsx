@@ -14,12 +14,10 @@ export function FloatingLogo({ scrolled }: FloatingLogoProps) {
         top: { 
             opacity: 1,
             scale: 1,
-            y: 0,
         },
         scrolled: { 
             opacity: 0,
             scale: 0.8,
-            y: -20,
         }
     };
 
@@ -36,7 +34,7 @@ export function FloatingLogo({ scrolled }: FloatingLogoProps) {
             >
                 <Link href="/">
                   <span 
-                    className="font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-headline"
+                    className="font-headline font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70"
                     style={{
                       fontSize: "clamp(2rem, 10vw, 5rem)",
                     }}
