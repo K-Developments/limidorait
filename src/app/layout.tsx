@@ -12,6 +12,7 @@ import { useState, useEffect } from 'react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { cn } from '@/lib/utils';
 import { FloatingLogo } from '@/components/layout/floating-logo';
+import { FloatingChatbot } from '@/components/FloatingChatbot';
 
 const metadata: Metadata = {
   title: 'Limidora Digital | Creative IT Solutions',
@@ -78,6 +79,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           {!isAdminPage && <Footer />}
         </div>
+        {!isAdminPage && <FloatingChatbot />}
         <Toaster />
       </body>
     </html>

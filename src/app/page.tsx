@@ -12,17 +12,11 @@ import { getHeroContent, HeroContent, ServiceSlide, StoryNewsItem } from "@/serv
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import ParticlesWrapper from "@/components/ParticlesWrapper";
-import { Globe, Smartphone, Code, LayoutGrid, ArrowUpRight, Twitter, Linkedin, Facebook, MessageSquare } from 'lucide-react';
-import dynamic from 'next/dynamic';
+import { Globe, Smartphone, Code, LayoutGrid, ArrowUpRight, Twitter, Linkedin, Facebook } from 'lucide-react';
 
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "react-chatbot-kit/build/main.css";
-
-const RuleBasedChatbot = dynamic(() => import('@/components/RuleBasedChatbot'), {
-  ssr: false,
-  loading: () => <Skeleton className="w-full h-full" />
-});
 
 const iconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   "Web": Globe,
@@ -52,7 +46,6 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
   const heroRef = useRef<HTMLDivElement>(null);
   const heroImageRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
-  const [showChatbot, setShowChatbot] = useState(true);
 
   useEffect(() => {
     if (isLoading || !heroRef.current || !heroImageRef.current || !heroContentRef.current) return;
@@ -167,10 +160,6 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
       <div ref={heroContentRef} className="hero-content-container relative w-1/2 h-full flex items-center justify-center px-12 z-10">
         {isLoading ? (
           <Skeleton className="w-full h-96" />
-        ) : showChatbot ? (
-          <div className="w-full h-full">
-            <RuleBasedChatbot onClose={() => setShowChatbot(false)} />
-          </div>
         ) : (
           <div className="w-full max-w-2xl text-left relative">
             <motion.h1 
@@ -227,21 +216,6 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
               </Button>
               <Button asChild variant="secondary" size="lg">
                 <Link href={content?.secondaryButton.link || '#'}>{content?.secondaryButton.text}</Link>
-              </Button>
-            </motion.div>
-             <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: 0.8 }}
-            >
-              <Button 
-                variant="outline" 
-                size="icon" 
-                className="absolute -bottom-8 -right-8 rounded-full h-16 w-16 shadow-lg z-20"
-                onClick={() => setShowChatbot(true)}
-              >
-                <MessageSquare className="h-8 w-8"/>
-                <span className="sr-only">Open Chatbot</span>
               </Button>
             </motion.div>
           </div>

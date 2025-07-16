@@ -29,7 +29,8 @@ const config: IConfig = {
     },
     chatContainer: {
         width: '100%',
-        height: '100%',
+        height: 'auto',
+        minHeight: '100%',
         boxShadow: 'none',
         border: 'none',
         background: 'transparent',
@@ -37,6 +38,8 @@ const config: IConfig = {
     messagesContainer: {
         height: '100%',
         background: 'transparent',
+        padding: '0 !important',
+        overflow: 'visible',
     },
     userMessageBox: {
       backgroundColor: 'transparent',
