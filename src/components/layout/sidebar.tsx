@@ -81,9 +81,6 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
                 <Button asChild size="lg" className="w-full" onClick={onClose}>
                     <Link href="/contact">Get in Touch</Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="w-full" onClick={onClose}>
-                    <Link href="/admin">Admin Login</Link>
-                </Button>
             </motion.div>
           </motion.div>
         </motion.div>
