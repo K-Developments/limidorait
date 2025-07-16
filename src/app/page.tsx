@@ -73,8 +73,8 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
       .to(heroContentRef.current, {
         opacity: 1,
         x: 0,
-        duration: 1,
-        ease: "power3.out",
+        duration: 1.2,
+        ease: "power3.inOut",
       }, "-=0.8");
     }, heroRef);
 
@@ -332,5 +332,7 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
 
     
