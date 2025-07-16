@@ -15,7 +15,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -111,7 +110,7 @@ export function Faq() {
             className="text-center mb-16"
         >
             <Badge variant="outline" className="mb-4">FAQs</Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 font-headline">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 font-body">
               {content?.title}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

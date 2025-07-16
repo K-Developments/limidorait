@@ -36,7 +36,7 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
         </CardHeader>
         <CardContent className="p-6 bg-card flex flex-col flex-grow">
           <div className="flex-grow">
-            <h3 className="text-2xl font-bold mb-2 font-headline">{project.title}</h3>
+            <h3 className="text-2xl font-bold mb-2 font-body">{project.title}</h3>
             <p className="text-muted-foreground mb-4">{project.description}</p>
           </div>
           <div className="flex flex-wrap gap-2 mt-4">
