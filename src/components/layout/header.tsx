@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Menu, User } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
 interface HeaderProps {
     onMenuClick: () => void;
@@ -51,7 +51,7 @@ export function Header({ onMenuClick }: HeaderProps) {
               <div className="relative bg-card/90 text-card-foreground shadow-lg px-8 py-4 rounded-bl-lg rounded-br-lg border border-border/50 backdrop-blur-sm group-hover:backdrop-blur-md transition-all duration-300">
                 <Link href="/">
                   <span 
-                    className="text-xl font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70"
+                    className="text-xl font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-headline"
                     style={{
                       textShadow: '0 2px 10px hsla(var(--primary), 0.3)',
                       letterSpacing: '0.1em'
@@ -81,7 +81,7 @@ export function Header({ onMenuClick }: HeaderProps) {
           >
             <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
               <Link href="/" className="relative group">
-                <span className="text-2xl font-bold text-foreground transition-colors hover:text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+                <span className="text-2xl font-bold text-foreground transition-colors hover:text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-headline">
                   Limidora
                 </span>
                 <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-primary to-primary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>

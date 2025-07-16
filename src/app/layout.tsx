@@ -3,6 +3,7 @@
 
 import type { Metadata } from 'next';
 import { usePathname } from 'next/navigation';
+import { Cinzel, Jost } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from '@/components/layout/header';
@@ -15,6 +16,19 @@ const metadata: Metadata = {
   title: 'Limidora Digital | Creative IT Solutions',
   description: 'Limidora is a creative agency offering modern IT solutions including web development, UI/UX design, and brand strategy.',
 };
+
+const fontHeadline = Cinzel({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-headline',
+});
+
+const fontBody = Jost({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-body',
+});
+
 
 export default function RootLayout({
   children,
@@ -36,7 +50,7 @@ export default function RootLayout({
   const navItems = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Solutions', href: '/solutions' },
+    { name: 'Solutions' },
     { name: 'FAQs', href: '/faq' },
     { name: 'Blog & News', href: '/blog' },
     { name: 'Careers', href: '/careers' },
@@ -44,7 +58,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={cn("font-body antialiased")}>
+      <body className={cn("font-body antialiased", fontHeadline.variable, fontBody.variable)}>
         {!isAdminPage && <Header onMenuClick={() => setSidebarOpen(true)} />}
         {!isAdminPage && <Sidebar navItems={navItems} isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />}
         <div id="main-content-wrapper" className="flex min-h-screen flex-col">

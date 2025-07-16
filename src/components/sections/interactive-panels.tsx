@@ -156,7 +156,7 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
                       initial={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
                       transition={{ duration: 0.3 }}
-                      className="text-2xl font-bold"
+                      className="text-2xl font-bold font-headline"
                     >
                       {panelData[panelId].title}
                     </motion.h3>
@@ -170,7 +170,7 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
                       transition={{ duration: 0.3 }}
-                      className="text-2xl font-bold [writing-mode:vertical-rl] rotate-180"
+                      className="text-2xl font-bold [writing-mode:vertical-rl] rotate-180 font-headline"
                     >
                       {panelData[panelId].title}
                     </motion.h3>
@@ -195,7 +195,7 @@ export function InteractivePanels({ content }: { content: AboutContent | null })
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.4 }}
-                        className="text-4xl font-bold max-w-lg"
+                        className="text-4xl font-bold max-w-lg font-headline"
                       >
                         {panelData[panelId].content.title}
                       </motion.h3>
