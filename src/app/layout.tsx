@@ -45,9 +45,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("font-body antialiased")}>
+        {!isAdminPage && <Header onMenuClick={() => setSidebarOpen(true)} />}
+        {!isAdminPage && <Sidebar navItems={navItems} isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />}
         <div id="main-content-wrapper" className="flex min-h-screen flex-col">
-          {!isAdminPage && <Header onMenuClick={() => setSidebarOpen(true)} />}
-          {!isAdminPage && <Sidebar navItems={navItems} isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />}
           <main className="flex-1">{children}</main>
           {!isAdminPage && <Footer />}
         </div>
