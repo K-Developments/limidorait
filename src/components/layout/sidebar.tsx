@@ -100,7 +100,7 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
                                 className="w-full"
                             >
                                 {item.name === 'Solutions' ? (
-                                    <button onClick={() => setMenu('solutions')} className="flex justify-between items-center py-4 text-3xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b text-left">
+                                    <button onClick={() => setMenu('solutions')} className="flex justify-between items-center py-4 text-2xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b text-left">
                                         {item.name}
                                         <ChevronRight className="h-7 w-7" />
                                     </button>
@@ -108,7 +108,7 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
                                     <Link
                                     href={item.href || '#'}
                                     onClick={onClose}
-                                    className="block py-4 text-3xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b"
+                                    className="block py-4 text-2xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b"
                                     >
                                     {item.name}
                                     </Link>
@@ -154,7 +154,7 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
                                     <Link
                                     href={item.href}
                                     onClick={onClose}
-                                    className="block py-4 text-2xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b"
+                                    className="block py-4 text-xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b"
                                     >
                                     {item.name}
                                     </Link>
