@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { getHeroContent, updateHeroContent, HeroContent, uploadImageAndGetURL, ServiceSlide, StoryNewsItem, ButtonContent } from '@/services/firestore';
@@ -39,7 +38,7 @@ export default function AdminHomePage() {
     fetchContent();
   }, [toast]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (heroContent) {
       setHeroContent({ ...heroContent, [name]: value });
@@ -226,7 +225,7 @@ export default function AdminHomePage() {
   if (isLoading) {
     return (
       <div className="space-y-8">
-        <h1 className="text-3xl font-bold">Content Management</h1>
+        <h1 className="text-3xl font-bold uppercase">Content Management</h1>
         <Card>
           <CardHeader>
             <Skeleton className="h-8 w-1/2" />
@@ -258,35 +257,40 @@ export default function AdminHomePage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Content Management</h1>
+      <h1 className="text-3xl font-bold uppercase">Content Management</h1>
       <form onSubmit={handleSubmit} className="space-y-8">
+
         <Card>
-          <CardHeader>
-            <CardTitle>Home Page Hero Section</CardTitle>
-            <CardDescription>Update the title and subtitle for the main hero section.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="title">Hero Title</Label>
-              <Textarea
-                id="title"
-                name="title"
-                value={heroContent?.title || ''}
-                onChange={handleInputChange}
-                className="min-h-[100px]"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="subtitle">Hero Subtitle</Label>
-              <Textarea
-                id="subtitle"
-                name="subtitle"
-                value={heroContent?.subtitle || ''}
-                onChange={handleInputChange}
-                className="min-h-[100px]"
-              />
-            </div>
-          </CardContent>
+            <CardHeader>
+                <CardTitle>Hero Video</CardTitle>
+                <CardDescription>Update the URL for the background video in the hero section.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="heroVideoUrl">Video URL</Label>
+                    <Input
+                        id="heroVideoUrl"
+                        name="heroVideoUrl"
+                        value={heroContent?.heroVideoUrl || ''}
+                        onChange={handleInputChange}
+                        placeholder="e.g., https://example.com/video.mp4"
+                    />
+                </div>
+                {heroContent?.heroVideoUrl && (
+                    <div className="space-y-2">
+                        <Label>Video Preview</Label>
+                        <video
+                            key={heroContent.heroVideoUrl}
+                            width="100%"
+                            controls
+                            className="rounded-md"
+                        >
+                            <source src={heroContent.heroVideoUrl} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                )}
+            </CardContent>
         </Card>
 
         <Card>
@@ -422,7 +426,7 @@ export default function AdminHomePage() {
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Limidora Stories Card */}
               <Card className="p-4">
-                <CardTitle className="mb-4 text-lg">Limidora Stories</CardTitle>
+                <CardTitle className="mb-4 text-lg uppercase">Limidora Stories</CardTitle>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="story-title">Title</Label>
@@ -430,7 +434,7 @@ export default function AdminHomePage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="story-description">Description</Label>
-                    <Textarea id="story-description" value={heroContent?.storiesAndNews?.story.description || ''} onChange={(e) => handleStoryNewsChange('story', 'description', e.target.value)} />
+                    <Input id="story-description" value={heroContent?.storiesAndNews?.story.description || ''} onChange={(e) => handleStoryNewsChange('story', 'description', e.target.value)} />
                   </div>
                   <div className="space-y-2">
                     <Label>Image</Label>
@@ -456,7 +460,7 @@ export default function AdminHomePage() {
               </Card>
               {/* News & Blog Card */}
               <Card className="p-4">
-                 <CardTitle className="mb-4 text-lg">News & Blog</CardTitle>
+                 <CardTitle className="mb-4 text-lg uppercase">News & Blog</CardTitle>
                  <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="news-title">Title</Label>
@@ -464,7 +468,7 @@ export default function AdminHomePage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="news-description">Description</Label>
-                    <Textarea id="news-description" value={heroContent?.storiesAndNews?.news.description || ''} onChange={(e) => handleStoryNewsChange('news', 'description', e.target.value)} />
+                    <Input id="news-description" value={heroContent?.storiesAndNews?.news.description || ''} onChange={(e) => handleStoryNewsChange('news', 'description', e.target.value)} />
                   </div>
                   <div className="space-y-2">
                     <Label>Image</Label>

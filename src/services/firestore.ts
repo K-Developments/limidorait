@@ -23,8 +23,7 @@ export interface ButtonContent {
 }
 
 export interface HeroContent {
-  title: string;
-  subtitle: string;
+  heroVideoUrl: string;
   imageUrls: string[];
   serviceSlides: ServiceSlide[];
   storiesAndNews: {
@@ -92,8 +91,7 @@ const CONTENT_COLLECTION_ID = 'homepage';
 const SUBMITTED_QUESTIONS_COLLECTION_ID = 'submittedQuestions';
 
 const defaultHeroContent: HeroContent = {
-    title: "We Create Digital Experiences That Matter",
-    subtitle: "Award-winning creative agency focused on branding, web design and development",
+    heroVideoUrl: "https://videos.pexels.com/video-files/3209828/3209828-hd_1280_720_30fps.mp4",
     imageUrls: [
       "https://placehold.co/800x1200.png",
       "https://placehold.co/800x1200.png",
@@ -240,13 +238,11 @@ export const getHeroContent = async (): Promise<HeroContent> => {
 };
 
 // Function to update hero content in Firestore
-export const updateHeroContent = async (content: HeroContent): Promise<void> => {
+export const updateHeroContent = async (content: Partial<HeroContent>): Promise<void> => {
   const docRef = doc(db, CONTENT_COLLECTION_ID, HERO_CONTENT_DOC_ID);
    try {
-    const existingDoc = await getDoc(docRef);
-    const existingData = existingDoc.exists() ? existingDoc.data() : {};
-    const mergedContent = deepMerge(existingData, content);
-    await setDoc(docRef, mergedContent);
+    // Use setDoc with { merge: true } to only update provided fields
+    await setDoc(docRef, content, { merge: true });
   } catch (error) {
     console.error("Error updating document: ", error);
     throw new Error("Could not update hero content.");

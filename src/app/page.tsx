@@ -12,7 +12,7 @@ import { getHeroContent, HeroContent, ServiceSlide, StoryNewsItem } from "@/serv
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import ParticlesWrapper from "@/components/ParticlesWrapper";
-import { Globe, Smartphone, Code, LayoutGrid, ArrowUpRight, Twitter, Linkedin, Facebook } from 'lucide-react';
+import { Globe, Smartphone, Code, LayoutGrid, ArrowUpRight } from 'lucide-react';
 
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -24,23 +24,6 @@ const iconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   "Web Application": LayoutGrid,
   "Software": Code,
 };
-
-const WhatsAppIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-  </svg>
-);
 
 const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLoading: boolean }) => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -157,55 +140,22 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
         )}
       </div>
 
-      <div ref={heroContentRef} className="hero-content-container relative w-1/2 h-full flex items-center justify-center px-12 z-10">
+      <div ref={heroContentRef} className="hero-content-container relative w-1/2 h-screen flex items-center justify-center p-0 z-10 bg-black">
         {isLoading ? (
-          <Skeleton className="w-full h-96" />
+          <Skeleton className="w-full h-full" />
         ) : (
-          <div className="w-full max-w-2xl text-left relative">
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-foreground font-body uppercase"
-            >
-              {content?.title}
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-xl md:text-2xl mb-6 max-w-2xl text-muted-foreground"
-            >
-              {content?.subtitle}
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex gap-4 mb-10 justify-start"
-            >
-              <Button asChild variant="outline" size="icon">
-                <Link href="#" aria-label="Twitter">
-                  <Twitter className="h-5 w-5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="icon">
-                <Link href="#" aria-label="LinkedIn">
-                  <Linkedin className="h-5 w-5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="icon">
-                <Link href="#" aria-label="Facebook">
-                  <Facebook className="h-5 w-5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="icon">
-                <Link href="#" aria-label="WhatsApp">
-                  <WhatsAppIcon className="h-5 w-5" />
-                </Link>
-              </Button>
-            </motion.div>
-            <motion.div 
+          <video 
+            key={content?.heroVideoUrl}
+            className="absolute top-0 left-0 w-full h-full object-cover"
+            src={content?.heroVideoUrl}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+        )}
+         <div className="absolute bottom-10 left-10 z-20">
+          <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
@@ -218,8 +168,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
                 <Link href={content?.secondaryButton.link || '#'}>{content?.secondaryButton.text}</Link>
               </Button>
             </motion.div>
-          </div>
-        )}
+         </div>
       </div>
     </section>
   );
