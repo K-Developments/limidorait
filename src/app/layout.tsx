@@ -75,7 +75,7 @@ export default function RootLayout({
         {!isAdminPage && <FloatingLogo scrolled={scrolled} />}
         {!isAdminPage && <Sidebar navItems={navItems} isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />}
         <div id="main-content-wrapper" className="flex min-h-screen flex-col">
-          <main className="flex-1 pt-32">{children}</main>
+          <main className="flex-1">{children}</main>
           {!isAdminPage && <Footer />}
         </div>
         <Toaster />
