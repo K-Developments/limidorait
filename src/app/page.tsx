@@ -268,40 +268,56 @@ const StoriesAndNewsSection = ({ content, isLoading }: { content: HeroContent | 
   return (
     <section className="w-full md:mt-2">
       <div className="flex flex-col md:flex-row gap-2">
-        <Link href={story.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full">
-          <Image
-            src={story.imageUrl || "https://placehold.co/800x600.png"}
-            alt={story.title}
-            fill
-            className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
-            data-ai-hint={story.imageHint}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-          <div className="absolute bottom-0 left-0 p-6 md:p-8">
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">{story.title}</h3>
-            <p className="text-white/90 text-sm md:text-base">{story.description}</p>
-          </div>
-          <div className="absolute top-4 right-4 bg-background/80 p-2 md:p-3 rounded-full translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-            <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-foreground" />
-          </div>
-        </Link>
-        <Link href={news.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full">
-          <Image
-            src={news.imageUrl || "https://placehold.co/800x600.png"}
-            alt={news.title}
-            fill
-            className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
-            data-ai-hint={news.imageHint}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-          <div className="absolute bottom-0 left-0 p-6 md:p-8">
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">{news.title}</h3>
-            <p className="text-white/90 text-sm md:text-base">{news.description}</p>
-          </div>
-          <div className="absolute top-4 right-4 bg-background/80 p-2 md:p-3 rounded-full translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-            <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-foreground" />
-          </div>
-        </Link>
+        <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+            className="w-full"
+        >
+            <Link href={story.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full block">
+            <Image
+                src={story.imageUrl || "https://placehold.co/800x600.png"}
+                alt={story.title}
+                fill
+                className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
+                data-ai-hint={story.imageHint}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+            <div className="absolute bottom-0 left-0 p-6 md:p-8">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">{story.title}</h3>
+                <p className="text-white/90 text-sm md:text-base">{story.description}</p>
+            </div>
+            <div className="absolute top-4 right-4 bg-background/80 p-2 md:p-3 rounded-full translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-foreground" />
+            </div>
+            </Link>
+        </motion.div>
+        <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="w-full"
+        >
+            <Link href={news.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full block">
+            <Image
+                src={news.imageUrl || "https://placehold.co/800x600.png"}
+                alt={news.title}
+                fill
+                className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
+                data-ai-hint={news.imageHint}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+            <div className="absolute bottom-0 left-0 p-6 md:p-8">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">{news.title}</h3>
+                <p className="text-white/90 text-sm md:text-base">{news.description}</p>
+            </div>
+            <div className="absolute top-4 right-4 bg-background/80 p-2 md:p-3 rounded-full translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-foreground" />
+            </div>
+            </Link>
+        </motion.div>
       </div>
     </section>
   );
@@ -332,7 +348,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
-
-    
