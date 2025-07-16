@@ -22,7 +22,7 @@ export function FloatingLogo({ scrolled }: FloatingLogoProps) {
 
     return (
         <motion.div
-            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            className="fixed z-50 top-8 left-1/2 -translate-x-1/2"
             variants={logoVariants}
             initial="top"
             animate={scrolled ? "scrolled" : "top"}
@@ -33,7 +33,6 @@ export function FloatingLogo({ scrolled }: FloatingLogoProps) {
                 className="font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-headline"
                 style={{
                   fontSize: "clamp(2rem, 10vw, 5rem)",
-                  textShadow: '0 2px 10px hsla(var(--primary), 0.3)',
                   pointerEvents: 'none'
                 }}
               >
