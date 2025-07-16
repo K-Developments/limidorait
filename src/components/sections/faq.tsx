@@ -110,7 +110,7 @@ export function Faq() {
             className="text-center mb-16"
         >
             <Badge variant="outline" className="mb-4">FAQs</Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 font-body">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 font-body uppercase">
               {content?.title}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -142,7 +142,7 @@ export function Faq() {
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Ask Your Question</DialogTitle>
+                  <DialogTitle className="uppercase">Ask Your Question</DialogTitle>
                   <DialogDescription>
                     Can't find the answer you're looking for? Fill out the form below and we'll get back to you.
                   </DialogDescription>

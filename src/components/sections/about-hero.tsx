@@ -55,7 +55,7 @@ export function AboutHero() {
           </>
         ) : (
           <>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter font-body">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter font-body uppercase">
               {content?.heroTitle}
             </h1>
             <p className="mt-4 text-lg md:text-xl max-w-2xl">

@@ -27,7 +27,7 @@ export function Contact() {
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="space-y-4">
             <div className="inline-block bg-secondary px-3 py-1 text-sm text-secondary-foreground">Contact Us</div>
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-body">Let's Build Something Great</h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-body uppercase">Let's Build Something Great</h2>
             <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               Have a project in mind or just want to say hello? Drop us a line. We're excited to hear from you and learn about your ideas.
             </p>

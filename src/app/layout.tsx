@@ -3,7 +3,7 @@
 
 import type { Metadata } from 'next';
 import { usePathname } from 'next/navigation';
-import { Cinzel, Jost } from 'next/font/google';
+import { Cinzel, Montserrat } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from '@/components/layout/header';
@@ -24,7 +24,7 @@ const fontHeadline = Cinzel({
   variable: '--font-headline',
 });
 
-const fontBody = Jost({
+const fontBody = Montserrat({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
   variable: '--font-body',
