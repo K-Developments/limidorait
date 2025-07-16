@@ -62,7 +62,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
       if (isMobile) return;
 
       gsap.set(heroImageRef.current, { width: "0%" });
-      gsap.set(heroContentRef.current, { opacity: 0, x: 100 });
+      gsap.set(heroContentRef.current, { opacity: 0, x: "100%" });
 
       const tl = gsap.timeline({ delay: 0.3 });
       tl.to(heroImageRef.current, {
@@ -332,3 +332,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
