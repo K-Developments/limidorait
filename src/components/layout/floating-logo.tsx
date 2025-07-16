@@ -11,26 +11,18 @@ interface FloatingLogoProps {
 export function FloatingLogo({ scrolled }: FloatingLogoProps) {
     const logoVariants = {
         top: { 
-            top: "50%",
-            left: "50%",
-            x: "-50%",
-            y: "-50%",
-            fontSize: "clamp(2rem, 10vw, 5rem)",
             opacity: 1,
+            scale: 1,
         },
         scrolled: { 
-            top: "1.5rem",
-            left: "2rem",
-            x: 0,
-            y: 0,
-            fontSize: "1.5rem",
-            opacity: 0
+            opacity: 0,
+            scale: 0,
         }
     };
 
     return (
         <motion.div
-            className="fixed z-50"
+            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
             variants={logoVariants}
             initial="top"
             animate={scrolled ? "scrolled" : "top"}
@@ -40,6 +32,7 @@ export function FloatingLogo({ scrolled }: FloatingLogoProps) {
               <span 
                 className="font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-headline"
                 style={{
+                  fontSize: "clamp(2rem, 10vw, 5rem)",
                   textShadow: '0 2px 10px hsla(var(--primary), 0.3)',
                   pointerEvents: 'none'
                 }}

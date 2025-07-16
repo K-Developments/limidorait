@@ -30,7 +30,39 @@ export function Header({ onMenuClick, scrolled }: HeaderProps) {
     }
   };
 
+  const hamburgerVariants = {
+    hidden: {
+      opacity: 0,
+      x: 100
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+    }
+  }
+
   return (
+    <>
+    <AnimatePresence>
+      {!scrolled && (
+        <motion.div
+          className="fixed top-6 right-6 z-50"
+          variants={hamburgerVariants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          <button
+            onClick={onMenuClick}
+            className="p-2 rounded-full transition-colors bg-background/80 hover:bg-primary/10"
+            aria-label="Toggle menu"
+          >
+            <Menu className="h-6 w-6 text-foreground" />
+          </button>
+        </motion.div>
+      )}
+    </AnimatePresence>
     <AnimatePresence>
       {scrolled && (
         <motion.header
@@ -70,5 +102,6 @@ export function Header({ onMenuClick, scrolled }: HeaderProps) {
         </motion.header>
       )}
     </AnimatePresence>
+    </>
   );
 }
