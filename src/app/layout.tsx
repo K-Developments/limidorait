@@ -25,6 +25,7 @@ export default function RootLayout({
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const navItems = [
+    { name: 'Home', href: '/' },
     { name: 'Portfolio', href: '/portfolio' },
     { name: 'About', href: '/about' },
   ];
