@@ -84,7 +84,7 @@ const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLo
   }, [isLoading]);
 
   return (
-    <section ref={heroRef} className="hero-section relative min-h-screen w-full flex items-center overflow-hidden">
+    <section ref={heroRef} className="hero-section relative min-h-screen w-full flex items-center overflow-hidden pt-0!">
       <ParticlesWrapper />
       
       <div ref={heroImageRef} className="hero-image-container relative w-1/2 h-screen">
@@ -342,7 +342,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div>
+    <div className="pt-0!">
       <HeroSection content={content} isLoading={isLoading} />
       <StoriesAndNewsSection content={content} isLoading={isLoading} />
     </div>

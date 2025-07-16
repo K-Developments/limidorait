@@ -11,6 +11,7 @@ import { Footer } from '@/components/layout/footer';
 import { useState, useEffect } from 'react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { cn } from '@/lib/utils';
+import { FloatingLogo } from '@/components/layout/floating-logo';
 
 const metadata: Metadata = {
   title: 'Limidora Digital | Creative IT Solutions',
@@ -38,6 +39,17 @@ export default function RootLayout({
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith('/admin');
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     if (isSidebarOpen) {
@@ -59,10 +71,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("font-body antialiased", fontHeadline.variable, fontBody.variable)}>
-        {!isAdminPage && <Header onMenuClick={() => setSidebarOpen(true)} />}
+        {!isAdminPage && <Header scrolled={scrolled} onMenuClick={() => setSidebarOpen(true)} />}
+        {!isAdminPage && <FloatingLogo scrolled={scrolled} />}
         {!isAdminPage && <Sidebar navItems={navItems} isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />}
         <div id="main-content-wrapper" className="flex min-h-screen flex-col">
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 pt-32">{children}</main>
           {!isAdminPage && <Footer />}
         </div>
         <Toaster />
