@@ -7,9 +7,9 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
+import { useState } from 'react';
+import { Sidebar } from '@/components/layout/sidebar';
 
-// Metadata can't be conditional, so we define it statically.
-// We can wrap it in a function if we need to export it, but for now this is fine.
 const metadata: Metadata = {
   title: 'Limidora Digital | Creative IT Solutions',
   description: 'Limidora is a creative agency offering modern IT solutions including web development, UI/UX design, and brand strategy.',
@@ -22,12 +22,19 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith('/admin');
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const navItems = [
+    { name: 'Portfolio', href: '/portfolio' },
+    { name: 'About', href: '/about' },
+  ];
 
   return (
     <html lang="en">
       <body className="font-body antialiased">
         <div className="flex min-h-screen flex-col">
-          {!isAdminPage && <Header />}
+          {!isAdminPage && <Header onMenuClick={() => setSidebarOpen(true)} />}
+          {!isAdminPage && <Sidebar navItems={navItems} isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />}
           <main className="flex-1">{children}</main>
           {!isAdminPage && <Footer />}
         </div>

@@ -4,6 +4,7 @@
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
 
 interface NavItem {
   name: string;
@@ -47,6 +48,11 @@ export function MobileNav({ navItems, isOpen, onClose }: MobileNavProps) {
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             onClick={(e) => e.stopPropagation()}
           >
+            <div className='flex justify-end'>
+                <Button variant="ghost" size="icon" onClick={onClose}>
+                    <X className="h-6 w-6" />
+                </Button>
+            </div>
             <nav className="flex flex-col items-center justify-center h-full pt-20">
               <ul className="flex flex-col items-center gap-y-8">
                 {navItems.map((item) => (
@@ -63,6 +69,9 @@ export function MobileNav({ navItems, isOpen, onClose }: MobileNavProps) {
               </ul>
               <Button asChild size="lg" className="mt-12" onClick={onClose}>
                 <Link href="/contact">Get in Touch</Link>
+              </Button>
+               <Button asChild size="lg" variant="outline" className="mt-4" onClick={onClose}>
+                <Link href="/admin">Admin Login</Link>
               </Button>
             </nav>
           </motion.div>
