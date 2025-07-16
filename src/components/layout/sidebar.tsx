@@ -71,11 +71,11 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
             animate="visible"
             exit="exit"
             variants={menuContainerVariants}
-            transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
+            transition={{ type: 'tween', duration: 0.4, ease: 'easeOut' }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className='flex justify-end mb-8'>
-                <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close menu">
+                <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close menu" className="bg-black text-white hover:bg-zinc-800">
                     <X className="h-6 w-6" />
                 </Button>
             </div>
