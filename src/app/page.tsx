@@ -1,273 +1,41 @@
 
 "use client";
 
-import { useEffect, useRef, useState, type ComponentType, type SVGProps } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectFade, Autoplay } from "swiper/modules";
-import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
-import { getHeroContent, HeroContent, ServiceSlide, StoryNewsItem } from "@/services/firestore";
-import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
-import ParticlesWrapper from "@/components/ParticlesWrapper";
-import { Globe, Smartphone, Code, LayoutGrid, ArrowUpRight } from 'lucide-react';
+import Link from "next/link";
 
-import "swiper/css";
-import "swiper/css/effect-fade";
-import "react-chatbot-kit/build/main.css";
-
-const iconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
-  "Web": Globe,
-  "Mobile App": Smartphone,
-  "Web Application": LayoutGrid,
-  "Software": Code,
-};
-
-const HeroSection = ({ content, isLoading }: { content: HeroContent | null, isLoading: boolean }) => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const heroImageRef = useRef<HTMLDivElement>(null);
-  const heroContentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isLoading || !heroRef.current || !heroImageRef.current || !heroContentRef.current) return;
-
-    let ctx = gsap.context(() => {
-      const isMobile = window.matchMedia("(max-width: 768px)").matches;
-      if (isMobile) return;
-
-      gsap.set(heroImageRef.current, { width: "0%" });
-      gsap.set(heroContentRef.current, { opacity: 0, x: "100%" });
-
-      const tl = gsap.timeline({ delay: 0.3 });
-      tl.to(heroImageRef.current, {
-        width: "50%",
-        duration: 1.2,
-        ease: "power3.inOut",
-      })
-      .to(heroContentRef.current, {
-        opacity: 1,
-        x: 0,
-        duration: 1.2,
-        ease: "power3.inOut",
-      }, "-=0.8");
-    }, heroRef);
-
-    return () => {
-      ctx.revert();
-    };
-  }, [isLoading]);
-
+const HeroSection = () => {
   return (
-    <section ref={heroRef} className="hero-section relative min-h-screen w-full flex items-center overflow-hidden pt-0!">
-      <ParticlesWrapper />
+    <section 
+      aria-labelledby="hero-title"
+      className="relative flex items-end w-full h-[80vh] bg-neutral-900 text-white"
+    >
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
       
-      <div ref={heroImageRef} className="hero-image-container relative w-1/2 h-screen">
-        {isLoading ? (
-          <Skeleton className="w-full h-full"/>
-        ) : (
-          <div className="relative h-full w-full">
-            <Swiper
-              modules={[EffectFade, Autoplay]}
-              effect="fade"
-              loop={true}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}
-              className="h-full w-full"
-            >
-              {(content?.imageUrls || []).map((url, index) => (
-                <SwiperSlide key={index} className="relative">
-                  <Image 
-                    src={url} 
-                    alt={`Creative work ${index + 1}`} 
-                    fill 
-                    priority
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/10 to-transparent"></div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            <div className="absolute bottom-0 left-0 w-full z-10">
-              <Swiper
-                modules={[Autoplay]}
-                spaceBetween={0}
-                slidesPerView={2}
-                breakpoints={{
-                  768: {
-                    slidesPerView: 4,
-                    spaceBetween: 0
-                  },
-                }}
-                loop={true}
-                autoplay={{
-                  delay: 3000,
-                  disableOnInteraction: false,
-                  reverseDirection: true,
-                }}
-                className="w-full"
-              >
-                {(content?.serviceSlides || []).map((slide, index) => {
-                  const Icon = iconMap[slide.text];
-                  return (
-                    <SwiperSlide key={index} className="border-r border-white/20 last:border-r-0">
-                      <div className="aspect-square relative group overflow-hidden">
-                        <Image 
-                          src={slide.image} 
-                          alt={slide.text} 
-                          fill 
-                          className="object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
-                          data-ai-hint={slide.hint}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-center justify-center p-4">
-                          {Icon && (
-                            <Icon className="w-12 h-12 text-white/80 transition-opacity duration-300 group-hover:opacity-0" />
-                          )}
-                          <h3 className="text-white text-lg font-bold absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 uppercase">
-                            {slide.text}
-                          </h3>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  );
-                })}
-              </Swiper>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div ref={heroContentRef} className="hero-content-container relative w-1/2 h-screen flex items-center justify-center p-0 z-10 bg-black">
-        {isLoading ? (
-          <Skeleton className="w-full h-full" />
-        ) : (
-          <video 
-            key={content?.heroVideoUrl}
-            className="absolute top-0 left-0 w-full h-full object-cover"
-            src={content?.heroVideoUrl}
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
-        )}
-         <div className="absolute bottom-10 left-10 z-20">
-          <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="flex flex-wrap gap-4 justify-start"
-            >
-              <Button asChild size="lg">
-                <Link href={content?.primaryButton.link || '#'}>{content?.primaryButton.text}</Link>
-              </Button>
-              <Button asChild variant="secondary" size="lg">
-                <Link href={content?.secondaryButton.link || '#'}>{content?.secondaryButton.text}</Link>
-              </Button>
-            </motion.div>
-         </div>
-      </div>
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+        className="relative z-10 p-8 md:p-12"
+      >
+        <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold font-headline uppercase mb-4">
+          Creative Agency
+        </h1>
+        <Button asChild size="lg">
+          <Link href="/portfolio">View Our Work</Link>
+        </Button>
+      </motion.div>
     </section>
   );
 };
 
-const StoriesAndNewsSection = ({ content, isLoading }: { content: HeroContent | null, isLoading: boolean }) => {
-  if (isLoading || !content?.storiesAndNews) {
-    return (
-      <section className="w-full md:mt-2">
-        <div className="flex flex-col md:flex-row gap-2">
-          <Skeleton className="h-[300px] md:h-[400px] w-full" />
-          <Skeleton className="h-[300px] md:h-[400px] w-full" />
-        </div>
-      </section>
-    );
-  }
-  
-  const { story, news } = content.storiesAndNews;
-
-  return (
-    <section className="w-full md:mt-2">
-      <div className="flex flex-col md:flex-row gap-2">
-        <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="w-full"
-        >
-            <Link href={story.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full block">
-            <Image
-                src={story.imageUrl || "https://placehold.co/800x600.png"}
-                alt={story.title}
-                fill
-                className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
-                data-ai-hint={story.imageHint}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-            <div className="absolute bottom-0 left-0 p-6 md:p-8">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 font-body uppercase">{story.title}</h3>
-                <p className="text-white/90 text-sm md:text-base">{story.description}</p>
-            </div>
-            <div className="absolute top-4 right-4 bg-background/80 p-2 md:p-3 rounded-full translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-foreground" />
-            </div>
-            </Link>
-        </motion.div>
-        <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="w-full"
-        >
-            <Link href={news.link} className="relative group h-[300px] md:h-[400px] overflow-hidden w-full block">
-            <Image
-                src={news.imageUrl || "https://placehold.co/800x600.png"}
-                alt={news.title}
-                fill
-                className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-105"
-                data-ai-hint={news.imageHint}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-            <div className="absolute bottom-0 left-0 p-6 md:p-8">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 font-body uppercase">{news.title}</h3>
-                <p className="text-white/90 text-sm md:text-base">{news.description}</p>
-            </div>
-            <div className="absolute top-4 right-4 bg-background/80 p-2 md:p-3 rounded-full translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-foreground" />
-            </div>
-            </Link>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
 
 export default function HomePage() {
-  const [content, setContent] = useState<HeroContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const heroContent = await getHeroContent();
-        setContent(heroContent);
-      } catch (error) {
-        console.error("Failed to fetch hero content:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchContent();
-  }, []);
-
   return (
-    <div className="pt-0!">
-      <HeroSection content={content} isLoading={isLoading} />
-      <StoriesAndNewsSection content={content} isLoading={isLoading} />
+    <div>
+      <HeroSection />
+      {/* Other new sections will be added here */}
     </div>
   );
 }

@@ -3,35 +3,15 @@ import { db, storage } from '@/lib/firebase';
 import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp, getDocs, deleteDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-export interface ServiceSlide {
-  text: string;
-  image: string;
-  hint: string;
-}
-
-export interface StoryNewsItem {
-  title: string;
-  description: string;
-  imageUrl: string;
-  imageHint: string;
-  link: string;
-}
-
 export interface ButtonContent {
   text: string;
   link: string;
 }
 
 export interface HeroContent {
-  heroVideoUrl: string;
-  imageUrls: string[];
-  serviceSlides: ServiceSlide[];
-  storiesAndNews: {
-    story: StoryNewsItem;
-    news: StoryNewsItem;
-  };
-  primaryButton: ButtonContent;
-  secondaryButton: ButtonContent;
+  title: string;
+  button: ButtonContent;
+  backgroundUrl: string;
 }
 
 export interface InteractivePanelContent {
@@ -91,42 +71,12 @@ const CONTENT_COLLECTION_ID = 'homepage';
 const SUBMITTED_QUESTIONS_COLLECTION_ID = 'submittedQuestions';
 
 const defaultHeroContent: HeroContent = {
-    heroVideoUrl: "https://videos.pexels.com/video-files/3209828/3209828-hd_1280_720_30fps.mp4",
-    imageUrls: [
-      "https://placehold.co/800x1200.png",
-      "https://placehold.co/800x1200.png",
-      "https://placehold.co/800x1200.png",
-    ],
-    serviceSlides: [
-      { text: "Web", image: "https://placehold.co/400x400.png", hint: "modern website" },
-      { text: "Mobile App", image: "https://placehold.co/400x400.png", hint: "app interface" },
-      { text: "Web Application", image: "https://placehold.co/400x400.png", hint: "saas dashboard" },
-      { text: "Software", image: "https://placehold.co/400x400.png", hint: "custom software" },
-    ],
-    storiesAndNews: {
-      story: {
-        title: "Limidora Stories",
-        description: "Discover the projects and people behind our success.",
-        imageUrl: "https://placehold.co/800x600.png",
-        imageHint: "team working office",
-        link: "#"
-      },
-      news: {
-        title: "News & Blog",
-        description: "Insights, trends, and thoughts from our team.",
-        imageUrl: "https://placehold.co/800x600.png",
-        imageHint: "person writing blog",
-        link: "#"
-      }
+    title: "Creative Agency",
+    button: {
+        text: "View Our Work",
+        link: "/portfolio"
     },
-    primaryButton: {
-      text: "View Our Work",
-      link: "/portfolio"
-    },
-    secondaryButton: {
-      text: "Get in Touch",
-      link: "/contact"
-    }
+    backgroundUrl: "https://placehold.co/1920x1080.png"
 };
 
 const defaultAboutContent: AboutContent = {
