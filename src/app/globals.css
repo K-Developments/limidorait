@@ -127,10 +127,8 @@ html{
     
     @media (max-width: 768px) {
         .hero-section {
-          flex-direction: column-reverse;
+          flex-direction: column;
           min-height: auto;
-          padding-top: 5rem;
-          padding-bottom: 2rem;
         }
         
         .hero-content-container {

@@ -13,6 +13,7 @@ import 'swiper/css/effect-fade';
 import Image from "next/image";
 import { getHeroContent, HeroContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
+import { HomepageServices } from "@/components/sections/homepage-services";
 
 const HeroSection = () => {
   const [content, setContent] = useState<HeroContent | null>(null);
@@ -129,6 +130,7 @@ export default function HomePage() {
   return (
     <div>
       <HeroSection />
+      <HomepageServices />
     </div>
   );
 }

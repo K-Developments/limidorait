@@ -1,0 +1,97 @@
+
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+
+const services = [
+  {
+    title: "Web Development",
+    description: "We build modern, scalable, and secure web applications tailored to your business needs.",
+    imageUrl: "https://placehold.co/600x400.png",
+    aiHint: "coding programming",
+    link: "/solutions/web-development",
+  },
+  {
+    title: "UI/UX Design",
+    description: "Crafting intuitive and beautiful user interfaces that delight your users and drive engagement.",
+    imageUrl: "https://placehold.co/600x400.png",
+    aiHint: "design wireframe",
+    link: "/solutions/ui-ux-design",
+  },
+  {
+    title: "Mobile App Development",
+    description: "From concept to launch, we develop native and cross-platform mobile apps for iOS and Android.",
+    imageUrl: "https://placehold.co/600x400.png",
+    aiHint: "mobile phone app",
+    link: "/solutions/mobile-apps",
+  },
+];
+
+export function HomepageServices() {
+  return (
+    <section id="services" className="py-16 md:py-24 bg-card">
+      <div className="container mx-auto px-4 md:px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <Badge variant="outline" className="mb-4">Our Services</Badge>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 font-body uppercase">
+            What We Do
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            We deliver high-quality digital solutions to help your business grow and succeed in the modern world.
+          </p>
+        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service, index) => (
+                <motion.div
+                    key={service.title}
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                >
+                    <Card className="group overflow-hidden relative h-full transition-shadow duration-300 flex flex-col">
+                        <CardHeader className="p-0">
+                        <div className="aspect-video overflow-hidden">
+                            <Image
+                            src={service.imageUrl}
+                            alt={service.title}
+                            width={600}
+                            height={400}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            data-ai-hint={service.aiHint}
+                            />
+                        </div>
+                        </CardHeader>
+                        <CardContent className="p-6 flex flex-col flex-grow">
+                            <div className="flex-grow">
+                                <h3 className="text-2xl font-bold mb-2 font-body uppercase">{service.title}</h3>
+                                <p className="text-muted-foreground mb-4">{service.description}</p>
+                            </div>
+                            <Button asChild className="mt-auto w-fit">
+                                <Link href={service.link}>Learn More</Link>
+                            </Button>
+                             <Link href={service.link} className="absolute inset-0" aria-label={service.title}></Link>
+                            <div className="absolute top-4 right-4 bg-background p-2 rounded-full translate-x-12 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                                <ArrowUpRight className="w-5 h-5 text-foreground" />
+                            </div>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+            ))}
+        </div>
+      </div>
+    </section>
+  );
+}
