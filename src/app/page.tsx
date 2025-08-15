@@ -42,7 +42,7 @@ const HeroSection = () => {
   return (
     <section 
       aria-labelledby="hero-title"
-      className="relative flex items-end w-full h-[80vh] bg-neutral-900 text-white overflow-hidden"
+      className="relative flex items-end justify-start w-full h-[80vh] bg-neutral-900 text-white overflow-hidden"
     >
       <Swiper
         modules={[Autoplay, EffectFade]}
