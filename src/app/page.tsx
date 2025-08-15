@@ -19,7 +19,7 @@ const HeroSection = () => {
         transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
         className="relative z-10 p-8 md:p-12"
       >
-        <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold font-headline uppercase mb-4">
+        <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4">
           Creative Agency
         </h1>
         <Button asChild size="lg">
