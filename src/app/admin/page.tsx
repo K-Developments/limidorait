@@ -33,22 +33,22 @@ export default function AdminHomePage() {
     };
     fetchContent();
   }, [toast]);
-
-  const handleSlideChange = (index: number, value: string) => {
-    if (heroContent) {
-      const newSlides = [...heroContent.slides];
-      // Simple logic: if URL contains .mp4, it's a video. Otherwise, an image.
-      const type = value.includes('.mp4') ? 'video' : 'image';
-      newSlides[index] = { ...newSlides[index], url: value, type };
-      setHeroContent({ ...heroContent, slides: newSlides });
-    }
-  };
-
-  const handleButtonChange = (field: 'buttonText' | 'buttonLink', value: string) => {
+  
+  const handleInputChange = (field: keyof HeroContent, value: string) => {
      if (heroContent) {
       setHeroContent({ ...heroContent, [field]: value });
     }
   }
+
+  const handleSlideChange = (index: number, value: string) => {
+    if (heroContent) {
+      const newSlides = [...heroContent.slides];
+      // Simple logic: if URL contains video extension, it's a video. Otherwise, an image.
+      const type = value.match(/\.(mp4|webm|ogg)$/) ? 'video' : 'image';
+      newSlides[index] = { ...newSlides[index], url: value, type };
+      setHeroContent({ ...heroContent, slides: newSlides });
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,6 +93,19 @@ export default function AdminHomePage() {
       <form onSubmit={handleSubmit} className="space-y-8">
         <Card>
           <CardHeader>
+            <CardTitle>Hero Section Title</CardTitle>
+            <CardDescription>Update the main title for the hero section.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+                <Label htmlFor="heroTitle">Title</Label>
+                <Input id="heroTitle" value={heroContent?.title || ''} onChange={(e) => handleInputChange('title', e.target.value)} />
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
             <CardTitle>Hero Section Slider</CardTitle>
             <CardDescription>Update the video and images for the hero section slider.</CardDescription>
           </CardHeader>
@@ -122,11 +135,11 @@ export default function AdminHomePage() {
             <CardContent className="space-y-4">
                  <div className="space-y-2">
                     <Label htmlFor="buttonText">Button Text</Label>
-                    <Input id="buttonText" value={heroContent?.buttonText || ''} onChange={(e) => handleButtonChange('buttonText', e.target.value)} />
+                    <Input id="buttonText" value={heroContent?.buttonText || ''} onChange={(e) => handleInputChange('buttonText', e.target.value)} />
                  </div>
                  <div className="space-y-2">
                     <Label htmlFor="buttonLink">Button Link</Label>
-                    <Input id="buttonLink" value={heroContent?.buttonLink || ''} onChange={(e) => handleButtonChange('buttonLink', e.target.value)} />
+                    <Input id="buttonLink" value={heroContent?.buttonLink || ''} onChange={(e) => handleInputChange('buttonLink', e.target.value)} />
                  </div>
             </CardContent>
         </Card>

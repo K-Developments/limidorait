@@ -10,6 +10,7 @@ export interface Slide {
 }
 
 export interface HeroContent {
+  title: string;
   slides: Slide[];
   buttonText: string;
   buttonLink: string;
@@ -72,6 +73,7 @@ const CONTENT_COLLECTION_ID = 'homepage';
 const SUBMITTED_QUESTIONS_COLLECTION_ID = 'submittedQuestions';
 
 const defaultHeroContent: HeroContent = {
+    title: "Creative Agency",
     slides: [
       { type: 'video', url: 'https://cdn.pixabay.com/video/2024/05/27/211904_large.mp4' },
       { type: 'image', url: 'https://placehold.co/1920x1080/eeece9/6e3d23', alt: 'Placeholder image 1' },

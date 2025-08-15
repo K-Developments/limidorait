@@ -35,16 +35,15 @@ const HeroSection = () => {
   }, []);
 
   const handleSlideChange = (swiperInstance: SwiperClass) => {
-    if (swiperInstance.activeIndex === 0) { // Assuming video is the first slide
+    const activeSlide = swiperInstance.slides[swiperInstance.activeIndex];
+    const video = activeSlide.querySelector('video');
+
+    if (video) { 
       swiperInstance.autoplay.stop();
-      if (videoRef.current) {
-        videoRef.current.currentTime = 0;
-        videoRef.current.play().catch(error => {
-          // Autoplay was prevented. This is common in some browsers.
-          // You might want to show a play button to the user.
-          console.error("Video autoplay prevented:", error);
-        });
-      }
+      video.currentTime = 0;
+      video.play().catch(error => {
+        console.error("Video autoplay prevented:", error);
+      });
     } else {
       swiperInstance.autoplay.start();
     }
@@ -85,9 +84,9 @@ const HeroSection = () => {
           <SwiperSlide key={index}>
             {slide.type === 'video' ? (
               <video
-                ref={videoRef}
+                ref={index === 0 ? videoRef : null}
                 src={slide.url}
-                autoPlay
+                autoPlay={index === 0}
                 muted
                 playsInline
                 onEnded={onVideoEnd}
@@ -115,7 +114,7 @@ const HeroSection = () => {
         className="relative z-10 p-8 md:p-12"
       >
         <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4 font-headline">
-          Creative Agency
+          {content?.title}
         </h1>
         <Button asChild size="lg">
           <Link href={content?.buttonLink || '#'}>{content?.buttonText}</Link>
