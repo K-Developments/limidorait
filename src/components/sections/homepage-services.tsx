@@ -76,7 +76,7 @@ export function HomepageServices() {
                         <CardContent className="p-6 flex flex-col flex-grow">
                             <div className="flex-grow">
                                 <h3 className="text-2xl font-bold mb-2 font-body uppercase">{service.title}</h3>
-                                <p className="text-muted-foreground mb-4">{service.description}</p>
+                                <p className="mb-4">{service.description}</p>
                             </div>
                             <Button asChild className="mt-auto w-fit" variant="outline">
                                 <Link href={service.link}>Learn More</Link>
