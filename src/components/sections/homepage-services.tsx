@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Separator } from "../ui/separator";
 
 const services = [
   {
@@ -47,11 +48,11 @@ export function HomepageServices() {
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 font-body uppercase">
             What We Do
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg max-w-2xl mx-auto text-foreground">
             We deliver high-quality digital solutions to help your business grow and succeed in the modern world.
           </p>
         </motion.div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
             {services.map((service, index) => (
                 <motion.div
                     key={service.title}
@@ -60,7 +61,7 @@ export function HomepageServices() {
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     viewport={{ once: true }}
                 >
-                    <Card className="group overflow-hidden relative h-full transition-shadow duration-300 flex flex-col">
+                    <Card className="group overflow-hidden relative h-full transition-shadow duration-300 flex flex-col border-0">
                         <CardHeader className="p-0">
                         <div className="aspect-video overflow-hidden">
                             <Image
@@ -75,8 +76,9 @@ export function HomepageServices() {
                         </CardHeader>
                         <CardContent className="p-6 flex flex-col flex-grow">
                             <div className="flex-grow">
-                                <h3 className="text-2xl font-bold mb-2 font-body uppercase">{service.title}</h3>
-                                <p className="mb-4">{service.description}</p>
+                                <h3 className="text-2xl font-bold mb-2 font-body uppercase text-foreground">{service.title}</h3>
+                                <Separator className="my-4" />
+                                <p className="mb-4 text-foreground">{service.description}</p>
                             </div>
                             <Button asChild className="mt-auto w-fit" variant="outline">
                                 <Link href={service.link}>Learn More</Link>
