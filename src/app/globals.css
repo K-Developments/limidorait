@@ -127,30 +127,28 @@ html{
     
     @media (max-width: 768px) {
         .hero-section {
-          flex-direction: column-reverse;
-          min-height: auto;
-          padding-top: 5rem;
-          padding-bottom: 2rem;
-        }
-        
-        .hero-content-container {
-            width: 100% !important;
-            max-width: 100%;
-            padding: 0 1.5rem;
-            text-align: center;
+          flex-direction: column;
+          height: auto !important;
+          min-height: 100vh;
         }
 
-        .hero-content-container > div {
-          align-items: center;
-          text-align: center;
+        .hero-slider-container {
+            height: 60vh;
+            min-height: 300px;
         }
       
-        .hero-image-container {
-          position: relative !important;
-          width: 100% !important;
-          height: 80vh !important;
-          margin-top: 2rem;
-          display: block !important;
+        .hero-content-container {
+          position: relative;
+          width: 100%;
+          background-color: hsl(var(--background));
+          color: hsl(var(--foreground));
+          padding: 2rem 1.5rem 3rem; 
+          z-index: 20;
+          margin-top: -2rem; 
+        }
+
+        .hero-content-container .bg-gradient-to-t {
+            display: none;
         }
     }
 }
@@ -256,3 +254,5 @@ html{
 .swiper-fade .swiper-slide {
   transition-property: opacity, transform !important;
 }
+
+    
