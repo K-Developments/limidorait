@@ -3,15 +3,16 @@ import { db, storage } from '@/lib/firebase';
 import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp, getDocs, deleteDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-export interface ButtonContent {
-  text: string;
-  link: string;
+export interface Slide {
+  type: 'video' | 'image';
+  url: string;
+  alt?: string;
 }
 
 export interface HeroContent {
-  title: string;
-  button: ButtonContent;
-  backgroundUrl: string;
+  slides: Slide[];
+  buttonText: string;
+  buttonLink: string;
 }
 
 export interface InteractivePanelContent {
@@ -71,12 +72,13 @@ const CONTENT_COLLECTION_ID = 'homepage';
 const SUBMITTED_QUESTIONS_COLLECTION_ID = 'submittedQuestions';
 
 const defaultHeroContent: HeroContent = {
-    title: "Creative Agency",
-    button: {
-        text: "View Our Work",
-        link: "/portfolio"
-    },
-    backgroundUrl: "https://placehold.co/1920x1080.png"
+    slides: [
+      { type: 'video', url: 'https://cdn.pixabay.com/video/2024/05/27/211904_large.mp4' },
+      { type: 'image', url: 'https://placehold.co/1920x1080/eeece9/6e3d23', alt: 'Placeholder image 1' },
+      { type: 'image', url: 'https://placehold.co/1920x1080/6e3d23/eeece9', alt: 'Placeholder image 2' },
+    ],
+    buttonText: "View Our Work",
+    buttonLink: "/portfolio"
 };
 
 const defaultAboutContent: AboutContent = {
@@ -183,6 +185,7 @@ export const getHeroContent = async (): Promise<HeroContent> => {
     return deepMerge(defaultHeroContent, data) as HeroContent;
   } else {
     // Return default content if document doesn't exist
+    await setDoc(docRef, defaultHeroContent);
     return defaultHeroContent;
   }
 };

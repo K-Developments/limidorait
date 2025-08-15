@@ -252,3 +252,7 @@ html{
     bottom: -40px !important;
   }
 }
+
+.swiper-fade .swiper-slide {
+  transition-property: opacity, transform !important;
+}
