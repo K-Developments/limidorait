@@ -107,8 +107,8 @@ const HeroSection = () => {
         </Swiper>
       </div>
 
-      <div className="hero-content-container relative z-10 w-full">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+      <div className="hero-content-container relative z-10 w-full md:w-1/2">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent md:bg-none" />
         <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
