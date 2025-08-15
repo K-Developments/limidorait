@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 
 const services = [
   {
@@ -79,13 +78,9 @@ export function HomepageServices() {
                                 <h3 className="text-2xl font-bold mb-2 font-body uppercase">{service.title}</h3>
                                 <p className="text-muted-foreground mb-4">{service.description}</p>
                             </div>
-                            <Button asChild className="mt-auto w-fit">
+                            <Button asChild className="mt-auto w-fit" variant="outline">
                                 <Link href={service.link}>Learn More</Link>
                             </Button>
-                             <Link href={service.link} className="absolute inset-0" aria-label={service.title}></Link>
-                            <div className="absolute top-4 right-4 bg-background p-2 rounded-full translate-x-12 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                                <ArrowUpRight className="w-5 h-5 text-foreground" />
-                            </div>
                         </CardContent>
                     </Card>
                 </motion.div>
