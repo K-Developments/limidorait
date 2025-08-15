@@ -15,25 +15,9 @@ import { getHeroContent, HeroContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { HomepageServices } from "@/components/sections/homepage-services";
 
-const HeroSection = () => {
-  const [content, setContent] = useState<HeroContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+const HeroSection = ({ content }: { content: HeroContent | null }) => {
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const heroContent = await getHeroContent();
-        setContent(heroContent);
-      } catch (error) {
-        console.error("Failed to fetch hero content:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchContent();
-  }, []);
 
   const handleSlideChange = (swiperInstance: SwiperClass) => {
     const activeSlide = swiperInstance.slides[swiperInstance.activeIndex];
@@ -46,7 +30,9 @@ const HeroSection = () => {
         console.error("Video autoplay prevented:", error);
       });
     } else {
-      swiperInstance.autoplay.start();
+      if (!swiperInstance.autoplay.running) {
+         swiperInstance.autoplay.start();
+      }
     }
   };
 
@@ -54,8 +40,7 @@ const HeroSection = () => {
     swiper?.slideNext();
   };
 
-
-  if (isLoading) {
+  if (!content) {
     return (
       <section className="relative w-full h-[80vh] bg-muted">
         <Skeleton className="w-full h-full" />
@@ -81,11 +66,11 @@ const HeroSection = () => {
         onSlideChange={handleSlideChange}
         className="absolute inset-0 w-full h-full"
       >
-        {content?.slides.map((slide, index) => (
+        {content.slides.map((slide, index) => (
           <SwiperSlide key={index}>
             {slide.type === 'video' ? (
               <video
-                ref={index === 0 ? videoRef : null}
+                ref={videoRef}
                 src={slide.url}
                 autoPlay={index === 0}
                 muted
@@ -115,10 +100,10 @@ const HeroSection = () => {
         className="relative z-10 p-8 md:basis-1/4"
       >
         <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4 font-headline">
-          {content?.title}
+          {content.title}
         </h1>
         <Button asChild size="lg">
-          <Link href={content?.buttonLink || '#'}>{content?.buttonText}</Link>
+          <Link href={content.buttonLink || '#'}>{content.buttonText}</Link>
         </Button>
       </motion.div>
     </section>
@@ -127,10 +112,27 @@ const HeroSection = () => {
 
 
 export default function HomePage() {
+  const [content, setContent] = useState<HeroContent | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const heroContent = await getHeroContent();
+        setContent(heroContent);
+      } catch (error) {
+        console.error("Failed to fetch hero content:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchContent();
+  }, []);
+
   return (
     <div>
-      <HeroSection />
-      <HomepageServices />
+      <HeroSection content={content} />
+      {content && <HomepageServices services={content.services} />}
     </div>
   );
 }

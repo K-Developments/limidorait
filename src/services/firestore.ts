@@ -9,11 +9,20 @@ export interface Slide {
   alt?: string;
 }
 
+export interface HomepageService {
+  title: string;
+  description: string;
+  imageUrl: string;
+  aiHint: string;
+  link: string;
+}
+
 export interface HeroContent {
   title: string;
   slides: Slide[];
   buttonText: string;
   buttonLink: string;
+  services: HomepageService[];
 }
 
 export interface InteractivePanelContent {
@@ -80,7 +89,37 @@ const defaultHeroContent: HeroContent = {
       { type: 'image', url: 'https://placehold.co/1920x1080/6e3d23/eeece9', alt: 'Placeholder image 2' },
     ],
     buttonText: "View Our Work",
-    buttonLink: "/portfolio"
+    buttonLink: "/portfolio",
+    services: [
+      {
+        title: "Web Development",
+        description: "We build modern, scalable, and secure web applications tailored to your business needs.",
+        imageUrl: "https://placehold.co/600x400.png",
+        aiHint: "coding programming",
+        link: "/solutions/web-development",
+      },
+      {
+        title: "UI/UX Design",
+        description: "Crafting intuitive and beautiful user interfaces that delight your users and drive engagement.",
+        imageUrl: "https://placehold.co/600x400.png",
+        aiHint: "design wireframe",
+        link: "/solutions/ui-ux-design",
+      },
+      {
+        title: "Mobile App Development",
+        description: "From concept to launch, we develop native and cross-platform mobile apps for iOS and Android.",
+        imageUrl: "https://placehold.co/600x400.png",
+        aiHint: "mobile phone app",
+        link: "/solutions/mobile-apps",
+      },
+       {
+        title: "Software Development",
+        description: "Custom software solutions to streamline your operations and drive business growth.",
+        imageUrl: "https://placehold.co/600x400.png",
+        aiHint: "software architecture",
+        link: "/solutions/software",
+      },
+    ]
 };
 
 const defaultAboutContent: AboutContent = {

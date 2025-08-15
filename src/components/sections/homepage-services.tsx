@@ -9,32 +9,13 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Separator } from "../ui/separator";
 import { ArrowUpRight } from "lucide-react";
+import type { HomepageService } from "@/services/firestore";
 
-const services = [
-  {
-    title: "Web Development",
-    description: "We build modern, scalable, and secure web applications tailored to your business needs.",
-    imageUrl: "https://placehold.co/600x400.png",
-    aiHint: "coding programming",
-    link: "/solutions/web-development",
-  },
-  {
-    title: "UI/UX Design",
-    description: "Crafting intuitive and beautiful user interfaces that delight your users and drive engagement.",
-    imageUrl: "https://placehold.co/600x400.png",
-    aiHint: "design wireframe",
-    link: "/solutions/ui-ux-design",
-  },
-  {
-    title: "Mobile App Development",
-    description: "From concept to launch, we develop native and cross-platform mobile apps for iOS and Android.",
-    imageUrl: "https://placehold.co/600x400.png",
-    aiHint: "mobile phone app",
-    link: "/solutions/mobile-apps",
-  },
-];
+interface HomepageServicesProps {
+  services: HomepageService[];
+}
 
-export function HomepageServices() {
+export function HomepageServices({ services }: HomepageServicesProps) {
   return (
     <section id="services" className="py-16 md:py-24 bg-card">
       <div className="container mx-auto px-4 md:px-6">
@@ -54,7 +35,7 @@ export function HomepageServices() {
           </p>
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {services.map((service, index) => (
+            {(services || []).map((service, index) => (
                 <motion.div
                     key={service.title}
                     initial={{ opacity: 0, y: 50 }}
@@ -63,31 +44,29 @@ export function HomepageServices() {
                     viewport={{ once: true }}
                 >
                     <Card className="group overflow-hidden relative h-full transition-shadow duration-300 flex flex-col border-0">
-                        <CardHeader className="p-0">
-                        <div className="aspect-video overflow-hidden">
-                            <Image
-                            src={service.imageUrl}
-                            alt={service.title}
-                            width={600}
-                            height={400}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            data-ai-hint={service.aiHint}
-                            />
-                        </div>
-                        </CardHeader>
-                        <CardContent className="p-6 flex flex-col flex-grow">
-                            <div className="flex-grow">
-                                <h3 className="text-2xl font-bold mb-2 font-body uppercase text-foreground">{service.title}</h3>
-                                <Separator className="my-4" />
-                                <p className="mb-4 text-foreground">{service.description}</p>
-                            </div>
-                            <Button asChild className="mt-auto w-fit" variant="outline">
-                                <Link href={service.link}>Learn More</Link>
-                            </Button>
-                             <div className="absolute top-4 right-4 bg-background p-2 rounded-full translate-x-12 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                                <ArrowUpRight className="w-5 h-5 text-foreground" />
-                            </div>
-                        </CardContent>
+                      <Link href={service.link} className="absolute inset-0 z-10" aria-label={service.title}></Link>
+                      <CardHeader className="p-0">
+                      <div className="aspect-video overflow-hidden">
+                          <Image
+                          src={service.imageUrl}
+                          alt={service.title}
+                          width={600}
+                          height={400}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          data-ai-hint={service.aiHint}
+                          />
+                      </div>
+                      </CardHeader>
+                      <CardContent className="p-6 flex flex-col flex-grow">
+                          <div className="flex-grow">
+                              <h3 className="text-2xl font-bold mb-2 font-body uppercase text-foreground">{service.title}</h3>
+                              <Separator className="my-4" />
+                              <p className="mb-4 text-foreground">{service.description}</p>
+                          </div>
+                           <div className="absolute top-4 right-4 bg-background p-2 rounded-full translate-x-12 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                              <ArrowUpRight className="w-5 h-5 text-foreground" />
+                          </div>
+                      </CardContent>
                     </Card>
                 </motion.div>
             ))}

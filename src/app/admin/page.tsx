@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getHeroContent, updateHeroContent, HeroContent, Slide } from '@/services/firestore';
+import { getHeroContent, updateHeroContent, HeroContent, HomepageService } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function AdminHomePage() {
   const { toast } = useToast();
@@ -43,10 +44,17 @@ export default function AdminHomePage() {
   const handleSlideChange = (index: number, value: string) => {
     if (heroContent) {
       const newSlides = [...heroContent.slides];
-      // Simple logic: if URL contains video extension, it's a video. Otherwise, an image.
       const type = value.match(/\.(mp4|webm|ogg)$/) ? 'video' : 'image';
       newSlides[index] = { ...newSlides[index], url: value, type };
       setHeroContent({ ...heroContent, slides: newSlides });
+    }
+  };
+
+  const handleServiceChange = (index: number, field: keyof HomepageService, value: string) => {
+    if (heroContent) {
+        const newServices = [...heroContent.services];
+        newServices[index] = { ...newServices[index], [field]: value };
+        setHeroContent({ ...heroContent, services: newServices });
     }
   };
 
@@ -142,6 +150,40 @@ export default function AdminHomePage() {
                     <Input id="buttonLink" value={heroContent?.buttonLink || ''} onChange={(e) => handleInputChange('buttonLink', e.target.value)} />
                  </div>
             </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Homepage Services</CardTitle>
+            <CardDescription>Update the content for the services section on the homepage.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {heroContent?.services.map((service, index) => (
+              <Card key={index} className="p-4 space-y-4">
+                 <h4 className="text-lg font-semibold">Service Card {index + 1}</h4>
+                 <div className="space-y-2">
+                    <Label htmlFor={`service-title-${index}`}>Title</Label>
+                    <Input id={`service-title-${index}`} value={service.title} onChange={(e) => handleServiceChange(index, 'title', e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor={`service-desc-${index}`}>Description</Label>
+                    <Textarea id={`service-desc-${index}`} value={service.description} onChange={(e) => handleServiceChange(index, 'description', e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor={`service-image-${index}`}>Image URL</Label>
+                    <Input id={`service-image-${index}`} value={service.imageUrl} onChange={(e) => handleServiceChange(index, 'imageUrl', e.target.value)} />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor={`service-aihint-${index}`}>AI Hint</Label>
+                    <Input id={`service-aihint-${index}`} value={service.aiHint} onChange={(e) => handleServiceChange(index, 'aiHint', e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor={`service-link-${index}`}>Link</Label>
+                    <Input id={`service-link-${index}`} value={service.link} onChange={(e) => handleServiceChange(index, 'link', e.target.value)} />
+                </div>
+              </Card>
+            ))}
+          </CardContent>
         </Card>
 
         <Button type="submit" size="lg">Save All Changes</Button>
