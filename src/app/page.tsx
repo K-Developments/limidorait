@@ -1,11 +1,12 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from 'swiper/react';
+import type { Swiper as SwiperClass } from 'swiper';
 import { Autoplay, EffectFade } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
@@ -16,6 +17,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 const HeroSection = () => {
   const [content, setContent] = useState<HeroContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [swiper, setSwiper] = useState<SwiperClass | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -30,6 +33,27 @@ const HeroSection = () => {
     };
     fetchContent();
   }, []);
+
+  const handleSlideChange = (swiperInstance: SwiperClass) => {
+    if (swiperInstance.activeIndex === 0) { // Assuming video is the first slide
+      swiperInstance.autoplay.stop();
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(error => {
+          // Autoplay was prevented. This is common in some browsers.
+          // You might want to show a play button to the user.
+          console.error("Video autoplay prevented:", error);
+        });
+      }
+    } else {
+      swiperInstance.autoplay.start();
+    }
+  };
+
+  const onVideoEnd = () => {
+    swiper?.slideNext();
+  };
+
 
   if (isLoading) {
     return (
@@ -53,17 +77,20 @@ const HeroSection = () => {
           delay: 5000,
           disableOnInteraction: false,
         }}
+        onSwiper={setSwiper}
+        onSlideChange={handleSlideChange}
         className="absolute inset-0 w-full h-full"
       >
         {content?.slides.map((slide, index) => (
           <SwiperSlide key={index}>
             {slide.type === 'video' ? (
               <video
+                ref={videoRef}
                 src={slide.url}
                 autoPlay
-                loop
                 muted
                 playsInline
+                onEnded={onVideoEnd}
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -87,7 +114,7 @@ const HeroSection = () => {
         transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
         className="relative z-10 p-8 md:p-12"
       >
-        <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4">
+        <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4 font-headline">
           Creative Agency
         </h1>
         <Button asChild size="lg">
