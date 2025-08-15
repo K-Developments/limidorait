@@ -65,64 +65,61 @@ const HeroSection = () => {
   return (
     <section 
       aria-labelledby="hero-title"
-      className="hero-section relative flex items-end justify-start w-full h-[80vh] bg-neutral-900 text-white overflow-hidden"
+      className="relative flex md:flex-row flex-col items-end justify-start w-full h-[80vh] bg-neutral-900 text-white overflow-hidden hero-section"
     >
-      <div className="hero-slider-container absolute inset-0 w-full h-full">
-        <Swiper
-            modules={[Autoplay, EffectFade]}
-            effect="fade"
-            fadeEffect={{ crossFade: true }}
-            loop={true}
-            autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-            }}
-            onSwiper={setSwiper}
-            onSlideChange={handleSlideChange}
-            className="w-full h-full"
-        >
-            {content?.slides.map((slide, index) => (
-            <SwiperSlide key={index}>
-                {slide.type === 'video' ? (
-                <video
-                    ref={index === 0 ? videoRef : null}
-                    src={slide.url}
-                    autoPlay={index === 0}
-                    muted
-                    playsInline
-                    onEnded={onVideoEnd}
-                    className="w-full h-full object-cover"
-                />
-                ) : (
-                <Image
-                    src={slide.url}
-                    alt={slide.alt || `Hero image ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    priority={index === 0}
-                />
-                )}
-            </SwiperSlide>
-            ))}
-        </Swiper>
-      </div>
+      <Swiper
+        modules={[Autoplay, EffectFade]}
+        effect="fade"
+        fadeEffect={{ crossFade: true }}
+        loop={true}
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+        }}
+        onSwiper={setSwiper}
+        onSlideChange={handleSlideChange}
+        className="absolute inset-0 w-full h-full"
+      >
+        {content?.slides.map((slide, index) => (
+          <SwiperSlide key={index}>
+            {slide.type === 'video' ? (
+              <video
+                ref={index === 0 ? videoRef : null}
+                src={slide.url}
+                autoPlay={index === 0}
+                muted
+                playsInline
+                onEnded={onVideoEnd}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <Image
+                src={slide.url}
+                alt={slide.alt || `Hero image ${index + 1}`}
+                fill
+                className="object-cover"
+                priority={index === 0}
+              />
+            )}
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
-      <div className="hero-content-container relative z-10 w-full md:w-1/2">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent md:bg-none" />
-        <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="relative z-10 p-8 md:p-12"
-        >
-            <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4 font-headline">
-            {content?.title}
-            </h1>
-            <Button asChild size="lg">
-            <Link href={content?.buttonLink || '#'}>{content?.buttonText}</Link>
-            </Button>
-        </motion.div>
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+      
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+        className="relative z-10 p-8 md:basis-1/4"
+      >
+        <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4 font-headline">
+          {content?.title}
+        </h1>
+        <Button asChild size="lg">
+          <Link href={content?.buttonLink || '#'}>{content?.buttonText}</Link>
+        </Button>
+      </motion.div>
     </section>
   );
 };
@@ -135,5 +132,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
