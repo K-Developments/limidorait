@@ -1,6 +1,7 @@
 
 import { About } from "@/components/sections/about";
 import { AboutHero } from "@/components/sections/about-hero";
+import { WhyUs } from "@/components/sections/why-us";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -13,6 +14,7 @@ export default function AboutPage() {
         <div>
             <AboutHero />
             <About />
+            <WhyUs />
         </div>
     );
 }
