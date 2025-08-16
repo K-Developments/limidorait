@@ -18,7 +18,7 @@ export function HomepageAbout() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-primary text-primary-foreground p-8 md:p-16 h-full flex flex-col justify-center order-2 md:order-1"
+            className="bg-neutral-900 text-primary-foreground p-8 md:p-16 h-full flex flex-col justify-center order-2 md:order-1"
           >
             <Badge variant="secondary" className="mb-4 self-start">
               Who We Are
@@ -29,7 +29,7 @@ export function HomepageAbout() {
             <p className="text-lg mb-8 text-primary-foreground/80">
               We are a creative agency that blends design, technology, and strategy to build exceptional digital experiences. Our passion is to help businesses thrive in the digital world.
             </p>
-            <Button asChild variant="secondary" size="lg" className="self-start">
+            <Button asChild size="lg" className="self-start">
               <Link href="/about">
                 More About Limidora
                 <ArrowRight className="ml-2 h-5 w-5" />
