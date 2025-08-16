@@ -1,27 +1,41 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { ChevronRight, GanttChartSquare, CheckSquare, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { getProjectBySlug } from '@/services/firestore';
+import type { Metadata, ResolvingMetadata } from 'next';
 
-export default function ProjectDetailPage({ params }: { params: { slug: string } }) {
-  // Decode the slug for display (e.g., "e-commerce-platform" -> "e commerce platform")
-  const projectName = params.slug.replace(/-/g, ' ');
+type Props = {
+  params: { slug: string }
+}
 
-  const features = [
-    "Seamless integration with multiple third-party payment gateways.",
-    "High-performance architecture to handle peak traffic seasons.",
-    "Scalable back-end for easy inventory and order management.",
-    "Intuitive user interface for a smooth shopping experience.",
-  ];
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const project = await getProjectBySlug(params.slug);
 
-  const highlights = [
-    "Built with a modern Next.js front-end for optimal SEO and performance.",
-    "Microservices architecture for enhanced scalability and maintainability.",
-    "Custom UI/UX design focused on conversion and user engagement.",
-    "Streamlined checkout process to reduce cart abandonment.",
-  ];
+  if (!project) {
+    return {
+      title: 'Project Not Found'
+    }
+  }
+
+  return {
+    title: `${project.title} | Limidora Digital`,
+    description: project.about.substring(0, 160),
+  }
+}
+
+export default async function ProjectDetailPage({ params }: { params: { slug: string } }) {
+  const project = await getProjectBySlug(params.slug);
+  
+  if (!project) {
+    notFound();
+  }
 
   return (
     <main>
@@ -30,7 +44,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         aria-labelledby="project-hero-title"
         className="relative flex items-center justify-center w-full min-h-[50vh] bg-neutral-900 text-white overflow-hidden"
       >
-        <div className="relative z-10 text-center p-8">
+        <div className="relative z-10 text-center p-8 w-[100%] h-[50vh] flex items-center justify-center">
           {/* Decorative Lines */}
           <div className="absolute inset-0 w-full h-full pointer-events-none">
               <div className="absolute top-0 left-1/4 h-full w-[1px] bg-gradient-to-t from-transparent to-white/10" />
@@ -40,8 +54,8 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
               <div className="absolute top-0 left-3/4 h-full w-[1px] bg-gradient-to-t from-transparent to-white/10" />
           </div>
           
-          <h1 id="project-hero-title" className="text-4xl md:text-6xl font-medium uppercase font-body tracking-tight">
-            {projectName}
+          <h1 id="project-hero-title" className="text-4xl md:text-6xl font-medium uppercase font-body tracking-tight capitalize">
+            {project.title}
           </h1>
         </div>
       </section>
@@ -50,11 +64,12 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
       <section className="relative py-24 bg-background">
          <div className="absolute inset-0 z-0">
           <Image
-            src="https://placehold.co/1600x1200.png"
-            alt={`Showcase image for ${projectName}`}
+            src={project.heroImageUrl}
+            alt={`Showcase image for ${project.title}`}
             fill
             className="object-cover"
             data-ai-hint="abstract project background"
+            priority
           />
           <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
         </div>
@@ -68,7 +83,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                 <ChevronRight className="h-4 w-4 mx-1" />
                 <Link href="/portfolio" className="hover:text-primary transition-colors">Portfolio</Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
-                <span className="font-medium text-foreground capitalize">{projectName}</span>
+                <span className="font-medium text-foreground capitalize">{project.title}</span>
             </nav>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
@@ -77,13 +92,14 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                 <div>
                     <h3 className="font-semibold text-foreground uppercase tracking-wider">Services</h3>
                     <div className="flex flex-wrap gap-2 mt-2">
-                        <Badge variant="secondary">Web Development</Badge>
-                        <Badge variant="secondary">UI/UX Design</Badge>
+                        {project.services.map(service => (
+                           <Badge key={service} variant="secondary">{service}</Badge>
+                        ))}
                     </div>
                 </div>
                 <div>
                     <h3 className="font-semibold text-foreground uppercase tracking-wider">Date</h3>
-                    <p className="text-muted-foreground">August 2023</p>
+                    <p className="text-muted-foreground">{project.date}</p>
                 </div>
                 </aside>
 
@@ -95,7 +111,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                     About the Project
                     </h2>
                     <p className="text-muted-foreground text-base leading-relaxed">
-                    This project involved creating a comprehensive e-commerce platform from the ground up for a leading retail client. The goal was to deliver a seamless, high-performance shopping experience across all devices, with a modern UI and a robust back-end system for inventory and order management.
+                        {project.about}
                     </p>
                 </div>
 
@@ -107,7 +123,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                     Features
                     </h2>
                     <ul className="space-y-2 text-muted-foreground list-none pl-2">
-                      {features.map((feature, index) => (
+                      {project.features.map((feature, index) => (
                         <li key={index} className="flex items-start">
                           <span className="h-2.5 w-2.5 bg-primary mt-1.5 mr-3 flex-shrink-0" />
                           <span>{feature}</span>
@@ -124,7 +140,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                     Highlights
                     </h2>
                     <ul className="space-y-2 text-muted-foreground list-none pl-2">
-                      {highlights.map((highlight, index) => (
+                      {project.highlights.map((highlight, index) => (
                         <li key={index} className="flex items-start">
                           <span className="h-2.5 w-2.5 bg-primary mt-1.5 mr-3 flex-shrink-0" />
                           <span>{highlight}</span>
@@ -140,3 +156,5 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
     </main>
   );
 }
+
+    

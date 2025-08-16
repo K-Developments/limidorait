@@ -78,7 +78,7 @@ const MobileTestimonialCarousel = ({ testimonials }: { testimonials: HomepageTes
       <div className="flex justify-center items-center gap-4 mt-6">
         <button
           onClick={goToPrevious}
-          className="p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
+          className="p-2 rounded-full  transition-colors"
           aria-label="Previous testimonial"
         >
           <ChevronLeft className="w-5 h-5 text-primary" />
@@ -101,7 +101,7 @@ const MobileTestimonialCarousel = ({ testimonials }: { testimonials: HomepageTes
 
         <button
           onClick={goToNext}
-          className="p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
+          className="p-2 rounded-full  transition-colors"
           aria-label="Next testimonial"
         >
           <ChevronRight className="w-5 h-5 text-primary" />

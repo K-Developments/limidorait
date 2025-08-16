@@ -1,6 +1,6 @@
 
 import { db, storage } from '@/lib/firebase';
-import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp, getDocs, deleteDoc, updateDoc, query, orderBy } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp, getDocs, deleteDoc, updateDoc, query, orderBy, where, limit } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export interface Slide {
@@ -77,10 +77,17 @@ export interface PortfolioContent {
 export interface Project {
     id: string;
     title: string;
+    slug: string;
+    category: string;
     imageUrl: string;
     aiHint: string;
-    category: string;
     link: string;
+    heroImageUrl: string;
+    about: string;
+    features: string[];
+    highlights: string[];
+    services: string[];
+    date: string;
 }
 
 
@@ -370,13 +377,13 @@ export const getProjects = async (): Promise<Project[]> => {
     const snapshot = await getDocs(q);
     if (snapshot.empty) {
         // Create default projects if collection is empty
-        const defaultProjects: Omit<Project, 'id'>[] = [
-            { title: "E-commerce Platform", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "website mockup", link: "#" },
-            { title: "Mobile Banking App", category: "Mobile App", imageUrl: "https://placehold.co/600x400.png", aiHint: "app interface", link: "#" },
-            { title: "SaaS Dashboard", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "dashboard analytics", link: "#" },
+        const defaultProjectsData: Omit<Project, 'id' | 'link'>[] = [
+            { title: "E-commerce Platform", slug: "e-commerce-platform", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "website mockup", heroImageUrl: "https://placehold.co/1600x1200.png", about: "A full-featured e-commerce platform.", features: [], highlights: [], services: [], date: "" },
+            { title: "Mobile Banking App", slug: "mobile-banking-app", category: "Mobile App", imageUrl: "https://placehold.co/600x400.png", aiHint: "app interface", heroImageUrl: "https://placehold.co/1600x1200.png", about: "A secure mobile banking application.", features: [], highlights: [], services: [], date: "" },
+            { title: "SaaS Dashboard", slug: "saas-dashboard", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "dashboard analytics", heroImageUrl: "https://placehold.co/1600x1200.png", about: "An analytics dashboard for a SaaS product.", features: [], highlights: [], services: [], date: "" },
         ];
-        for (const project of defaultProjects) {
-            await addDoc(projectsCol, project);
+        for (const projectData of defaultProjectsData) {
+            await addProject(projectData as any);
         }
         const newSnapshot = await getDocs(q);
         return newSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
@@ -384,14 +391,37 @@ export const getProjects = async (): Promise<Project[]> => {
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
 };
 
-export const updateProject = async (id: string, data: Partial<Project>): Promise<void> => {
+export const getProjectBySlug = async (slug: string): Promise<Project | null> => {
+    const q = query(collection(db, PORTFOLIO_COLLECTION_ID), where("slug", "==", slug), limit(1));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) {
+        return null;
+    }
+    const doc = snapshot.docs[0];
+    return { id: doc.id, ...doc.data() } as Project;
+};
+
+
+export const updateProject = async (id: string, data: Partial<Omit<Project, 'id'>>): Promise<void> => {
     const projectDoc = doc(db, PORTFOLIO_COLLECTION_ID, id);
     await updateDoc(projectDoc, data);
 };
 
-export const addProject = async (data: Omit<Project, 'id'>): Promise<Project> => {
-    const docRef = await addDoc(collection(db, PORTFOLIO_COLLECTION_ID), data);
-    return { id: docRef.id, ...data };
+export const addProject = async (data: Omit<Project, 'id' | 'link'>): Promise<Project> => {
+    const slug = data.title.toLowerCase().replace(/\s+/g, '-');
+    const newProjectData = {
+      ...data,
+      slug,
+      link: `/portfolio/${slug}`,
+      heroImageUrl: data.heroImageUrl || "https://placehold.co/1600x1200.png",
+      about: data.about || "Enter project description here.",
+      features: data.features || [],
+      highlights: data.highlights || [],
+      services: data.services || ["Web Development", "UI/UX Design"],
+      date: data.date || new Date().toLocaleString('default', { month: 'long', year: 'numeric' }),
+    };
+    const docRef = await addDoc(collection(db, PORTFOLIO_COLLECTION_ID), newProjectData);
+    return { id: docRef.id, ...newProjectData, link: newProjectData.link };
 };
 
 export const deleteProject = async (id: string): Promise<void> => {
@@ -490,3 +520,5 @@ export const deleteSubmittedQuestion = async (id: string): Promise<void> => {
         throw new Error("Could not delete submitted question.");
     }
 };
+
+    
