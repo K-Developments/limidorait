@@ -1,13 +1,27 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronRight, GanttChartSquare, Target, Zap } from 'lucide-react';
+import { ChevronRight, GanttChartSquare, CheckSquare, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 
 export default function ProjectDetailPage({ params }: { params: { slug: string } }) {
   // Decode the slug for display (e.g., "e-commerce-platform" -> "e commerce platform")
   const projectName = params.slug.replace(/-/g, ' ');
+
+  const features = [
+    "Seamless integration with multiple third-party payment gateways.",
+    "High-performance architecture to handle peak traffic seasons.",
+    "Scalable back-end for easy inventory and order management.",
+    "Intuitive user interface for a smooth shopping experience.",
+  ];
+
+  const highlights = [
+    "Built with a modern Next.js front-end for optimal SEO and performance.",
+    "Microservices architecture for enhanced scalability and maintainability.",
+    "Custom UI/UX design focused on conversion and user engagement.",
+    "Streamlined checkout process to reduce cart abandonment.",
+  ];
 
   return (
     <main>
@@ -93,24 +107,34 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
 
                 <div className="space-y-4">
                     <h2 className="text-2xl md:text-3xl font-medium text-foreground flex items-center gap-3">
-                    <Target className="h-7 w-7 text-primary" />
-                    Challenges
+                    <CheckSquare className="h-7 w-7 text-primary" />
+                    Features
                     </h2>
-                    <p className="text-muted-foreground text-base leading-relaxed">
-                    The primary challenge was integrating multiple third-party services, including payment gateways, shipping providers, and a complex tax calculation API, while maintaining fast page load times. Ensuring the platform was scalable to handle high traffic during peak shopping seasons was also a critical requirement.
-                    </p>
+                    <ul className="space-y-2 text-muted-foreground list-none pl-2">
+                      {features.map((feature, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="h-2.5 w-2.5 bg-primary mt-1.5 mr-3 flex-shrink-0" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
                 </div>
 
                 <Separator />
 
                 <div className="space-y-4">
                     <h2 className="text-2xl md:text-3xl font-medium text-foreground flex items-center gap-3">
-                    <Zap className="h-7 w-7 text-primary" />
-                    Our Solution
+                    <Star className="h-7 w-7 text-primary" />
+                    Highlights
                     </h2>
-                    <p className="text-muted-foreground text-base leading-relaxed">
-                    We built the platform on a modern tech stack using Next.js for the front-end to ensure optimal performance and SEO. For the back-end, we designed a microservices architecture to handle different functionalities independently. This approach provided the necessary scalability and made future integrations straightforward. A custom-designed UI/UX focused on intuitive navigation and a streamlined checkout process significantly improved user engagement.
-                    </p>
+                    <ul className="space-y-2 text-muted-foreground list-none pl-2">
+                      {highlights.map((highlight, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="h-2.5 w-2.5 bg-primary mt-1.5 mr-3 flex-shrink-0" />
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
                 </div>
                 </article>
             </div>
