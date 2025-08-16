@@ -61,33 +61,12 @@ export interface HeroContent {
   aboutSection: HomepageAboutSection;
 }
 
-export interface InteractivePanelContent {
-  title: string;
-  description: string;
-  imageUrl: string;
-  imageHint: string;
-  link: string;
-}
-
 export interface AboutContent {
   heroTitle: string;
   heroSubtitle: string;
   heroImageUrl: string;
   aboutTitle: string;
   aboutDescription: string;
-  conceptsTitle: string;
-  conceptsDescription: string;
-  conceptsImageUrl: string;
-  conceptsLink: string;
-  workflowTitle: string;
-  workflowDescription: string;
-  workflowImageUrl: string;
-  workflowLink: string;
-  interactivePanels: {
-    faq: InteractivePanelContent;
-    testimonials: InteractivePanelContent;
-    solutions: InteractivePanelContent;
-  }
 }
 
 export interface FaqItem {
@@ -228,37 +207,6 @@ const defaultAboutContent: AboutContent = {
   heroImageUrl: "https://placehold.co/1600x640.png",
   aboutTitle: "Our Vision",
   aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.",
-  conceptsTitle: "Limidora Concepts",
-  conceptsDescription: "We provide solutions for businesses of all types and sizes. Whether your business is large or small, our concepts are designed to integrate modern technology seamlessly. In today's world, every business needs to adapt and evolve. We create tailored technological solutions to improve your processes, reach, and overall success.",
-  conceptsImageUrl: "https://placehold.co/400x400.png",
-  conceptsLink: "/portfolio",
-  workflowTitle: "Our Workflow",
-  workflowDescription: "Our process is collaborative and transparent. We start with discovery and strategy, move to design and development, and finish with testing and launch. We keep you involved every step of the way to ensure the final product exceeds your expectations.",
-  workflowImageUrl: "https://placehold.co/400x400.png",
-  workflowLink: "/contact",
-  interactivePanels: {
-    faq: {
-      title: "Frequently Asked Questions",
-      description: "Find answers to common questions about our services, processes, and technology. We believe in transparency and are here to provide the clarity you need.",
-      imageUrl: "https://images.unsplash.com/photo-1543286386-713bdd548da4?q=80&w=3000&auto=format&fit=crop",
-      imageHint: "question mark abstract",
-      link: "/faq?from=about",
-    },
-    testimonials: {
-      title: "What Our Clients Say",
-      description: "Our clients' success is our success. Read stories and testimonials from businesses we've helped transform with our digital solutions.",
-      imageUrl: "https://images.unsplash.com/photo-1521791055366-0d553872125f?q=80&w=3000&auto=format&fit=crop",
-      imageHint: "customer review happy",
-      link: "#",
-    },
-    solutions: {
-      title: "Our Service Overview",
-      description: "From web development and UI/UX design to comprehensive brand strategies, we offer a full suite of services to bring your digital vision to life.",
-      imageUrl: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=3000&auto=format&fit=crop",
-      imageHint: "business solution puzzle",
-      link: "#",
-    },
-  }
 };
 
 const defaultFaqContent: FaqContent = {
