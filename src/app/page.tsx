@@ -152,7 +152,7 @@ export default function HomePage() {
       {content && <HomepageWorks works={content.works} />}
       {content && <Testimonials testimonials={content.testimonials} />}
       {content && <HomepageAbout aboutSection={content.aboutSection} />}
-      <HomepageCta />
+      {content && <HomepageCta ctaSection={content.ctaSection} />}
     </div>
   );
 }

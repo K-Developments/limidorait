@@ -3,7 +3,8 @@ import { About } from "@/components/sections/about";
 import { AboutHero } from "@/components/sections/about-hero";
 import { WhyUs } from "@/components/sections/why-us";
 import { Testimonials } from "@/components/sections/homepage-testimonials";
-import { getHeroContent } from "@/services/firestore";
+import { HomepageCta } from "@/components/sections/homepage-cta";
+import { getHeroContent, getAboutContent } from "@/services/firestore";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -12,13 +13,15 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-    const content = await getHeroContent();
+    const heroContent = await getHeroContent();
+    const aboutContent = await getAboutContent();
     return (
         <div>
             <AboutHero />
             <About />
             <WhyUs />
-            {content && <Testimonials testimonials={content.testimonials} />}
+            {heroContent && <Testimonials testimonials={heroContent.testimonials} />}
+            {heroContent && <HomepageCta ctaSection={heroContent.ctaSection} />}
         </div>
     );
 }
