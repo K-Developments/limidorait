@@ -6,7 +6,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import type { Project } from "@/lib/portfolio-data";
-import { Button } from "./ui/button";
+import { ArrowUpRight } from "lucide-react";
 
 interface PortfolioCardProps {
   project: Project;
@@ -31,12 +31,12 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
           <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-            <div className="transform transition-transform duration-300 ease-in-out group-hover:-translate-y-2">
+            <div className="transform transition-all duration-300 ease-in-out group-hover:-translate-y-8">
               <p className="text-sm font-semibold uppercase tracking-wider text-white/80">{project.category}</p>
               <h3 className="text-2xl font-medium mt-1 font-body uppercase">{project.title}</h3>
             </div>
-            <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button variant="secondary" size="sm">View Project</Button>
+            <div className="absolute bottom-6 right-6 p-2 rounded-full bg-white/10 translate-x-14 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+              <ArrowUpRight className="w-5 h-5 text-white" />
             </div>
           </div>
         </Link>
