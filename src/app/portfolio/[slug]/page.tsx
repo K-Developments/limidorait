@@ -75,10 +75,6 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                 {/* Left Column - Meta Info */}
                 <aside className="md:col-span-1 space-y-6">
                 <div>
-                    <h3 className="font-semibold text-foreground uppercase tracking-wider">Client</h3>
-                    <p className="text-muted-foreground">Innovate Co.</p>
-                </div>
-                <div>
                     <h3 className="font-semibold text-foreground uppercase tracking-wider">Services</h3>
                     <div className="flex flex-wrap gap-2 mt-2">
                         <Badge variant="secondary">Web Development</Badge>
