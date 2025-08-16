@@ -1,14 +1,10 @@
 
 "use client";
 
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getAboutContent, AboutContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { InteractivePanels } from "./interactive-panels";
 
 export function About() {
   const [content, setContent] = useState<AboutContent | null>(null);
@@ -29,134 +25,46 @@ export function About() {
   }, []);
 
   return (
-    <section id="about" className="w-full bg-card relative">
-      <div className="container mx-auto px-4 md:px-6 ">
-        <div className="mb-8">
-          <nav aria-label="Breadcrumb" className="flex items-center text-sm text-muted-foreground">
-            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-            <ChevronRight className="h-4 w-4 mx-1" />
-            <span className="font-medium text-foreground">About</span>
-          </nav>
-        </div>
+    <section id="about-vision" className="w-full bg-background relative py-20 md:py-28">
+      <div className="container mx-auto px-4 md:px-6">
         {isLoading ? (
-          <div className="flex flex-col items-center text-center py-12">
-            <Skeleton className="h-8 w-1/4 mb-4" />
-            <Skeleton className="h-10 w-1/2 mb-4" />
-            <Skeleton className="h-20 w-3/4" />
+          <div className="grid md:grid-cols-3 gap-8 items-start">
+            <div className="md:col-span-1">
+              <Skeleton className="h-10 w-3/4" />
+            </div>
+            <div className="md:col-span-2 space-y-4">
+              <Skeleton className="h-8 w-1/2" />
+              <Skeleton className="h-24 w-full" />
+            </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center text-center py-12">
-            <div className="inline-block bg-secondary px-3 py-1 text-sm text-secondary-foreground mb-4">Our Vision</div>
-            <h2 className="text-3xl font-medium tracking-tighter sm:text-4xl md:text-5xl mb-4 font-body uppercase">
-              {content?.aboutTitle}
-            </h2>
-            <p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              {content?.aboutDescription}
-            </p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="grid md:grid-cols-3 gap-8 md:gap-16 items-start"
+          >
+            <div className="md:col-span-1 md:text-right">
+              <h2 className="text-3xl font-medium uppercase text-foreground tracking-tight">
+                {content?.aboutTitle}
+              </h2>
+            </div>
+            <div className="md:col-span-2 relative pl-8 md:pl-12">
+              <div 
+                aria-hidden="true" 
+                className="absolute top-0 left-0 h-full w-px bg-border"
+              />
+              <div 
+                aria-hidden="true" 
+                className="absolute top-0 left-0 w-8 h-px bg-border"
+              />
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+                {content?.aboutDescription}
+              </p>
+            </div>
+          </motion.div>
         )}
-
-        <div className="py-8 md:py-12">
-          <div className="relative md:grid md:grid-cols-2 md:gap-8 md:items-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="w-full"
-            >
-              {isLoading ? (
-                <Skeleton className="w-full h-auto aspect-square rounded-lg" />
-              ) : (
-                <Image
-                  src={content?.conceptsImageUrl || "https://placehold.co/400x400.png"}
-                  alt={content?.conceptsTitle || "Limidora Concepts"}
-                  width={400}
-                  height={400}
-                  className="rounded-lg object-cover w-full h-auto aspect-square"
-                  data-ai-hint="abstract technology design"
-                />
-              )}
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="space-y-4 mt-6 md:mt-0 md:absolute md:right-0 md:w-3/5 md:bg-background/80 md:backdrop-blur-sm md:p-8 md:rounded-lg md:-ml-16"
-            >
-              {isLoading ? (
-                <>
-                  <Skeleton className="h-9 w-1/2" />
-                  <Skeleton className="h-24 w-full" />
-                </>
-              ) : (
-                <>
-                  <h3 className="text-3xl font-medium tracking-tight font-body uppercase">{content?.conceptsTitle}</h3>
-                  <p className="text-muted-foreground md:text-lg">
-                    {content?.conceptsDescription}
-                  </p>
-                  <Link href={content?.conceptsLink || '#'} className="inline-flex items-center font-semibold text-primary hover:underline">
-                    Explore Concepts <ChevronRight className="w-4 h-4 ml-1" />
-                  </Link>
-                </>
-              )}
-            </motion.div>
-          </div>
-        </div>
-
-        <div className="py-8 md:py-12">
-          <div className="flex flex-col-reverse md:relative md:grid md:grid-cols-2 md:gap-8 md:items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="space-y-4 mt-6 md:mt-0 md:absolute md:left-0 md:w-3/5 md:bg-background/80 md:backdrop-blur-sm md:p-8 md:rounded-lg md:-mr-16 z-10"
-            >
-              {isLoading ? (
-                <>
-                  <Skeleton className="h-9 w-1/2" />
-                  <Skeleton className="h-24 w-full" />
-                </>
-              ) : (
-                <>
-                  <h3 className="text-3xl font-medium tracking-tight font-body uppercase">{content?.workflowTitle}</h3>
-                  <p className="text-muted-foreground md:text-lg">
-                    {content?.workflowDescription}
-                  </p>
-                  <Link href={content?.workflowLink || '#'} className="inline-flex items-center font-semibold text-primary hover:underline">
-                    Explore Workflow <ChevronRight className="w-4 h-4 ml-1" />
-                  </Link>
-                </>
-              )}
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="w-full md:col-start-2"
-            >
-              {isLoading ? (
-                <Skeleton className="w-full h-auto aspect-square rounded-lg" />
-              ) : (
-                <Image
-                  src={content?.workflowImageUrl || "https://placehold.co/400x400.png"}
-                  alt={content?.workflowTitle || "Our Workflow"}
-                  width={400}
-                  height={400}
-                  className="rounded-lg object-cover w-full h-auto aspect-square"
-                  data-ai-hint="workflow diagram flowchart"
-                />
-              )}
-            </motion.div>
-          </div>
-        </div>
-
-      </div>
-       <div className="py-8 md:py-12">
-          <InteractivePanels content={content} />
       </div>
     </section>
   );
