@@ -95,20 +95,32 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
         ))}
       </Swiper>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
       
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-        className="relative z-10 p-8 md:basis-2/3"
+        className="relative z-10 p-8 md:p-12 md:basis-2/3"
       >
-        <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4 font-headline" style={{lineHeight:1.2}}>
-          {content.title}
-        </h1>
-        <Button asChild size="lg">
-          <Link href={content.buttonLink || '#'}>{content.buttonText}</Link>
-        </Button>
+        {/* Decorative Lines */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none">
+            {/* Top Lines */}
+            <div className="absolute top-0 left-1/4 h-full w-[1px] bg-gradient-to-t from-transparent to-white/10" />
+            <div className="absolute top-0 left-2/4 h-full w-[1px] bg-gradient-to-t from-transparent to-white/10" />
+            {/* Right Lines */}
+            <div className="absolute right-0 top-1/3 w-full h-[1px] bg-gradient-to-r from-transparent to-white/10" />
+            <div className="absolute right-0 top-2/3 w-full h-[1px] bg-gradient-to-r from-transparent to-white/10" />
+        </div>
+        
+        <div className="relative">
+            <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4 font-headline" style={{lineHeight:1.2}}>
+            {content.title}
+            </h1>
+            <Button asChild size="lg">
+            <Link href={content.buttonLink || '#'}>{content.buttonText}</Link>
+            </Button>
+        </div>
       </motion.div>
     </section>
   );
