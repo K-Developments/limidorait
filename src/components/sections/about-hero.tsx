@@ -27,13 +27,13 @@ export function AboutHero() {
   return (
     <section 
       aria-labelledby="about-hero-title"
-      className="relative flex md:flex-row flex-col items-center justify-center w-full min-h-[50vh] bg-neutral-900 text-white overflow-hidden hero-section w-[100%] h-[100%]"
+      className="relative flex md:flex-row flex-col items-center justify-center w-full min-h-[50vh] bg-neutral-900 text-white overflow-hidden hero-section w-[100%] "
     >
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-        className="relative z-10 p-8 md:p-12 h-full flex items-center justify-center w-[100%] h-[50vh]"
+        className="relative z-10 p-8  flex items-center justify-center w-[100%] h-[50vh]"
       >
         {/* Decorative Lines */}
         <div className="absolute inset-0 w-full h-full pointer-events-none">

@@ -1,6 +1,6 @@
 
 import { db, storage } from '@/lib/firebase';
-import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp, getDocs, deleteDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp, getDocs, deleteDoc, updateDoc, query, orderBy } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export interface Slide {
@@ -74,6 +74,16 @@ export interface PortfolioContent {
   heroSubtitle: string;
 }
 
+export interface Project {
+    id: string;
+    title: string;
+    imageUrl: string;
+    aiHint: string;
+    category: string;
+    link: string;
+}
+
+
 export interface FaqItem {
   question: string;
   answer: string;
@@ -100,6 +110,7 @@ const ABOUT_CONTENT_DOC_ID = 'aboutContent';
 const PORTFOLIO_CONTENT_DOC_ID = 'portfolioContent';
 const FAQ_CONTENT_DOC_ID = 'faqContent';
 const CONTENT_COLLECTION_ID = 'homepage';
+const PORTFOLIO_COLLECTION_ID = 'portfolio';
 const SUBMITTED_QUESTIONS_COLLECTION_ID = 'submittedQuestions';
 
 const defaultHeroContent: HeroContent = {
@@ -351,6 +362,43 @@ export const updatePortfolioContent = async (content: Partial<PortfolioContent>)
     throw new Error("Could not update portfolio content.");
   }
 };
+
+// Portfolio Project Functions
+export const getProjects = async (): Promise<Project[]> => {
+    const projectsCol = collection(db, PORTFOLIO_COLLECTION_ID);
+    const q = query(projectsCol, orderBy("title"));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) {
+        // Create default projects if collection is empty
+        const defaultProjects: Omit<Project, 'id'>[] = [
+            { title: "E-commerce Platform", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "website mockup", link: "#" },
+            { title: "Mobile Banking App", category: "Mobile App", imageUrl: "https://placehold.co/600x400.png", aiHint: "app interface", link: "#" },
+            { title: "SaaS Dashboard", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "dashboard analytics", link: "#" },
+        ];
+        for (const project of defaultProjects) {
+            await addDoc(projectsCol, project);
+        }
+        const newSnapshot = await getDocs(q);
+        return newSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
+    }
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
+};
+
+export const updateProject = async (id: string, data: Partial<Project>): Promise<void> => {
+    const projectDoc = doc(db, PORTFOLIO_COLLECTION_ID, id);
+    await updateDoc(projectDoc, data);
+};
+
+export const addProject = async (data: Omit<Project, 'id'>): Promise<Project> => {
+    const docRef = await addDoc(collection(db, PORTFOLIO_COLLECTION_ID), data);
+    return { id: docRef.id, ...data };
+};
+
+export const deleteProject = async (id: string): Promise<void> => {
+    const projectDoc = doc(db, PORTFOLIO_COLLECTION_ID, id);
+    await deleteDoc(projectDoc);
+};
+
 
 // Function to get FAQ content from Firestore
 export const getFaqContent = async (): Promise<FaqContent> => {

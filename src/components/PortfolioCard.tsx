@@ -5,8 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import type { Project } from "@/lib/portfolio-data";
 import { ArrowUpRight } from "lucide-react";
+import type { Project } from "@/services/firestore";
 
 interface PortfolioCardProps {
   project: Project;
@@ -21,7 +21,7 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
       viewport={{ once: true }}
     >
       <Card className="group overflow-hidden relative h-full transition-shadow duration-300 aspect-video">
-        <Link href={`/portfolio#`} className="block w-full h-full">
+        <Link href={project.link || '#'} className="block w-full h-full">
           <Image
             src={project.imageUrl}
             alt={project.title}
