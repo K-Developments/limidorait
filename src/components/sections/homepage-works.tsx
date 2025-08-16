@@ -14,7 +14,6 @@ interface HomepageWorksProps {
 
 export function HomepageWorks({ works }: HomepageWorksProps) {
   if (!works || works.length < 3) {
-    // Render nothing or a placeholder if there isn't enough data
     return null;
   }
 
@@ -55,38 +54,36 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-auto md:h-[600px]">
-          {/* Main Large Item */}
           <motion.div 
-            className="md:col-span-1 md:row-span-2 relative group overflow-hidden aspect-video md:aspect-auto"
+            className="md:col-span-1 md:row-span-2 group"
             custom={0}
             variants={cardVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <WorkCard work={firstWork} />
+            <WorkCard work={firstWork} className="aspect-square md:aspect-auto"/>
           </motion.div>
 
-          {/* Two Smaller Items */}
           <motion.div 
-            className="md:col-span-1 relative group overflow-hidden aspect-video md:aspect-auto"
+            className="md:col-span-1 group"
             custom={1}
             variants={cardVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <WorkCard work={secondWork} />
+            <WorkCard work={secondWork} className="aspect-video md:aspect-auto" />
           </motion.div>
           <motion.div 
-            className="md:col-span-1 relative group overflow-hidden aspect-video md:aspect-auto"
+            className="md:col-span-1 group"
             custom={2}
             variants={cardVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <WorkCard work={thirdWork} />
+             <WorkCard work={thirdWork} className="aspect-square md:aspect-auto" />
           </motion.div>
         </div>
         <div className="text-center mt-12">
@@ -100,26 +97,35 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
 }
 
 
-const WorkCard = ({ work }: { work: HomepageWork }) => {
+const WorkCard = ({ work, className }: { work: HomepageWork, className?: string }) => {
     return (
         <div className="relative w-full h-full">
-            <Link href={work.link} className="absolute inset-0">
-                <Image
-                    src={work.imageUrl}
-                    alt={work.title}
-                    fill
-                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300 ease-in-out"
-                    data-ai-hint={work.aiHint}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                    <div className="transform transition-transform duration-300 ease-in-out group-hover:-translate-y-2">
-                        <p className="text-sm font-semibold uppercase tracking-wider text-white/80">{work.category}</p>
-                        <h3 className="text-2xl font-bold mt-1 font-body uppercase">{work.title}</h3>
+            <Link href={work.link}>
+                <div className={`relative w-full h-full overflow-hidden ${className}`}>
+                    <Image
+                        src={work.imageUrl}
+                        alt={work.title}
+                        fill
+                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                        data-ai-hint={work.aiHint}
+                    />
+                    {/* Desktop Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent hidden md:block" />
+                    <div className="absolute inset-0 hidden md:flex flex-col justify-end p-6 text-white">
+                        <div className="transform transition-transform duration-300 ease-in-out group-hover:-translate-y-2">
+                            <p className="text-sm font-semibold uppercase tracking-wider text-white/80">{work.category}</p>
+                            <h3 className="text-2xl font-bold mt-1 font-body uppercase">{work.title}</h3>
+                        </div>
+                        <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <Button variant="secondary">View Project</Button>
+                        </div>
                     </div>
-                    <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <Button variant="secondary">View Project</Button>
-                    </div>
+                </div>
+                 {/* Mobile Content */}
+                <div className="md:hidden mt-4 p-2">
+                    <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{work.category}</p>
+                    <h3 className="text-xl font-bold mt-1 font-body uppercase text-foreground">{work.title}</h3>
+                    <Button variant="outline" className="mt-3">View Project</Button>
                 </div>
             </Link>
         </div>
