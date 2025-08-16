@@ -13,6 +13,9 @@ interface PortfolioCardProps {
 }
 
 export function PortfolioCard({ project }: PortfolioCardProps) {
+  // Create a URL-friendly slug from the project title
+  const slug = project.title.toLowerCase().replace(/\s+/g, '-');
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -21,7 +24,7 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
       viewport={{ once: true }}
     >
       <Card className="group overflow-hidden relative h-full transition-shadow duration-300 aspect-video">
-        <Link href={project.link || '#'} className="block w-full h-full">
+        <Link href={`/portfolio/${slug}`} className="block w-full h-full">
           <Image
             src={project.imageUrl}
             alt={project.title}
