@@ -2,8 +2,28 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { getAboutContent, AboutContent } from "@/services/firestore";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function AboutHero() {
+  const [content, setContent] = useState<AboutContent | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const aboutContent = await getAboutContent();
+        setContent(aboutContent);
+      } catch (error) {
+        console.error("Failed to fetch about content:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchContent();
+  }, []);
+
   return (
     <section 
       aria-labelledby="about-hero-title"
@@ -26,12 +46,21 @@ export function AboutHero() {
         </div>
         
         <div className="relative">
-            <h1 id="about-hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4 font-headline" style={{lineHeight:1.2}}>
-                About Limidora
-            </h1>
-            <p className="text-lg md:text-xl max-w-3xl text-primary-foreground/80">
-                We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences that drive success and inspire change.
-            </p>
+            {isLoading ? (
+                <div className="space-y-4">
+                    <Skeleton className="h-16 w-3/4 bg-white/10" />
+                    <Skeleton className="h-8 w-full max-w-3xl bg-white/10" />
+                </div>
+            ) : (
+                <>
+                    <h1 id="about-hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4 font-headline" style={{lineHeight:1.2}}>
+                        {content?.heroTitle}
+                    </h1>
+                    <p className="text-lg md:text-xl max-w-3xl text-primary-foreground/80">
+                        {content?.heroSubtitle}
+                    </p>
+                </>
+            )}
         </div>
       </motion.div>
     </section>

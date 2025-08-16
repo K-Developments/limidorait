@@ -224,7 +224,7 @@ const defaultHeroContent: HeroContent = {
 
 const defaultAboutContent: AboutContent = {
   heroTitle: "About Limidora",
-  heroSubtitle: "We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences.",
+  heroSubtitle: "We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences that drive success and inspire change.",
   heroImageUrl: "https://placehold.co/1600x640.png",
   aboutTitle: "About Limidora",
   aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.",
@@ -352,23 +352,22 @@ export const getAboutContent = async (): Promise<AboutContent> => {
     const data = docSnap.data();
     return deepMerge(defaultAboutContent, data) as AboutContent;
   } else {
+    await setDoc(docRef, defaultAboutContent);
     return defaultAboutContent;
   }
 };
 
 // Function to update about content in Firestore
-export const updateAboutContent = async (content: AboutContent): Promise<void> => {
+export const updateAboutContent = async (content: Partial<AboutContent>): Promise<void> => {
   const docRef = doc(db, CONTENT_COLLECTION_ID, ABOUT_CONTENT_DOC_ID);
   try {
-    const existingDoc = await getDoc(docRef);
-    const existingData = existingDoc.exists() ? existingDoc.data() : {};
-    const mergedContent = deepMerge(existingData, content);
-    await setDoc(docRef, mergedContent);
+    await setDoc(docRef, content, { merge: true });
   } catch (error) {
     console.error("Error updating about content: ", error);
     throw new Error("Could not update about content.");
   }
 };
+
 
 // Function to get FAQ content from Firestore
 export const getFaqContent = async (): Promise<FaqContent> => {
