@@ -69,6 +69,11 @@ export interface AboutContent {
   aboutDescription: string;
 }
 
+export interface PortfolioContent {
+  heroTitle: string;
+  heroSubtitle: string;
+}
+
 export interface FaqItem {
   question: string;
   answer: string;
@@ -92,6 +97,7 @@ export interface SubmittedQuestion {
 
 const HERO_CONTENT_DOC_ID = 'heroContent';
 const ABOUT_CONTENT_DOC_ID = 'aboutContent';
+const PORTFOLIO_CONTENT_DOC_ID = 'portfolioContent';
 const FAQ_CONTENT_DOC_ID = 'faqContent';
 const CONTENT_COLLECTION_ID = 'homepage';
 const SUBMITTED_QUESTIONS_COLLECTION_ID = 'submittedQuestions';
@@ -209,6 +215,11 @@ const defaultAboutContent: AboutContent = {
   aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.",
 };
 
+const defaultPortfolioContent: PortfolioContent = {
+  heroTitle: "Our Works",
+  heroSubtitle: "A glimpse into our creative world and the impact we deliver.",
+};
+
 const defaultFaqContent: FaqContent = {
   heroTitle: "Help Center",
   heroSubtitle: "Your questions, answered. Find the information you need about our services.",
@@ -316,6 +327,30 @@ export const updateAboutContent = async (content: Partial<AboutContent>): Promis
   }
 };
 
+// Function to get portfolio content from Firestore
+export const getPortfolioContent = async (): Promise<PortfolioContent> => {
+  const docRef = doc(db, CONTENT_COLLECTION_ID, PORTFOLIO_CONTENT_DOC_ID);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    return deepMerge(defaultPortfolioContent, data) as PortfolioContent;
+  } else {
+    await setDoc(docRef, defaultPortfolioContent);
+    return defaultPortfolioContent;
+  }
+};
+
+// Function to update portfolio content in Firestore
+export const updatePortfolioContent = async (content: Partial<PortfolioContent>): Promise<void> => {
+  const docRef = doc(db, CONTENT_COLLECTION_ID, PORTFOLIO_CONTENT_DOC_ID);
+  try {
+    await setDoc(docRef, content, { merge: true });
+  } catch (error) {
+    console.error("Error updating portfolio content: ", error);
+    throw new Error("Could not update portfolio content.");
+  }
+};
 
 // Function to get FAQ content from Firestore
 export const getFaqContent = async (): Promise<FaqContent> => {
