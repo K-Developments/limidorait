@@ -139,8 +139,8 @@ export default function HomePage() {
       {content && <HomepageServices services={content.services} />}
       {content && <HomepageWorks works={content.works} />}
       {content && <HomepageTestimonials testimonials={content.testimonials} />}
-      {content && <HomepageCta ctaSection={content.ctaSection} />}
       {content && <HomepageAbout aboutSection={content.aboutSection} />}
+      {content && <HomepageCta ctaSection={content.ctaSection} />}
     </div>
   );
 }
