@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { PortfolioCard } from "@/components/PortfolioCard";
 import { projects } from "@/lib/portfolio-data";
 import { PortfolioHero } from "@/components/sections/portfolio-hero";
+import { ClientsCarousel } from "@/components/sections/clients-carousel";
 
 export default function PortfolioPage() {
     return (
@@ -43,6 +44,7 @@ export default function PortfolioPage() {
             </div>
           </div>
         </section>
+        <ClientsCarousel />
       </>
     );
 }

@@ -187,6 +187,19 @@ html{
     .scrolling-container {
       animation: scroll-vertical 20s linear infinite;
     }
+
+    @keyframes scroll-horizontal {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .animate-scroll-horizontal {
+      animation: scroll-horizontal 40s linear infinite;
+    }
 }
 
 /* Swiper custom styles */
