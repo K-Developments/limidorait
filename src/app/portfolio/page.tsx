@@ -5,13 +5,7 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { PortfolioCard } from "@/components/PortfolioCard";
 import { projects } from "@/lib/portfolio-data";
-import type { Metadata } from 'next';
 import { PortfolioHero } from "@/components/sections/portfolio-hero";
-
-export const metadata: Metadata = {
-  title: 'Our Portfolio | Limidora Digital',
-  description: 'Explore a selection of our creative work, from e-commerce platforms and mobile apps to corporate rebranding and SaaS dashboards. See the impact we deliver.',
-};
 
 export default function PortfolioPage() {
     return (
