@@ -57,7 +57,7 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-auto md:h-[600px]">
           {/* Main Large Item */}
           <motion.div 
-            className="md:col-span-1 md:row-span-2 relative group overflow-hidden"
+            className="md:col-span-1 md:row-span-2 relative group overflow-hidden aspect-video md:aspect-auto"
             custom={0}
             variants={cardVariants}
             initial="hidden"
@@ -69,7 +69,7 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
 
           {/* Two Smaller Items */}
           <motion.div 
-            className="md:col-span-1 relative group overflow-hidden"
+            className="md:col-span-1 relative group overflow-hidden aspect-video md:aspect-auto"
             custom={1}
             variants={cardVariants}
             initial="hidden"
@@ -79,7 +79,7 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
             <WorkCard work={secondWork} />
           </motion.div>
           <motion.div 
-            className="md:col-span-1 relative group overflow-hidden"
+            className="md:col-span-1 relative group overflow-hidden aspect-video md:aspect-auto"
             custom={2}
             variants={cardVariants}
             initial="hidden"
@@ -102,24 +102,26 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
 
 const WorkCard = ({ work }: { work: HomepageWork }) => {
     return (
-        <Link href={work.link} className="absolute inset-0">
-            <Image
-                src={work.imageUrl}
-                alt={work.title}
-                fill
-                className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300 ease-in-out"
-                data-ai-hint={work.aiHint}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
-            <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                <div className="transform transition-transform duration-300 ease-in-out group-hover:-translate-y-2">
-                    <p className="text-sm font-semibold uppercase tracking-wider text-white/80">{work.category}</p>
-                    <h3 className="text-2xl font-bold mt-1 font-body uppercase">{work.title}</h3>
+        <div className="relative w-full h-full">
+            <Link href={work.link} className="absolute inset-0">
+                <Image
+                    src={work.imageUrl}
+                    alt={work.title}
+                    fill
+                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                    data-ai-hint={work.aiHint}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
+                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
+                    <div className="transform transition-transform duration-300 ease-in-out group-hover:-translate-y-2">
+                        <p className="text-sm font-semibold uppercase tracking-wider text-white/80">{work.category}</p>
+                        <h3 className="text-2xl font-bold mt-1 font-body uppercase">{work.title}</h3>
+                    </div>
+                    <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <Button variant="secondary">View Project</Button>
+                    </div>
                 </div>
-                <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <Button variant="secondary">View Project</Button>
-                </div>
-            </div>
-        </Link>
+            </Link>
+        </div>
     )
 }
