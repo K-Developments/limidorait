@@ -22,44 +22,13 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="w-full min-h-screen grid lg:grid-cols-2">
-      <motion.div 
-        initial={{ opacity: 0, x: -50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="flex items-center justify-center p-8 md:p-12 lg:p-16 bg-background"
-      >
-        <div className="w-full max-w-md space-y-8">
-          <div>
-            <h2 className="text-3xl font-medium tracking-tighter sm:text-4xl font-body uppercase">Get in Touch</h2>
-            <p className="mt-2 text-muted-foreground">Fill out the form and we'll get back to you as soon as possible.</p>
-          </div>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Your Name" required autoComplete="name" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="your@email.com" required autoComplete="email" />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="message">Message</Label>
-              <Textarea id="message" placeholder="Tell us about your project" required className="min-h-[150px]" />
-            </div>
-            <Button type="submit" className="w-full">Send Message</Button>
-          </form>
-        </div>
-      </motion.div>
-      <motion.div 
+    <section id="contact" aria-labelledby="contact-heading" className="w-full grid lg:grid-cols-2">
+       <motion.div 
         initial={{ opacity: 0, x: 50 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="hidden lg:flex items-center justify-center p-8 md:p-12 lg:p-16 bg-neutral-900 text-white relative overflow-hidden"
+        className="flex items-center justify-center p-8 md:p-12 lg:p-16 bg-neutral-900 text-white relative overflow-hidden min-h-[60vh] lg:min-h-screen"
       >
         <div className="absolute inset-0 w-full h-full pointer-events-none">
             <div className="absolute top-0 left-1/4 h-full w-[1px] bg-gradient-to-t from-transparent to-white/10" />
@@ -85,6 +54,37 @@ export function Contact() {
               <Github className="h-6 w-6 text-white/60 hover:text-white transition-colors" />
             </a>
           </div>
+        </div>
+      </motion.div>
+      <motion.div 
+        initial={{ opacity: 0, x: -50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="flex items-center justify-center p-8 md:p-12 lg:p-16 bg-background min-h-screen"
+      >
+        <div className="w-full max-w-md space-y-8">
+          <div>
+            <h2 className="text-3xl font-medium tracking-tighter sm:text-4xl font-body uppercase">Get in Touch</h2>
+            <p className="mt-2 text-muted-foreground">Fill out the form and we'll get back to you as soon as possible.</p>
+          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" placeholder="Your Name" required autoComplete="name" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="your@email.com" required autoComplete="email" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="message">Message</Label>
+              <Textarea id="message" placeholder="Tell us about your project" required className="min-h-[150px]" />
+            </div>
+            <Button type="submit" className="w-full">Send Message</Button>
+          </form>
         </div>
       </motion.div>
     </section>
