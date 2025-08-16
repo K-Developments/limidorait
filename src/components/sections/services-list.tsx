@@ -71,7 +71,7 @@ export function ServicesList() {
                 transition={{ duration: 0.7, ease: "easeOut" }}
                 className="grid grid-cols-1 md:grid-cols-2 items-center min-h-[400px] overflow-hidden"
               >
-                <div className={`relative w-full h-[300px] md:h-full ${index % 2 === 0 ? 'md:order-1' : 'md:order-2'}`}>
+                <div className="relative w-full h-[300px] md:h-full md:order-1">
                   <Image
                     src={service.imageUrl}
                     alt={service.title}
@@ -80,7 +80,7 @@ export function ServicesList() {
                     data-ai-hint={service.aiHint}
                   />
                 </div>
-                <div className={`bg-neutral-900 text-primary-foreground p-8 md:p-16 h-full flex flex-col justify-center ${index % 2 === 0 ? 'md:order-2' : 'md:order-1'}`}>
+                <div className="bg-neutral-900 text-primary-foreground p-8 md:p-16 h-full flex flex-col justify-center md:order-2">
                   <h3 className="text-3xl md:text-4xl font-medium mb-4 font-body uppercase">
                     {service.title}
                   </h3>
