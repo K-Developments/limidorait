@@ -101,7 +101,7 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-        className="relative z-10 p-8 md:p-12 md:basis-2/3"
+        className="relative z-10 p-8 md:p-12 md:basis-2/3 h-[100%] flex items-end"
       >
         {/* Decorative Lines */}
         <div className="absolute inset-0 w-full h-full pointer-events-none">
