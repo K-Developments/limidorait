@@ -6,6 +6,10 @@ import { getHeroContent, HomepageService } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { Badge } from "../ui/badge";
+import Image from "next/image";
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export function ServicesList() {
   const [services, setServices] = useState<HomepageService[]>([]);
@@ -47,44 +51,48 @@ export function ServicesList() {
         {isLoading ? (
           <div className="space-y-12">
             {[...Array(4)].map((_, i) => (
-                <div key={i} className="grid md:grid-cols-3 gap-8 items-start">
-                    <div className="md:col-span-1">
-                    <Skeleton className="h-10 w-3/4" />
-                    </div>
-                    <div className="md:col-span-2 space-y-4">
-                    <Skeleton className="h-24 w-full" />
+                <div key={i} className="grid md:grid-cols-2 gap-8 items-center">
+                    <Skeleton className="h-64 w-full" />
+                    <div className="space-y-4">
+                        <Skeleton className="h-10 w-3/4" />
+                        <Skeleton className="h-24 w-full" />
                     </div>
                 </div>
             ))}
           </div>
         ) : (
-          <div className="space-y-16">
+          <div className="space-y-8">
             {services.map((service, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.7, ease: "easeOut", delay: index * 0.1 }}
-                className="grid md:grid-cols-3 gap-8 md:gap-16 items-start"
+                transition={{ duration: 0.7, ease: "easeOut" }}
+                className="grid grid-cols-1 md:grid-cols-2 items-center min-h-[400px] overflow-hidden"
               >
-                <div className="md:col-span-1 md:text-right">
-                  <h2 className="text-3xl font-medium uppercase text-foreground tracking-tight">
-                    {service.title}
-                  </h2>
+                <div className={`relative w-full h-[300px] md:h-full ${index % 2 === 0 ? 'md:order-1' : 'md:order-2'}`}>
+                  <Image
+                    src={service.imageUrl}
+                    alt={service.title}
+                    fill
+                    className="object-cover"
+                    data-ai-hint={service.aiHint}
+                  />
                 </div>
-                <div className="md:col-span-2 relative pl-8 md:pl-12">
-                  <div 
-                    aria-hidden="true" 
-                    className="absolute top-0 left-0 h-full w-px bg-border"
-                  />
-                  <div 
-                    aria-hidden="true" 
-                    className="absolute top-0 left-0 w-8 h-px bg-border"
-                  />
-                  <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+                <div className={`bg-neutral-900 text-primary-foreground p-8 md:p-16 h-full flex flex-col justify-center ${index % 2 === 0 ? 'md:order-2' : 'md:order-1'}`}>
+                  <h3 className="text-3xl md:text-4xl font-medium mb-4 font-body uppercase">
+                    {service.title}
+                  </h3>
+                  <p className="text-lg mb-8 text-primary-foreground/80">
                     {service.description}
                   </p>
+                  <Button asChild size="lg" className="self-start">
+                    <Link href={service.link}>
+                      Learn More
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
                 </div>
               </motion.div>
             ))}
