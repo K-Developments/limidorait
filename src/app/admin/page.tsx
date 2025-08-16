@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getHeroContent, updateHeroContent, HeroContent, HomepageService, HomepageWork, HomepageTestimonial } from '@/services/firestore';
+import { getHeroContent, updateHeroContent, HeroContent, HomepageService, HomepageWork, HomepageTestimonial, HomepageAboutSection } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { PlusCircle, Trash2 } from 'lucide-react';
@@ -87,6 +87,18 @@ export default function AdminHomePage() {
           const newTestimonials = heroContent.testimonials.filter((_, i) => i !== index);
           setHeroContent({ ...heroContent, testimonials: newTestimonials });
       }
+  };
+  
+  const handleAboutSectionChange = (field: keyof HomepageAboutSection, value: string) => {
+    if (heroContent) {
+        setHeroContent({
+            ...heroContent,
+            aboutSection: {
+                ...heroContent.aboutSection,
+                [field]: value,
+            },
+        });
+    }
   };
 
 
@@ -286,6 +298,43 @@ export default function AdminHomePage() {
                     <PlusCircle className="mr-2 h-4 w-4" /> Add Testimonial
                 </Button>
             </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Homepage About Section</CardTitle>
+            <CardDescription>Update the content for the 'About' section on the homepage.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="about-badge">Badge Text</Label>
+              <Input id="about-badge" value={heroContent?.aboutSection.badge || ''} onChange={(e) => handleAboutSectionChange('badge', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="about-title">Title</Label>
+              <Input id="about-title" value={heroContent?.aboutSection.title || ''} onChange={(e) => handleAboutSectionChange('title', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="about-description">Description</Label>
+              <Textarea id="about-description" value={heroContent?.aboutSection.description || ''} onChange={(e) => handleAboutSectionChange('description', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="about-button-text">Button Text</Label>
+              <Input id="about-button-text" value={heroContent?.aboutSection.buttonText || ''} onChange={(e) => handleAboutSectionChange('buttonText', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="about-button-link">Button Link</Label>
+              <Input id="about-button-link" value={heroContent?.aboutSection.buttonLink || ''} onChange={(e) => handleAboutSectionChange('buttonLink', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="about-image-url">Image URL</Label>
+              <Input id="about-image-url" value={heroContent?.aboutSection.imageUrl || ''} onChange={(e) => handleAboutSectionChange('imageUrl', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="about-ai-hint">AI Hint</Label>
+              <Input id="about-ai-hint" value={heroContent?.aboutSection.aiHint || ''} onChange={(e) => handleAboutSectionChange('aiHint', e.target.value)} />
+            </div>
+          </CardContent>
         </Card>
 
 

@@ -32,6 +32,16 @@ export interface HomepageTestimonial {
   avatarUrl: string;
 }
 
+export interface HomepageAboutSection {
+    badge: string;
+    title: string;
+    description: string;
+    buttonText: string;
+    buttonLink: string;
+    imageUrl: string;
+    aiHint: string;
+}
+
 export interface HeroContent {
   title: string;
   slides: Slide[];
@@ -40,6 +50,7 @@ export interface HeroContent {
   services: HomepageService[];
   works: HomepageWork[];
   testimonials: HomepageTestimonial[];
+  aboutSection: HomepageAboutSection;
 }
 
 export interface InteractivePanelContent {
@@ -185,7 +196,16 @@ const defaultHeroContent: HeroContent = {
         company: "Future Enterprises",
         avatarUrl: "https://placehold.co/100x100.png"
       }
-    ]
+    ],
+    aboutSection: {
+        badge: "Who We Are",
+        title: "About Limidora",
+        description: "We are a creative agency that blends design, technology, and strategy to build exceptional digital experiences. Our passion is to help businesses thrive in the digital world.",
+        buttonText: "More About Limidora",
+        buttonLink: "/about",
+        imageUrl: "https://placehold.co/800x600.png",
+        aiHint: "office team collaboration"
+    }
 };
 
 const defaultAboutContent: AboutContent = {

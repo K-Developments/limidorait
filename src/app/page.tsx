@@ -138,7 +138,7 @@ export default function HomePage() {
       {content && <HomepageServices services={content.services} />}
       {content && <HomepageWorks works={content.works} />}
       {content && <HomepageTestimonials testimonials={content.testimonials} />}
-      <HomepageAbout />
+      {content && <HomepageAbout aboutSection={content.aboutSection} />}
     </div>
   );
 }
