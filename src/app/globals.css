@@ -151,6 +151,16 @@ html{
           display: block !important;
         }
     }
+
+    @keyframes scroll-vertical {
+      to {
+        transform: translateY(-50%);
+      }
+    }
+
+    .scrolling-container {
+      animation: scroll-vertical 40s linear infinite;
+    }
 }
 
 /* Swiper custom styles */
