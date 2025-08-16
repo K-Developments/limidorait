@@ -32,6 +32,13 @@ export interface HomepageTestimonial {
   avatarUrl: string;
 }
 
+export interface HomepageCtaSection {
+    title: string;
+    description: string;
+    buttonText: string;
+    buttonLink: string;
+}
+
 export interface HomepageAboutSection {
     badge: string;
     title: string;
@@ -50,6 +57,7 @@ export interface HeroContent {
   services: HomepageService[];
   works: HomepageWork[];
   testimonials: HomepageTestimonial[];
+  ctaSection: HomepageCtaSection;
   aboutSection: HomepageAboutSection;
 }
 
@@ -197,6 +205,12 @@ const defaultHeroContent: HeroContent = {
         avatarUrl: "https://placehold.co/100x100.png"
       }
     ],
+    ctaSection: {
+        title: "Let's Build Something Great",
+        description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas.",
+        buttonText: "Get in Touch",
+        buttonLink: "/contact"
+    },
     aboutSection: {
         badge: "Who We Are",
         title: "About Limidora",

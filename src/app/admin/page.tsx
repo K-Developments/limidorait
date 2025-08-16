@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getHeroContent, updateHeroContent, HeroContent, HomepageService, HomepageWork, HomepageTestimonial, HomepageAboutSection } from '@/services/firestore';
+import { getHeroContent, updateHeroContent, HeroContent, HomepageService, HomepageWork, HomepageTestimonial, HomepageAboutSection, HomepageCtaSection } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { PlusCircle, Trash2 } from 'lucide-react';
@@ -87,6 +87,18 @@ export default function AdminHomePage() {
           const newTestimonials = heroContent.testimonials.filter((_, i) => i !== index);
           setHeroContent({ ...heroContent, testimonials: newTestimonials });
       }
+  };
+    
+  const handleCtaSectionChange = (field: keyof HomepageCtaSection, value: string) => {
+    if (heroContent) {
+      setHeroContent({
+        ...heroContent,
+        ctaSection: {
+          ...(heroContent.ctaSection || { title: '', description: '', buttonText: '', buttonLink: '' }),
+          [field]: value,
+        },
+      });
+    }
   };
   
   const handleAboutSectionChange = (field: keyof HomepageAboutSection, value: string) => {
@@ -299,6 +311,32 @@ export default function AdminHomePage() {
                 </Button>
             </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Call to Action Section</CardTitle>
+            <CardDescription>Update the content for the CTA section on the homepage.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="cta-title">Title</Label>
+              <Input id="cta-title" value={heroContent?.ctaSection?.title || ''} onChange={(e) => handleCtaSectionChange('title', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cta-description">Description</Label>
+              <Textarea id="cta-description" value={heroContent?.ctaSection?.description || ''} onChange={(e) => handleCtaSectionChange('description', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cta-button-text">Button Text</Label>
+              <Input id="cta-button-text" value={heroContent?.ctaSection?.buttonText || ''} onChange={(e) => handleCtaSectionChange('buttonText', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cta-button-link">Button Link</Label>
+              <Input id="cta-button-link" value={heroContent?.ctaSection?.buttonLink || ''} onChange={(e) => handleCtaSectionChange('buttonLink', e.target.value)} />
+            </div>
+          </CardContent>
+        </Card>
+
 
         <Card>
           <CardHeader>

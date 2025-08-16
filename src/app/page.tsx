@@ -17,6 +17,7 @@ import { HomepageServices } from "@/components/sections/homepage-services";
 import { HomepageWorks } from "@/components/sections/homepage-works";
 import { HomepageTestimonials } from "@/components/sections/homepage-testimonials";
 import { HomepageAbout } from "@/components/sections/homepage-about";
+import { HomepageCta } from "@/components/sections/homepage-cta";
 
 const HeroSection = ({ content }: { content: HeroContent | null }) => {
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
@@ -138,6 +139,7 @@ export default function HomePage() {
       {content && <HomepageServices services={content.services} />}
       {content && <HomepageWorks works={content.works} />}
       {content && <HomepageTestimonials testimonials={content.testimonials} />}
+      {content && <HomepageCta ctaSection={content.ctaSection} />}
       {content && <HomepageAbout aboutSection={content.aboutSection} />}
     </div>
   );
