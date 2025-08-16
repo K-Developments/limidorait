@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getHeroContent, updateHeroContent, HeroContent, HomepageService } from '@/services/firestore';
+import { getHeroContent, updateHeroContent, HeroContent, HomepageService, HomepageWork } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -55,6 +55,14 @@ export default function AdminHomePage() {
         const newServices = [...heroContent.services];
         newServices[index] = { ...newServices[index], [field]: value };
         setHeroContent({ ...heroContent, services: newServices });
+    }
+  };
+  
+  const handleWorkChange = (index: number, field: keyof HomepageWork, value: string) => {
+    if (heroContent) {
+        const newWorks = [...heroContent.works];
+        newWorks[index] = { ...newWorks[index], [field]: value };
+        setHeroContent({ ...heroContent, works: newWorks });
     }
   };
 
@@ -180,6 +188,40 @@ export default function AdminHomePage() {
                 <div className="space-y-2">
                     <Label htmlFor={`service-link-${index}`}>Link</Label>
                     <Input id={`service-link-${index}`} value={service.link} onChange={(e) => handleServiceChange(index, 'link', e.target.value)} />
+                </div>
+              </Card>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Homepage Works</CardTitle>
+            <CardDescription>Update the content for the featured works section on the homepage.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {heroContent?.works.map((work, index) => (
+              <Card key={index} className="p-4 space-y-4">
+                 <h4 className="text-lg font-semibold">Work Item {index + 1}</h4>
+                 <div className="space-y-2">
+                    <Label htmlFor={`work-title-${index}`}>Title</Label>
+                    <Input id={`work-title-${index}`} value={work.title} onChange={(e) => handleWorkChange(index, 'title', e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor={`work-category-${index}`}>Category</Label>
+                    <Input id={`work-category-${index}`} value={work.category} onChange={(e) => handleWorkChange(index, 'category', e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor={`work-image-${index}`}>Image URL</Label>
+                    <Input id={`work-image-${index}`} value={work.imageUrl} onChange={(e) => handleWorkChange(index, 'imageUrl', e.target.value)} />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor={`work-aihint-${index}`}>AI Hint</Label>
+                    <Input id={`work-aihint-${index}`} value={work.aiHint} onChange={(e) => handleWorkChange(index, 'aiHint', e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor={`work-link-${index}`}>Link</Label>
+                    <Input id={`work-link-${index}`} value={work.link} onChange={(e) => handleWorkChange(index, 'link', e.target.value)} />
                 </div>
               </Card>
             ))}

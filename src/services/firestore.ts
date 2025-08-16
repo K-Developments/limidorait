@@ -17,12 +17,21 @@ export interface HomepageService {
   link: string;
 }
 
+export interface HomepageWork {
+  title: string;
+  category: string;
+  imageUrl: string;
+  aiHint: string;
+  link: string;
+}
+
 export interface HeroContent {
   title: string;
   slides: Slide[];
   buttonText: string;
   buttonLink: string;
   services: HomepageService[];
+  works: HomepageWork[];
 }
 
 export interface InteractivePanelContent {
@@ -119,6 +128,29 @@ const defaultHeroContent: HeroContent = {
         aiHint: "software architecture",
         link: "/solutions/software",
       },
+    ],
+    works: [
+        {
+            title: "E-commerce Platform",
+            category: "Web Development",
+            imageUrl: "https://placehold.co/800x600.png",
+            aiHint: "website mockup",
+            link: "/portfolio/ecommerce-platform"
+        },
+        {
+            title: "Mobile Banking App",
+            category: "UI/UX Design",
+            imageUrl: "https://placehold.co/600x400.png",
+            aiHint: "app interface",
+            link: "/portfolio/mobile-banking"
+        },
+        {
+            title: "SaaS Dashboard",
+            category: "Web Development",
+            imageUrl: "https://placehold.co/600x400.png",
+            aiHint: "dashboard analytics",
+            link: "/portfolio/saas-dashboard"
+        }
     ]
 };
 

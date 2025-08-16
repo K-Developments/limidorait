@@ -14,6 +14,7 @@ import Image from "next/image";
 import { getHeroContent, HeroContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { HomepageServices } from "@/components/sections/homepage-services";
+import { HomepageWorks } from "@/components/sections/homepage-works";
 
 const HeroSection = ({ content }: { content: HeroContent | null }) => {
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
@@ -97,7 +98,7 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-        className="relative z-10 p-8 md:basis-2/3"
+        className="relative z-10 p-8 md:basis-1/4"
       >
         <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4 font-headline">
           {content.title}
@@ -133,6 +134,7 @@ export default function HomePage() {
     <div>
       <HeroSection content={content} />
       {content && <HomepageServices services={content.services} />}
+      {content && <HomepageWorks works={content.works} />}
     </div>
   );
 }
