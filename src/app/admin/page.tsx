@@ -7,23 +7,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getHeroContent, updateHeroContent, HeroContent, HomepageService, HomepageWork, HomepageTestimonial, HomepageAboutSection, HomepageCtaSection } from '@/services/firestore';
+import { getHeroContent, updateHeroContent, HeroContent, Service, HomepageWork, HomepageTestimonial, HomepageAboutSection, HomepageCtaSection, getServices } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { PlusCircle, Trash2 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function AdminHomePage() {
   const { toast } = useToast();
   const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
+  const [allServices, setAllServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
         const content = await getHeroContent();
+        const services = await getServices();
         setHeroContent(content);
+        setAllServices(services);
       } catch (error) {
-        console.error("Failed to fetch hero content:", error);
+        console.error("Failed to fetch content:", error);
         toast({
           title: "Error",
           description: "Failed to load content from the database.",
@@ -51,11 +55,24 @@ export default function AdminHomePage() {
     }
   };
 
-  const handleServiceChange = (index: number, field: keyof HomepageService, value: string) => {
+  const handleFeaturedServiceChange = (serviceId: string, checked: boolean) => {
     if (heroContent) {
-        const newServices = [...heroContent.services];
-        newServices[index] = { ...newServices[index], [field]: value };
-        setHeroContent({ ...heroContent, services: newServices });
+        let currentFeatured = heroContent.featuredServices || [];
+        if (checked) {
+            if (currentFeatured.length < 4) {
+                currentFeatured.push(serviceId);
+            } else {
+                toast({
+                    title: "Limit Reached",
+                    description: "You can only feature up to 4 services on the homepage.",
+                    variant: "destructive"
+                });
+                return; // Prevent checking the box
+            }
+        } else {
+            currentFeatured = currentFeatured.filter(id => id !== serviceId);
+        }
+        setHeroContent({ ...heroContent, featuredServices: currentFeatured });
     }
   };
   
@@ -137,16 +154,17 @@ export default function AdminHomePage() {
     return (
       <div className="space-y-8">
         <h1 className="text-3xl font-medium uppercase">Content Management</h1>
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-8 w-1/2" />
-            <Skeleton className="h-4 w-3/4" />
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-10 w-24" />
-          </CardContent>
-        </Card>
+        {[...Array(6)].map((_, i) => (
+          <Card key={i}>
+            <CardHeader>
+              <Skeleton className="h-8 w-1/2" />
+              <Skeleton className="h-4 w-3/4" />
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <Skeleton className="h-10 w-full" />
+            </CardContent>
+          </Card>
+        ))}
       </div>
     );
   }
@@ -210,35 +228,26 @@ export default function AdminHomePage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Homepage Services</CardTitle>
-            <CardDescription>Update the content for the services section on the homepage.</CardDescription>
+            <CardTitle>Featured Homepage Services</CardTitle>
+            <CardDescription>Select up to 4 services to feature on the homepage. Manage all services on the <Link href="/admin/services" className="underline text-primary">Services page</Link>.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            {heroContent?.services.map((service, index) => (
-              <Card key={index} className="p-4 space-y-4">
-                 <h4 className="text-lg font-semibold">Service Card {index + 1}</h4>
-                 <div className="space-y-2">
-                    <Label htmlFor={`service-title-${index}`}>Title</Label>
-                    <Input id={`service-title-${index}`} value={service.title} onChange={(e) => handleServiceChange(index, 'title', e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor={`service-desc-${index}`}>Description</Label>
-                    <Textarea id={`service-desc-${index}`} value={service.description} onChange={(e) => handleServiceChange(index, 'description', e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor={`service-image-${index}`}>Image URL</Label>
-                    <Input id={`service-image-${index}`} value={service.imageUrl} onChange={(e) => handleServiceChange(index, 'imageUrl', e.target.value)} />
-                </div>
-                 <div className="space-y-2">
-                    <Label htmlFor={`service-aihint-${index}`}>AI Hint</Label>
-                    <Input id={`service-aihint-${index}`} value={service.aiHint} onChange={(e) => handleServiceChange(index, 'aiHint', e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor={`service-link-${index}`}>Link</Label>
-                    <Input id={`service-link-${index}`} value={service.link} onChange={(e) => handleServiceChange(index, 'link', e.target.value)} />
-                </div>
-              </Card>
-            ))}
+          <CardContent className="space-y-4">
+              {allServices.map(service => (
+                  <div key={service.id} className="flex items-center space-x-2">
+                      <Checkbox
+                          id={`service-${service.id}`}
+                          checked={heroContent?.featuredServices?.includes(service.id)}
+                          onCheckedChange={(checked) => handleFeaturedServiceChange(service.id, checked as boolean)}
+                          disabled={!heroContent?.featuredServices?.includes(service.id) && heroContent?.featuredServices?.length >= 4}
+                      />
+                      <label
+                          htmlFor={`service-${service.id}`}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                          {service.title}
+                      </label>
+                  </div>
+              ))}
           </CardContent>
         </Card>
 

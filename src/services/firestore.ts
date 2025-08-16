@@ -1,6 +1,6 @@
 
 import { db, storage } from '@/lib/firebase';
-import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp, getDocs, deleteDoc, updateDoc, query, orderBy, where, limit } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp, getDocs, deleteDoc, updateDoc, query, orderBy, where, limit, documentId } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export interface Slide {
@@ -9,7 +9,8 @@ export interface Slide {
   alt?: string;
 }
 
-export interface HomepageService {
+export interface Service {
+  id: string;
   title: string;
   description: string;
   imageUrl: string;
@@ -54,11 +55,12 @@ export interface HeroContent {
   slides: Slide[];
   buttonText: string;
   buttonLink: string;
-  services: HomepageService[];
+  featuredServices: string[]; // Now stores service IDs
   works: HomepageWork[];
   testimonials: HomepageTestimonial[];
   ctaSection: HomepageCtaSection;
   aboutSection: HomepageAboutSection;
+  services?: Service[]; // Optional field to hold resolved services
 }
 
 export interface AboutContent {
@@ -117,9 +119,10 @@ const PORTFOLIO_CONTENT_DOC_ID = 'portfolioContent';
 const FAQ_CONTENT_DOC_ID = 'faqContent';
 const CONTENT_COLLECTION_ID = 'homepage';
 const PORTFOLIO_COLLECTION_ID = 'portfolio';
+const SERVICES_COLLECTION_ID = 'services';
 const SUBMITTED_QUESTIONS_COLLECTION_ID = 'submittedQuestions';
 
-const defaultHeroContent: HeroContent = {
+const defaultHeroContent: Omit<HeroContent, 'services'> = {
     title: "Creative Agency",
     slides: [
       { type: 'video', url: 'https://cdn.pixabay.com/video/2024/05/27/211904_large.mp4' },
@@ -128,36 +131,7 @@ const defaultHeroContent: HeroContent = {
     ],
     buttonText: "View Our Work",
     buttonLink: "/portfolio",
-    services: [
-      {
-        title: "Web Development",
-        description: "We build modern, scalable, and secure web applications tailored to your business needs.",
-        imageUrl: "https://placehold.co/600x400.png",
-        aiHint: "coding programming",
-        link: "/solutions/web-development",
-      },
-      {
-        title: "UI/UX Design",
-        description: "Crafting intuitive and beautiful user interfaces that delight your users and drive engagement.",
-        imageUrl: "https://placehold.co/600x400.png",
-        aiHint: "design wireframe",
-        link: "/solutions/ui-ux-design",
-      },
-      {
-        title: "Mobile App Development",
-        description: "From concept to launch, we develop native and cross-platform mobile apps for iOS and Android.",
-        imageUrl: "https://placehold.co/600x400.png",
-        aiHint: "mobile phone app",
-        link: "/solutions/mobile-apps",
-      },
-       {
-        title: "Software Development",
-        description: "Custom software solutions to streamline your operations and drive business growth.",
-        imageUrl: "https://placehold.co/600x400.png",
-        aiHint: "software architecture",
-        link: "/solutions/software",
-      },
-    ],
+    featuredServices: [],
     works: [
         {
             title: "E-commerce Platform",
@@ -296,27 +270,38 @@ export const getHeroContent = async (): Promise<HeroContent> => {
   const docRef = doc(db, CONTENT_COLLECTION_ID, HERO_CONTENT_DOC_ID);
   const docSnap = await getDoc(docRef);
 
+  let contentData: Omit<HeroContent, 'services'>;
   if (docSnap.exists()) {
-    const data = docSnap.data() as HeroContent;
-    // Ensure links are generated for homepage works
-    data.works = data.works.map(work => ({
-        ...work,
-        link: work.link || `/portfolio/${work.title.toLowerCase().replace(/\s+/g, '-')}`
-    }));
-    return deepMerge(defaultHeroContent, data);
+    contentData = deepMerge(defaultHeroContent, docSnap.data()) as Omit<HeroContent, 'services'>;
   } else {
     // Return default content if document doesn't exist
     await setDoc(docRef, defaultHeroContent);
-    return defaultHeroContent;
+    contentData = defaultHeroContent;
   }
+
+  // Ensure links are generated for homepage works
+  contentData.works = contentData.works.map(work => ({
+      ...work,
+      link: work.link || `/portfolio/${work.title.toLowerCase().replace(/\s+/g, '-')}`
+  }));
+
+  // Fetch featured services if IDs are present
+  let services: Service[] = [];
+  if (contentData.featuredServices && contentData.featuredServices.length > 0) {
+    const servicesQuery = query(collection(db, SERVICES_COLLECTION_ID), where(documentId(), 'in', contentData.featuredServices));
+    const servicesSnapshot = await getDocs(servicesQuery);
+    services = servicesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Service));
+  }
+  
+  return { ...contentData, services };
 };
 
 // Function to update hero content in Firestore
 export const updateHeroContent = async (content: Partial<HeroContent>): Promise<void> => {
   const docRef = doc(db, CONTENT_COLLECTION_ID, HERO_CONTENT_DOC_ID);
    try {
-    // Use setDoc with { merge: true } to only update provided fields
-    await setDoc(docRef, content, { merge: true });
+    const { services, ...restOfContent } = content;
+    await setDoc(docRef, restOfContent, { merge: true });
   } catch (error) {
     console.error("Error updating document: ", error);
     throw new Error("Could not update hero content.");
@@ -539,4 +524,47 @@ export const deleteSubmittedQuestion = async (id: string): Promise<void> => {
         console.error("Error deleting submitted question: ", error);
         throw new Error("Could not delete submitted question.");
     }
+};
+
+// Services Functions
+const defaultServices: Omit<Service, 'id'>[] = [
+    { title: "Web Development", description: "We build modern, scalable, and secure web applications tailored to your business needs.", imageUrl: "https://placehold.co/600x400.png", aiHint: "coding programming", link: "/services" },
+    { title: "UI/UX Design", description: "Crafting intuitive and beautiful user interfaces that delight your users and drive engagement.", imageUrl: "https://placehold.co/600x400.png", aiHint: "design wireframe", link: "/services" },
+    { title: "Mobile App Development", description: "From concept to launch, we develop native and cross-platform mobile apps for iOS and Android.", imageUrl: "https://placehold.co/600x400.png", aiHint: "mobile phone app", link: "/services" },
+    { title: "Software Development", description: "Custom software solutions to streamline your operations and drive business growth.", imageUrl: "https://placehold.co/600x400.png", aiHint: "software architecture", link: "/services" },
+];
+
+export const getServices = async (): Promise<Service[]> => {
+    const servicesCol = collection(db, SERVICES_COLLECTION_ID);
+    const snapshot = await getDocs(servicesCol);
+
+    if (snapshot.empty) {
+        const batch = [];
+        for (const serviceData of defaultServices) {
+           batch.push(addDoc(servicesCol, serviceData));
+        }
+        await Promise.all(batch);
+        const newSnapshot = await getDocs(servicesCol);
+        // Also set these as featured on the homepage by default
+        const serviceIds = newSnapshot.docs.map(doc => doc.id);
+        await updateHeroContent({ featuredServices: serviceIds.slice(0, 4) });
+
+        return newSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Service));
+    }
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Service));
+};
+
+export const addService = async (data: Omit<Service, 'id'>): Promise<Service> => {
+    const docRef = await addDoc(collection(db, SERVICES_COLLECTION_ID), data);
+    return { id: docRef.id, ...data };
+};
+
+export const updateService = async (id: string, data: Partial<Omit<Service, 'id'>>): Promise<void> => {
+    const serviceDoc = doc(db, SERVICES_COLLECTION_ID, id);
+    await updateDoc(serviceDoc, data);
+};
+
+export const deleteService = async (id: string): Promise<void> => {
+    const serviceDoc = doc(db, SERVICES_COLLECTION_ID, id);
+    await deleteDoc(serviceDoc);
 };

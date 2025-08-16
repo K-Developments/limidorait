@@ -9,10 +9,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Separator } from "../ui/separator";
 import { ArrowUpRight } from "lucide-react";
-import type { HomepageService } from "@/services/firestore";
+import type { Service } from "@/services/firestore";
 
 interface HomepageServicesProps {
-  services: HomepageService[];
+  services: Service[];
 }
 
 export function HomepageServices({ services }: HomepageServicesProps) {

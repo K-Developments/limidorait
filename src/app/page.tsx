@@ -148,7 +148,7 @@ export default function HomePage() {
   return (
     <div>
       <HeroSection content={content} />
-      {content && <HomepageServices services={content.services} />}
+      {content && content.services && <HomepageServices services={content.services} />}
       {content && <HomepageWorks works={content.works} />}
       {content && <Testimonials testimonials={content.testimonials} />}
       {content && <HomepageAbout aboutSection={content.aboutSection} />}

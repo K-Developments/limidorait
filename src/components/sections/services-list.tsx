@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getHeroContent, HomepageService } from "@/services/firestore";
+import { getServices, Service } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { Badge } from "../ui/badge";
@@ -12,14 +12,14 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export function ServicesList() {
-  const [services, setServices] = useState<HomepageService[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const content = await getHeroContent();
-        setServices(content.services);
+        const content = await getServices();
+        setServices(content);
       } catch (error) {
         console.error("Failed to fetch services content:", error);
       } finally {
