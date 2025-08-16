@@ -17,6 +17,7 @@ type EditableProject = Omit<Project, 'features' | 'highlights' | 'services'> & {
     features: string;
     highlights: string;
     services: string;
+    link: string;
 };
 
 
@@ -132,7 +133,7 @@ export default function AdminPortfolioPage() {
       await updatePortfolioContent(portfolioContent);
       
       const projectsToUpdate = projects.map(p => {
-          const { id, features, highlights, services, ...rest } = p;
+          const { id, features, highlights, services, link, ...rest } = p;
           return {
               id,
               ...rest,
@@ -305,5 +306,3 @@ export default function AdminPortfolioPage() {
     </div>
   );
 }
-
-    

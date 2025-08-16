@@ -6,10 +6,10 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { ArrowUpRight } from "lucide-react";
-import type { Project } from "@/services/firestore";
+import type { Project, HomepageWork } from "@/services/firestore";
 
 interface PortfolioCardProps {
-  project: Project;
+  project: (Project & { link: string }) | HomepageWork;
 }
 
 export function PortfolioCard({ project }: PortfolioCardProps) {
@@ -44,5 +44,3 @@ export function PortfolioCard({ project }: PortfolioCardProps) {
     </motion.div>
   );
 }
-
-    

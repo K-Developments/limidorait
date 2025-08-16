@@ -81,7 +81,6 @@ export interface Project {
     category: string;
     imageUrl: string;
     aiHint: string;
-    link: string;
     heroImageUrl: string;
     about: string;
     features: string[];
@@ -298,9 +297,13 @@ export const getHeroContent = async (): Promise<HeroContent> => {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    const data = docSnap.data();
-    // Deep merge to ensure nested objects are handled correctly and defaults are applied
-    return deepMerge(defaultHeroContent, data) as HeroContent;
+    const data = docSnap.data() as HeroContent;
+    // Ensure links are generated for homepage works
+    data.works = data.works.map(work => ({
+        ...work,
+        link: work.link || `/portfolio/${work.title.toLowerCase().replace(/\s+/g, '-')}`
+    }));
+    return deepMerge(defaultHeroContent, data);
   } else {
     // Return default content if document doesn't exist
     await setDoc(docRef, defaultHeroContent);
@@ -371,48 +374,65 @@ export const updatePortfolioContent = async (content: Partial<PortfolioContent>)
 };
 
 // Portfolio Project Functions
-export const getProjects = async (): Promise<Project[]> => {
+export const getProjects = async (): Promise<(Project & { link: string })[]> => {
     const projectsCol = collection(db, PORTFOLIO_COLLECTION_ID);
     const q = query(projectsCol, orderBy("title"));
     const snapshot = await getDocs(q);
+
+    const mapDocToProject = (doc: any) => {
+        const data = doc.data();
+        const slug = data.slug || data.title.toLowerCase().replace(/\s+/g, '-');
+        return {
+            id: doc.id,
+            ...data,
+            slug,
+            link: `/portfolio/${slug}`,
+        } as (Project & { link: string });
+    };
+
     if (snapshot.empty) {
         // Create default projects if collection is empty
-        const defaultProjectsData: Omit<Project, 'id' | 'link'>[] = [
-            { title: "E-commerce Platform", slug: "e-commerce-platform", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "website mockup", heroImageUrl: "https://placehold.co/1600x1200.png", about: "A full-featured e-commerce platform.", features: [], highlights: [], services: [], date: "" },
-            { title: "Mobile Banking App", slug: "mobile-banking-app", category: "Mobile App", imageUrl: "https://placehold.co/600x400.png", aiHint: "app interface", heroImageUrl: "https://placehold.co/1600x1200.png", about: "A secure mobile banking application.", features: [], highlights: [], services: [], date: "" },
-            { title: "SaaS Dashboard", slug: "saas-dashboard", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "dashboard analytics", heroImageUrl: "https://placehold.co/1600x1200.png", about: "An analytics dashboard for a SaaS product.", features: [], highlights: [], services: [], date: "" },
+        const defaultProjectsData: Omit<Project, 'id'>[] = [
+            { title: "E-commerce Platform", slug: "e-commerce-platform", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "website mockup", heroImageUrl: "https://placehold.co/1600x1200.png", about: "A full-featured e-commerce platform.", features: ["Product catalog", "Shopping cart", "Secure checkout"], highlights: ["Increased sales by 30%", "Improved user experience"], services: ["Web Development", "UI/UX"], date: "June 2024" },
+            { title: "Mobile Banking App", slug: "mobile-banking-app", category: "Mobile App", imageUrl: "https://placehold.co/600x400.png", aiHint: "app interface", heroImageUrl: "https://placehold.co/1600x1200.png", about: "A secure mobile banking application.", features: ["Check balance", "Transfer funds", "Pay bills"], highlights: ["Top-rated on app stores", "Enhanced security features"], services: ["Mobile App Development", "Security"], date: "May 2024" },
+            { title: "SaaS Dashboard", slug: "saas-dashboard", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "dashboard analytics", heroImageUrl: "https://placehold.co/1600x1200.png", about: "An analytics dashboard for a SaaS product.", features: ["Data visualization", "Custom reports", "User management"], highlights: ["Actionable insights for users", "High performance and scalability"], services: ["Web App Development", "Data Analytics"], date: "April 2024" },
         ];
         for (const projectData of defaultProjectsData) {
             await addProject(projectData as any);
         }
         const newSnapshot = await getDocs(q);
-        return newSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
+        return newSnapshot.docs.map(mapDocToProject);
     }
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
+    return snapshot.docs.map(mapDocToProject);
 };
 
-export const getProjectBySlug = async (slug: string): Promise<Project | null> => {
+export const getProjectBySlug = async (slug: string): Promise<(Project & { link: string }) | null> => {
     const q = query(collection(db, PORTFOLIO_COLLECTION_ID), where("slug", "==", slug), limit(1));
     const snapshot = await getDocs(q);
     if (snapshot.empty) {
         return null;
     }
     const doc = snapshot.docs[0];
-    return { id: doc.id, ...doc.data() } as Project;
+    const data = doc.data();
+    return { id: doc.id, ...data, link: `/portfolio/${slug}` } as (Project & { link: string });
 };
 
 
 export const updateProject = async (id: string, data: Partial<Omit<Project, 'id'>>): Promise<void> => {
     const projectDoc = doc(db, PORTFOLIO_COLLECTION_ID, id);
-    await updateDoc(projectDoc, data);
+    const slug = data.title ? data.title.toLowerCase().replace(/\s+/g, '-') : undefined;
+    const updateData = { ...data };
+    if (slug) {
+        (updateData as Project).slug = slug;
+    }
+    await updateDoc(projectDoc, updateData);
 };
 
-export const addProject = async (data: Omit<Project, 'id' | 'link'>): Promise<Project> => {
-    const slug = data.title.toLowerCase().replace(/\s+/g, '-');
+export const addProject = async (data: Omit<Project, 'id'>): Promise<Project & {link: string}> => {
+    const slug = data.slug || data.title.toLowerCase().replace(/\s+/g, '-');
     const newProjectData = {
       ...data,
       slug,
-      link: `/portfolio/${slug}`,
       heroImageUrl: data.heroImageUrl || "https://placehold.co/1600x1200.png",
       about: data.about || "Enter project description here.",
       features: data.features || [],
@@ -421,7 +441,7 @@ export const addProject = async (data: Omit<Project, 'id' | 'link'>): Promise<Pr
       date: data.date || new Date().toLocaleString('default', { month: 'long', year: 'numeric' }),
     };
     const docRef = await addDoc(collection(db, PORTFOLIO_COLLECTION_ID), newProjectData);
-    return { id: docRef.id, ...newProjectData, link: newProjectData.link };
+    return { id: docRef.id, ...newProjectData, link: `/portfolio/${slug}` };
 };
 
 export const deleteProject = async (id: string): Promise<void> => {
@@ -520,5 +540,3 @@ export const deleteSubmittedQuestion = async (id: string): Promise<void> => {
         throw new Error("Could not delete submitted question.");
     }
 };
-
-    

@@ -11,7 +11,7 @@ import { getProjects, Project } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function PortfolioPage() {
-    const [projects, setProjects] = useState<Project[]>([]);
+    const [projects, setProjects] = useState<(Project & { link: string })[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
