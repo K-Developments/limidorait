@@ -11,11 +11,11 @@ export function Footer() {
     { name: 'Contact', href: '/contact' }
   ];
 
-  const solutionLinks = [
-    { name: 'Web Development', href: '/solutions' },
-    { name: 'Mobile App Development', href: '/solutions' },
-    { name: 'UI/UX Design', href: '/solutions' },
-    { name: 'Software Development', href: '/solutions' }
+  const serviceLinks = [
+    { name: 'Web Development', href: '/services' },
+    { name: 'Mobile App Development', href: '/services' },
+    { name: 'UI/UX Design', href: '/services' },
+    { name: 'Software Development', href: '/services' }
   ];
 
   return (
@@ -59,11 +59,11 @@ export function Footer() {
             </ul>
           </div>
           
-          {/* Column 3: Solution Links */}
+          {/* Column 3: Service Links */}
           <div>
-            <h4 className="font-semibold uppercase tracking-wider mb-4">Solutions</h4>
+            <h4 className="font-semibold uppercase tracking-wider mb-4">Services</h4>
             <ul className="space-y-3">
-              {solutionLinks.map(link => (
+              {serviceLinks.map(link => (
                 <li key={link.name}>
                   <Link href={link.href} className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
                     {link.name}

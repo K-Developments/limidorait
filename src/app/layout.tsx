@@ -46,7 +46,7 @@ export default function RootLayout({
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Portfolio', href: '/portfolio' },
-    { name: 'Solutions' },
+    { name: 'Services' },
     { name: 'FAQs', href: '/faq' },
     { name: 'Blog & News', href: '/blog' },
     { name: 'Careers', href: '/careers' },

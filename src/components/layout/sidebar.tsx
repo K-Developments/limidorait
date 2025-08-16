@@ -19,7 +19,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
-  const [menu, setMenu] = useState<'main' | 'solutions'>('main');
+  const [menu, setMenu] = useState<'main' | 'services'>('main');
 
   const backdropVariants = {
     hidden: { opacity: 0 },
@@ -39,17 +39,17 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
     exit: { x: '-100%', opacity: 0 },
   };
 
-  const solutionsVariants = {
+  const servicesVariants = {
     initial: { x: '100%', opacity: 0 },
     animate: { x: 0, opacity: 1 },
     exit: { x: '100%', opacity: 0 },
   };
   
-  const solutionsNavItems = [
-      { name: 'Web Developments', href: '/solutions/web-development'},
-      { name: 'Mobile App Developments', href: '/solutions/mobile-apps'},
-      { name: 'Software Developments', href: '/solutions/software'},
-      { name: 'Web App Developments', href: '/solutions/web-apps'},
+  const servicesNavItems = [
+      { name: 'Web Developments', href: '/services'},
+      { name: 'Mobile App Developments', href: '/services'},
+      { name: 'Software Developments', href: '/services'},
+      { name: 'Web App Developments', href: '/services'},
       { name: 'Need Help?', href: '/contact'}
   ]
 
@@ -102,8 +102,8 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
                                   transition={{ delay: 0.1 * index + 0.2, duration: 0.5, ease: 'easeOut' }}
                                   className="w-full"
                               >
-                                  {item.name === 'Solutions' ? (
-                                      <button onClick={() => setMenu('solutions')} className="flex justify-between items-center py-4 text-2xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b text-left">
+                                  {item.name === 'Services' ? (
+                                      <button onClick={() => setMenu('services')} className="flex justify-between items-center py-4 text-2xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b text-left">
                                           {item.name}
                                           <ChevronRight className="h-7 w-7" />
                                       </button>
@@ -133,10 +133,10 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
                     </motion.div>
                 )}
 
-                {menu === 'solutions' && (
+                {menu === 'services' && (
                     <motion.div
-                        key="solutions"
-                        variants={solutionsVariants}
+                        key="services"
+                        variants={servicesVariants}
                         initial="initial"
                         animate="animate"
                         exit="exit"
@@ -146,9 +146,9 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
                         <Button variant="ghost" onClick={() => setMenu('main')} className="mb-4 font-semibold text-lg pl-0 hover:bg-transparent">
                             <ChevronLeft className="mr-2 h-5 w-5"/> Back to Main Menu
                         </Button>
-                        <nav aria-label="Solutions Navigation">
+                        <nav aria-label="Services Navigation">
                           <ul className="flex flex-col items-start gap-y-2">
-                              {solutionsNavItems.map((item, index) => (
+                              {servicesNavItems.map((item, index) => (
                                   <motion.li
                                       key={item.name}
                                       initial={{ opacity: 0, x: 50 }}
