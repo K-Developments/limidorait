@@ -30,7 +30,7 @@ export function About() {
 
   return (
     <section id="about" className="w-full bg-card relative">
-      <div className="container mx-auto px-4 md:px-6 pt-12">
+      <div className="container mx-auto px-4 md:px-6 ">
         <div className="mb-8">
           <nav aria-label="Breadcrumb" className="flex items-center text-sm text-muted-foreground">
             <Link href="/" className="hover:text-primary transition-colors">Home</Link>
@@ -47,7 +47,7 @@ export function About() {
         ) : (
           <div className="flex flex-col items-center text-center py-12">
             <div className="inline-block bg-secondary px-3 py-1 text-sm text-secondary-foreground mb-4">Our Vision</div>
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-4 font-body uppercase">
+            <h2 className="text-3xl font-medium tracking-tighter sm:text-4xl md:text-5xl mb-4 font-body uppercase">
               {content?.aboutTitle}
             </h2>
             <p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
@@ -92,7 +92,7 @@ export function About() {
                 </>
               ) : (
                 <>
-                  <h3 className="text-3xl font-bold tracking-tight font-body uppercase">{content?.conceptsTitle}</h3>
+                  <h3 className="text-3xl font-medium tracking-tight font-body uppercase">{content?.conceptsTitle}</h3>
                   <p className="text-muted-foreground md:text-lg">
                     {content?.conceptsDescription}
                   </p>
@@ -121,7 +121,7 @@ export function About() {
                 </>
               ) : (
                 <>
-                  <h3 className="text-3xl font-bold tracking-tight font-body uppercase">{content?.workflowTitle}</h3>
+                  <h3 className="text-3xl font-medium tracking-tight font-body uppercase">{content?.workflowTitle}</h3>
                   <p className="text-muted-foreground md:text-lg">
                     {content?.workflowDescription}
                   </p>

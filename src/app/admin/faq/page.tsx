@@ -147,7 +147,7 @@ export default function AdminFaqPage() {
   if (isLoading) {
     return (
       <div className="space-y-8">
-        <h1 className="text-3xl font-bold">FAQ Page Management</h1>
+        <h1 className="text-3xl font-medium">FAQ Page Management</h1>
         <Skeleton className="h-64 w-full" />
         <Skeleton className="h-48 w-full" />
         <Skeleton className="h-48 w-full" />
@@ -157,7 +157,7 @@ export default function AdminFaqPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">FAQ Page Management</h1>
+      <h1 className="text-3xl font-medium">FAQ Page Management</h1>
       <form onSubmit={handleSubmit} className="space-y-8">
         <Card>
           <CardHeader>

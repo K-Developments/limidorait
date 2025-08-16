@@ -1,3 +1,4 @@
+
 "use client";
 import * as React from "react";
 import Image from "next/image";
@@ -26,7 +27,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: HomepageTestimonial }) 
           className="rounded-full object-cover"
         />
         <div>
-          <p className="font-bold text-foreground">{testimonial.author}</p>
+          <p className="font-medium text-foreground">{testimonial.author}</p>
           <p className="text-sm text-muted-foreground">{testimonial.company}</p>
         </div>
       </div>
@@ -160,7 +161,7 @@ export function HomepageTestimonials({ testimonials }: HomepageTestimonialsProps
           className="text-center mb-12"
         >
           <Badge variant="outline">Testimonials</Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground font-body uppercase">
+          <h2 className="text-3xl md:text-4xl font-medium text-foreground font-body uppercase">
             What Our Clients Say
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mt-4">

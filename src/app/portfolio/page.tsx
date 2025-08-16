@@ -24,7 +24,7 @@ export default function PortfolioPage() {
             className="text-center mb-16"
           >
             <Badge variant="outline" className="mb-4">Our Work</Badge>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 font-body uppercase">
+            <h1 className="text-4xl md:text-5xl font-medium text-foreground mb-4 font-body uppercase">
               Our Portfolio
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

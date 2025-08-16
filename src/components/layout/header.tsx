@@ -17,7 +17,7 @@ export function Header({ onMenuClick }: HeaderProps) {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative flex justify-between items-center h-full">
           <Link href="/">
             <span 
-              className="font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 text-2xl"
+              className="font-medium uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 text-2xl"
               style={{
                 textShadow: '0 2px 10px hsla(var(--primary), 0.3)',
               }}

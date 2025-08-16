@@ -1,4 +1,5 @@
 
+import { About } from "@/components/sections/about";
 import { AboutHero } from "@/components/sections/about-hero";
 import type { Metadata } from 'next';
 
@@ -11,6 +12,7 @@ export default function AboutPage() {
     return (
         <div>
             <AboutHero />
+            <About />
         </div>
     );
 }

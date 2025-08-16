@@ -23,7 +23,7 @@ export function HomepageCta({ ctaSection }: HomepageCtaProps) {
           viewport={{ once: true }}
           className="max-w-2xl"
         >
-          <h2 className="text-3xl md:text-4xl font-bold font-body uppercase">
+          <h2 className="text-3xl md:text-4xl font-medium font-body uppercase">
             {ctaSection.title}
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">

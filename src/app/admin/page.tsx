@@ -136,7 +136,7 @@ export default function AdminHomePage() {
   if (isLoading) {
     return (
       <div className="space-y-8">
-        <h1 className="text-3xl font-bold uppercase">Content Management</h1>
+        <h1 className="text-3xl font-medium uppercase">Content Management</h1>
         <Card>
           <CardHeader>
             <Skeleton className="h-8 w-1/2" />
@@ -153,7 +153,7 @@ export default function AdminHomePage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold uppercase">Homepage Content Management</h1>
+      <h1 className="text-3xl font-medium uppercase">Homepage Content Management</h1>
       <form onSubmit={handleSubmit} className="space-y-8">
         <Card>
           <CardHeader>

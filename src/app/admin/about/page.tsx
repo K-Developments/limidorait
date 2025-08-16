@@ -111,7 +111,7 @@ export default function AdminAboutPage() {
   if (isLoading) {
     return (
       <div className="space-y-8">
-        <h1 className="text-3xl font-bold">About Page Management</h1>
+        <h1 className="text-3xl font-medium">About Page Management</h1>
         {[...Array(4)].map((_, i) => (
           <Card key={i}>
             <CardHeader>
@@ -132,7 +132,7 @@ export default function AdminAboutPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">About Page Management</h1>
+      <h1 className="text-3xl font-medium">About Page Management</h1>
       <form onSubmit={handleSubmit} className="space-y-8">
         <Card>
           <CardHeader>

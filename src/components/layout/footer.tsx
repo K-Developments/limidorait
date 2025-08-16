@@ -26,7 +26,7 @@ export function Footer() {
           {/* Column 1: Company Info */}
           <div className="col-span-1 md:col-span-2">
             <Link href="/">
-              <span className="text-2xl font-bold uppercase tracking-wider">Limidora</span>
+              <span className="text-2xl font-medium uppercase tracking-wider">Limidora</span>
               <span className="sr-only">Limidora Home</span>
             </Link>
             <p className="mt-4 max-w-xs text-primary-foreground/70">

@@ -110,7 +110,7 @@ export function Faq() {
             className="text-center mb-16"
         >
             <Badge variant="outline" className="mb-4">FAQs</Badge>
-            <h1 id="faq-heading" className="text-4xl md:text-5xl font-bold text-foreground mb-4 font-body uppercase">
+            <h1 id="faq-heading" className="text-4xl md:text-5xl font-medium text-foreground mb-4 font-body uppercase">
               {content?.title}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
