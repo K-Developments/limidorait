@@ -21,12 +21,12 @@ const WhyUsCard = ({ icon, title, description, delay }: WhyUsCardProps) => (
     transition={{ duration: 0.5, delay }}
     viewport={{ once: true }}
   >
-    <Card className="h-full text-center bg-card border shadow-sm hover:shadow-xl transition-shadow duration-300 p-4">
+    <Card className="h-full text-center bg-transparent border-none shadow-none p-4">
       <CardHeader>
         <div className="mx-auto bg-primary/10 p-4 rounded-full w-fit">
           {icon}
         </div>
-        <CardTitle className="pt-4 text-xl font-medium">{title}</CardTitle>
+        <CardTitle className="pt-4 text-xl font-medium text-foreground">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground">{description}</p>
