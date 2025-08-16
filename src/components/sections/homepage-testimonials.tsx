@@ -28,29 +28,27 @@ export function HomepageTestimonials({ testimonials }: HomepageTestimonialsProps
   return (
     <section id="testimonials" className="py-16 md:py-24 bg-card overflow-hidden">
       <div className="container mx-auto px-4 md:px-[5rem]">
-        <div className="grid md:grid-cols-3 gap-8 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+         <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="md:col-span-1 space-y-4 text-center md:text-left"
+            className="text-center mb-12"
           >
             <Badge variant="outline">Testimonials</Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground font-body uppercase">
               What Our Clients Say
             </h2>
-            <p className="text-muted-foreground text-lg">
+             <p className="text-muted-foreground text-lg max-w-2xl mx-auto mt-4">
               We take pride in our work and are honored to have the trust of our amazing clients.
             </p>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="md:col-span-2"
           >
             <Carousel
               opts={{
@@ -97,7 +95,6 @@ export function HomepageTestimonials({ testimonials }: HomepageTestimonialsProps
               </div>
             </Carousel>
           </motion.div>
-        </div>
       </div>
     </section>
   );
