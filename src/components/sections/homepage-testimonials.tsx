@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-interface HomepageTestimonialsProps {
+interface TestimonialsProps {
   testimonials: HomepageTestimonial[];
 }
 
@@ -141,7 +141,7 @@ const TestimonialColumn = ({
   );
 };
 
-export function HomepageTestimonials({ testimonials }: HomepageTestimonialsProps) {
+export function Testimonials({ testimonials }: TestimonialsProps) {
   if (!testimonials || testimonials.length === 0) {
     return null;
   }
