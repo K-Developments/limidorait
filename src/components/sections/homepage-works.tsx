@@ -55,7 +55,7 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-auto md:h-[600px]">
           <motion.div 
-            className="md:col-span-1 md:row-span-2 group"
+            className="md:col-span-1 md:row-span-2"
             custom={0}
             variants={cardVariants}
             initial="hidden"
@@ -66,7 +66,7 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
           </motion.div>
 
           <motion.div 
-            className="md:col-span-1 group"
+            className="md:col-span-1"
             custom={1}
             variants={cardVariants}
             initial="hidden"
@@ -76,7 +76,7 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
             <WorkCard work={secondWork} className="aspect-video md:aspect-auto" />
           </motion.div>
           <motion.div 
-            className="md:col-span-1 group"
+            className="md:col-span-1"
             custom={2}
             variants={cardVariants}
             initial="hidden"
@@ -99,9 +99,9 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
 
 const WorkCard = ({ work, className }: { work: HomepageWork, className?: string }) => {
     return (
-        <div className="relative w-full h-full">
-            <Link href={work.link}>
-                <div className={`relative w-full h-full overflow-hidden ${className}`}>
+        <div className="relative w-full h-full group">
+            <Link href={work.link} className="block relative w-full h-full overflow-hidden">
+                <div className={`relative w-full h-full ${className}`}>
                     <Image
                         src={work.imageUrl}
                         alt={work.title}
@@ -121,13 +121,15 @@ const WorkCard = ({ work, className }: { work: HomepageWork, className?: string 
                         </div>
                     </div>
                 </div>
-                 {/* Mobile Content */}
-                <div className="md:hidden mt-4 p-2">
-                    <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{work.category}</p>
-                    <h3 className="text-xl font-bold mt-1 font-body uppercase text-foreground">{work.title}</h3>
-                    <Button variant="outline" className="mt-3">View Project</Button>
-                </div>
             </Link>
+             {/* Mobile Content */}
+            <div className="md:hidden mt-4 p-2">
+                <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{work.category}</p>
+                <h3 className="text-xl font-bold mt-1 font-body uppercase text-foreground">{work.title}</h3>
+                <Button asChild variant="outline" className="mt-3">
+                    <Link href={work.link}>View Project</Link>
+                </Button>
+            </div>
         </div>
     )
 }
