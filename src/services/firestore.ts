@@ -25,6 +25,13 @@ export interface HomepageWork {
   link: string;
 }
 
+export interface HomepageTestimonial {
+  quote: string;
+  author: string;
+  company: string;
+  avatarUrl: string;
+}
+
 export interface HeroContent {
   title: string;
   slides: Slide[];
@@ -32,6 +39,7 @@ export interface HeroContent {
   buttonLink: string;
   services: HomepageService[];
   works: HomepageWork[];
+  testimonials: HomepageTestimonial[];
 }
 
 export interface InteractivePanelContent {
@@ -151,6 +159,32 @@ const defaultHeroContent: HeroContent = {
             aiHint: "dashboard analytics",
             link: "/portfolio/saas-dashboard"
         }
+    ],
+    testimonials: [
+      {
+        quote: "Limidora transformed our online presence. Their team is professional, creative, and delivered beyond our expectations. We've seen a significant increase in engagement since the launch.",
+        author: "Jane Doe",
+        company: "Tech Solutions Inc.",
+        avatarUrl: "https://placehold.co/100x100.png"
+      },
+      {
+        quote: "The best web development agency we've worked with. Their attention to detail and commitment to quality is unparalleled. Highly recommended for any business looking to grow.",
+        author: "John Smith",
+        company: "Innovate Co.",
+        avatarUrl: "https://placehold.co/100x100.png"
+      },
+      {
+        quote: "From start to finish, the process was seamless. The team at Limidora was always available to answer our questions and provided valuable insights that helped shape our project.",
+        author: "Emily White",
+        company: "Creative Minds",
+        avatarUrl: "https://placehold.co/100x100.png"
+      },
+       {
+        quote: "An absolutely stellar experience. The final product was not only beautiful but also highly functional and user-friendly. We couldn't be happier with the results.",
+        author: "Michael Brown",
+        company: "Future Enterprises",
+        avatarUrl: "https://placehold.co/100x100.png"
+      }
     ]
 };
 

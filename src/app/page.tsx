@@ -15,6 +15,7 @@ import { getHeroContent, HeroContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { HomepageServices } from "@/components/sections/homepage-services";
 import { HomepageWorks } from "@/components/sections/homepage-works";
+import { HomepageTestimonials } from "@/components/sections/homepage-testimonials";
 
 const HeroSection = ({ content }: { content: HeroContent | null }) => {
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
@@ -135,6 +136,7 @@ export default function HomePage() {
       <HeroSection content={content} />
       {content && <HomepageServices services={content.services} />}
       {content && <HomepageWorks works={content.works} />}
+      {content && <HomepageTestimonials testimonials={content.testimonials} />}
     </div>
   );
 }

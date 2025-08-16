@@ -7,9 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getHeroContent, updateHeroContent, HeroContent, HomepageService, HomepageWork } from '@/services/firestore';
+import { getHeroContent, updateHeroContent, HeroContent, HomepageService, HomepageWork, HomepageTestimonial } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
+import { PlusCircle, Trash2 } from 'lucide-react';
 
 export default function AdminHomePage() {
   const { toast } = useToast();
@@ -65,6 +66,29 @@ export default function AdminHomePage() {
         setHeroContent({ ...heroContent, works: newWorks });
     }
   };
+
+  const handleTestimonialChange = (index: number, field: keyof HomepageTestimonial, value: string) => {
+    if (heroContent) {
+        const newTestimonials = [...heroContent.testimonials];
+        newTestimonials[index] = { ...newTestimonials[index], [field]: value };
+        setHeroContent({ ...heroContent, testimonials: newTestimonials });
+    }
+  };
+
+  const addTestimonial = () => {
+      if (heroContent) {
+          const newTestimonials = [...heroContent.testimonials, { quote: "", author: "", company: "", avatarUrl: "https://placehold.co/100x100.png" }];
+          setHeroContent({ ...heroContent, testimonials: newTestimonials });
+      }
+  };
+
+  const removeTestimonial = (index: number) => {
+      if (heroContent) {
+          const newTestimonials = heroContent.testimonials.filter((_, i) => i !== index);
+          setHeroContent({ ...heroContent, testimonials: newTestimonials });
+      }
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -227,6 +251,43 @@ export default function AdminHomePage() {
             ))}
           </CardContent>
         </Card>
+        
+        <Card>
+            <CardHeader>
+                <CardTitle>Homepage Testimonials</CardTitle>
+                <CardDescription>Update the testimonials section on the homepage.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+                {heroContent?.testimonials.map((testimonial, index) => (
+                    <Card key={index} className="p-4 space-y-4 relative">
+                        <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-7 w-7" onClick={() => removeTestimonial(index)}>
+                            <Trash2 className="h-4 w-4" />
+                        </Button>
+                        <h4 className="text-lg font-semibold">Testimonial {index + 1}</h4>
+                        <div className="space-y-2">
+                            <Label htmlFor={`testimonial-quote-${index}`}>Quote</Label>
+                            <Textarea id={`testimonial-quote-${index}`} value={testimonial.quote} onChange={(e) => handleTestimonialChange(index, 'quote', e.target.value)} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor={`testimonial-author-${index}`}>Author</Label>
+                            <Input id={`testimonial-author-${index}`} value={testimonial.author} onChange={(e) => handleTestimonialChange(index, 'author', e.target.value)} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor={`testimonial-company-${index}`}>Company</Label>
+                            <Input id={`testimonial-company-${index}`} value={testimonial.company} onChange={(e) => handleTestimonialChange(index, 'company', e.target.value)} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor={`testimonial-avatar-${index}`}>Avatar URL</Label>
+                            <Input id={`testimonial-avatar-${index}`} value={testimonial.avatarUrl} onChange={(e) => handleTestimonialChange(index, 'avatarUrl', e.target.value)} />
+                        </div>
+                    </Card>
+                ))}
+                <Button type="button" variant="outline" onClick={addTestimonial}>
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add Testimonial
+                </Button>
+            </CardContent>
+        </Card>
+
 
         <Button type="submit" size="lg">Save All Changes</Button>
       </form>

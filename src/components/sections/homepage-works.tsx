@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -54,19 +53,73 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
           </p>
         </motion.div>
 
-        {/* Mobile & Tablet Layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:hidden gap-6 sm:gap-4">
-            <motion.div custom={0} variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="sm:col-span-2">
-                <WorkCard work={firstWork} className="aspect-video" />
-            </motion.div>
-            <motion.div custom={1} variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                <WorkCard work={secondWork} className="aspect-square" />
-            </motion.div>
-            <motion.div custom={2} variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                <WorkCard work={thirdWork} className="aspect-square" />
-            </motion.div>
+        {/* Mobile Layout - Single Column */}
+        <div className="block sm:hidden space-y-6">
+          <motion.div
+            custom={0}
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <WorkCard work={firstWork} className="aspect-square" />
+          </motion.div>
+
+          <motion.div
+            custom={1}
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <WorkCard work={secondWork} className="aspect-square" />
+          </motion.div>
+
+          <motion.div
+            custom={2}
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <WorkCard work={thirdWork} className="aspect-square" />
+          </motion.div>
         </div>
 
+        {/* Tablet Layout - 2 Column */}
+        <div className="hidden sm:block md:hidden">
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <motion.div
+              custom={0}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <WorkCard work={firstWork} className="aspect-square" />
+            </motion.div>
+
+            <motion.div
+              custom={1}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <WorkCard work={secondWork} className="aspect-square" />
+            </motion.div>
+          </div>
+          
+          <motion.div
+            custom={2}
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <WorkCard work={thirdWork} className="aspect-video" />
+          </motion.div>
+        </div>
 
         {/* Desktop Layout - Original Grid */}
         <div className="hidden md:grid md:grid-cols-2 gap-8 h-[600px]">
@@ -116,8 +169,8 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
 
 const WorkCard = ({ work, className }: { work: HomepageWork, className?: string }) => {
     return (
-        <div>
-            <Link href={work.link} className="block relative w-full group overflow-hidden rounded-lg">
+        <div className="relative w-full h-full group">
+            <Link href={work.link} className="block relative w-full h-full overflow-hidden rounded-lg">
                 <div className={`relative w-full ${className}`}>
                     <Image
                         src={work.imageUrl}
@@ -145,8 +198,8 @@ const WorkCard = ({ work, className }: { work: HomepageWork, className?: string 
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{work.category}</p>
                 <h3 className="text-lg font-bold mt-1 font-body uppercase text-foreground">{work.title}</h3>
                 <Link href={work.link} className="inline-flex items-center gap-1 mt-3 text-sm text-foreground hover:text-primary transition-colors duration-200">
-                    <ArrowRight className="h-4 w-4" />
                     View Project
+                    <ArrowRight className="h-4 w-4" />
                 </Link>
             </div>
         </div>
