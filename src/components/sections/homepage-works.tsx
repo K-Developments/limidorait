@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { HomepageWork } from "@/services/firestore";
+import { ArrowRight } from "lucide-react";
 
 interface HomepageWorksProps {
   works: HomepageWork[];
@@ -35,25 +36,40 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
   };
 
   return (
-    <section id="homepage-works" className="py-16 md:py-24 bg-background">
-      <div className="container mx-auto px-4">
+    <section id="homepage-works" className="py-12 sm:py-16 md:py-24 bg-background">
+      <div className="container mx-auto px-4 md:px-[5rem]">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
           <Badge variant="outline" className="mb-4">Our Portfolio</Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 font-body uppercase">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4 font-body uppercase">
             Our Recent Works
           </h2>
-          <p className="text-lg max-w-2xl mx-auto text-muted-foreground">
+          <p className="text-base sm:text-lg max-w-2xl mx-auto text-muted-foreground px-4">
             We are passionate about creating stunning digital experiences. Here's a glimpse of our favorite projects.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-auto md:h-[600px]">
+        {/* Mobile & Tablet Layout */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:hidden gap-8">
+            <motion.div custom={0} variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="sm:col-span-2">
+                <WorkCard work={firstWork} className="aspect-video" />
+            </motion.div>
+            <motion.div custom={1} variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                <WorkCard work={secondWork} className="aspect-square" />
+            </motion.div>
+            <motion.div custom={2} variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                <WorkCard work={thirdWork} className="aspect-square" />
+            </motion.div>
+        </div>
+
+
+        {/* Desktop Layout - Original Grid */}
+        <div className="hidden md:grid md:grid-cols-2 gap-8 h-[600px]">
           <motion.div 
             className="md:col-span-1 md:row-span-2"
             custom={0}
@@ -62,7 +78,7 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <WorkCard work={firstWork} className="aspect-square md:aspect-auto"/>
+            <WorkCard work={firstWork} className="h-full"/>
           </motion.div>
 
           <motion.div 
@@ -73,8 +89,9 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <WorkCard work={secondWork} className="aspect-video md:aspect-auto" />
+            <WorkCard work={secondWork} className="h-full" />
           </motion.div>
+          
           <motion.div 
             className="md:col-span-1"
             custom={2}
@@ -83,24 +100,24 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
             whileInView="visible"
             viewport={{ once: true }}
           >
-             <WorkCard work={thirdWork} className="aspect-square md:aspect-auto" />
+             <WorkCard work={thirdWork} className="h-full" />
           </motion.div>
         </div>
-        <div className="text-center mt-12">
-            <Button asChild size="lg" variant="outline">
-                <Link href="/portfolio">View All Works</Link>
-            </Button>
+
+        <div className="text-center mt-8 sm:mt-12">
+          <Button asChild size="lg" variant="outline">
+            <Link href="/portfolio">View All Works</Link>
+          </Button>
         </div>
       </div>
     </section>
   );
 }
 
-
 const WorkCard = ({ work, className }: { work: HomepageWork, className?: string }) => {
     return (
-        <div className="relative w-full h-full group">
-            <Link href={work.link} className="block relative w-full h-full overflow-hidden">
+        <div className="w-full h-full group">
+            <Link href={work.link} className="block relative w-full h-full overflow-hidden rounded-lg">
                 <div className={`relative w-full h-full ${className}`}>
                     <Image
                         src={work.imageUrl}
@@ -109,26 +126,27 @@ const WorkCard = ({ work, className }: { work: HomepageWork, className?: string 
                         className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300 ease-in-out"
                         data-ai-hint={work.aiHint}
                     />
-                    {/* Desktop Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent hidden md:block" />
-                    <div className="absolute inset-0 hidden md:flex flex-col justify-end p-6 text-white">
+                    {/* Desktop & Tablet Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent hidden sm:block" />
+                    <div className="absolute inset-0 hidden sm:flex flex-col justify-end p-4 md:p-6 text-white">
                         <div className="transform transition-transform duration-300 ease-in-out group-hover:-translate-y-2">
-                            <p className="text-sm font-semibold uppercase tracking-wider text-white/80">{work.category}</p>
-                            <h3 className="text-2xl font-bold mt-1 font-body uppercase">{work.title}</h3>
+                            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-white/80">{work.category}</p>
+                            <h3 className="text-lg sm:text-xl md:text-2xl font-bold mt-1 font-body uppercase">{work.title}</h3>
                         </div>
-                        <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <Button variant="secondary">View Project</Button>
+                        <div className="mt-3 md:mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <Button variant="secondary" size="sm" className="sm:size-default">View Project</Button>
                         </div>
                     </div>
                 </div>
             </Link>
-             {/* Mobile Content */}
-            <div className="md:hidden mt-4 p-2">
-                <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{work.category}</p>
-                <h3 className="text-xl font-bold mt-1 font-body uppercase text-foreground">{work.title}</h3>
-                <Button asChild variant="outline" className="mt-3">
-                    <Link href={work.link}>View Project</Link>
-                </Button>
+            
+            {/* Mobile Content */}
+            <div className="sm:hidden mt-3 px-1">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{work.category}</p>
+                <h3 className="text-lg font-bold mt-1 font-body uppercase text-foreground">{work.title}</h3>
+                <Link href={work.link} className="inline-flex items-center gap-2 mt-3 text-sm text-foreground hover:text-primary transition-colors duration-200">
+                    <ArrowRight className="w-4 h-4" /> View Project
+                </Link>
             </div>
         </div>
     )

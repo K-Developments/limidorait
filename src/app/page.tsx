@@ -98,9 +98,9 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-        className="relative z-10 p-8 md:basis-1/4"
+        className="relative z-10 p-8 md:basis-2/3"
       >
-        <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4 font-headline">
+        <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-4 font-headline" style={{lineHeight:1.2}}>
           {content.title}
         </h1>
         <Button asChild size="lg">
