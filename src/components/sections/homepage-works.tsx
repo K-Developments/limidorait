@@ -55,7 +55,7 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
         </motion.div>
 
         {/* Mobile & Tablet Layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:hidden gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:hidden gap-6 sm:gap-4">
             <motion.div custom={0} variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="sm:col-span-2">
                 <WorkCard work={firstWork} className="aspect-video" />
             </motion.div>
@@ -116,9 +116,9 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
 
 const WorkCard = ({ work, className }: { work: HomepageWork, className?: string }) => {
     return (
-        <div className="w-full h-full group">
-            <Link href={work.link} className="block relative w-full h-full overflow-hidden rounded-lg">
-                <div className={`relative w-full h-full ${className}`}>
+        <div>
+            <Link href={work.link} className="block relative w-full group overflow-hidden rounded-lg">
+                <div className={`relative w-full ${className}`}>
                     <Image
                         src={work.imageUrl}
                         alt={work.title}
@@ -144,8 +144,9 @@ const WorkCard = ({ work, className }: { work: HomepageWork, className?: string 
             <div className="sm:hidden mt-3 px-1">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{work.category}</p>
                 <h3 className="text-lg font-bold mt-1 font-body uppercase text-foreground">{work.title}</h3>
-                <Link href={work.link} className="inline-flex items-center gap-2 mt-3 text-sm text-foreground hover:text-primary transition-colors duration-200">
-                    <ArrowRight className="w-4 h-4" /> View Project
+                <Link href={work.link} className="inline-flex items-center gap-1 mt-3 text-sm text-foreground hover:text-primary transition-colors duration-200">
+                    <ArrowRight className="h-4 w-4" />
+                    View Project
                 </Link>
             </div>
         </div>
