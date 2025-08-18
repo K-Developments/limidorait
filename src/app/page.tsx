@@ -110,7 +110,7 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
   <motion.div
     className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white/40 via-white/20 to-transparent"
     animate={{ y: ["-100%", "100%"], opacity: [0, 0.5, 0] }}
-    transition={{ duration: 6, repeat: Infinity, repeatDelay: 8, ease: "easeInOut" }}
+    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, ease: "easeInOut" }}
   />
 </div>
 
@@ -118,7 +118,7 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
   <motion.div
     className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white/40 via-white/20 to-transparent"
     animate={{ y: ["-100%", "100%"], opacity: [0, 0.5, 0] }}
-    transition={{ duration: 7, repeat: Infinity, repeatDelay: 9, delay: 1, ease: "easeInOut" }}
+    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, delay: 0, ease: "easeInOut" }}
   />
 </div>
 
@@ -126,7 +126,7 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
   <motion.div
     className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white/40 via-white/20 to-transparent"
     animate={{ y: ["-100%", "100%"], opacity: [0, 0.5, 0] }}
-    transition={{ duration: 8, repeat: Infinity, repeatDelay: 10, delay: 1, ease: "easeInOut" }}
+    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, delay: 0, ease: "easeInOut" }}
   />
 </div>
 
@@ -143,7 +143,7 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
   <motion.div
     className="absolute top-0 right-0 w-32 h-full bg-gradient-to-r from-white/40 via-white/20 to-transparent"
     animate={{ x: ["100%", "-100%"], opacity: [0, 0.4, 0] }}
-    transition={{ duration: 7, repeat: Infinity, repeatDelay: 10, delay: 1, ease: "easeInOut" }}
+    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, delay: 0, ease: "easeInOut" }}
   />
 </div>
 
@@ -152,7 +152,7 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
             <motion.div
               className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-white/30 via-white/10 to-transparent"
               animate={{ x: ["100%", "-100%"], opacity: [0, 0.4, 0] }}
-              transition={{ duration: 7, repeat: Infinity, repeatDelay: 10, delay: 1, ease: "easeInOut" }}
+              transition={{ duration: 4, repeat: Infinity, repeatDelay: 1, delay: 0, ease: "easeInOut" }}
             />
           </div>
 
@@ -160,12 +160,12 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
           <motion.div
             className="absolute top-1/4 left-1/3 w-32 h-32 bg-white/5 rounded-full blur-2xl"
             animate={{ scale: [0.9, 1.1, 0.9], opacity: [0.2, 0.35, 0.2] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.div
             className="absolute bottom-1/4 right-1/3 w-24 h-24 bg-white/5 rounded-full blur-2xl"
             animate={{ scale: [1, 0.85, 1], opacity: [0.15, 0.3, 0.15] }}
-            transition={{ duration: 9, repeat: Infinity, delay: 2, ease: "easeInOut" }}
+            transition={{ duration: 4, repeat: Infinity, delay: 2, ease: "easeInOut" }}
           />
         </div>
         
