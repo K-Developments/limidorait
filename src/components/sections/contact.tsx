@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Twitter, Linkedin, Github } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
@@ -28,14 +29,73 @@ export function Contact() {
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="flex items-center justify-center p-8 md:p-12 lg:p-16 bg-neutral-900 text-white relative overflow-hidden min-h-[60vh] lg:min-h-screen"
+        className="flex items-center justify-center p-8 md:p-12 lg:p-16 bg-neutral-900 text-white relative overflow-hidden min-h-[60vh] lg:min-h-screen lg:order-last"
       >
-        <div className="absolute inset-0 w-full h-full pointer-events-none">
-            <div className="absolute top-0 left-1/4 h-full w-[1px] bg-gradient-to-t from-transparent to-white/10" />
-            <div className="absolute top-0 left-2/4 h-full w-[1px] bg-gradient-to-t from-transparent to-white/10" />
-            <div className="absolute right-0 top-1/3 w-full h-[1px] bg-gradient-to-r from-transparent to-white/10" />
-            <div className="absolute right-0 top-2/3 w-full h-[1px] bg-gradient-to-r from-transparent to-white/10" />
-            <div className="absolute top-0 left-3/4 h-full w-[1px] bg-gradient-to-t from-transparent to-white/10" />
+         {/* Gentle Decorative Lines */}
+         <div className="absolute inset-0 w-full h-full pointer-events-none">
+     {/* Vertical Lines */}
+<div className="absolute top-0 left-1/4 h-full w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent overflow-hidden">
+  {/* Gentle moving highlight */}
+  <motion.div
+    className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white/40 via-white/20 to-transparent"
+    animate={{ y: ["-100%", "100%"], opacity: [0, 0.5, 0] }}
+    transition={{ duration: 6, repeat: Infinity, repeatDelay: 8, ease: "easeInOut" }}
+  />
+</div>
+
+<div className="absolute top-0 left-2/4 h-full w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent overflow-hidden">
+  <motion.div
+    className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white/40 via-white/20 to-transparent"
+    animate={{ y: ["-100%", "100%"], opacity: [0, 0.5, 0] }}
+    transition={{ duration: 7, repeat: Infinity, repeatDelay: 9, delay: 1, ease: "easeInOut" }}
+  />
+</div>
+
+<div className="absolute top-0 left-3/4 h-full w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent overflow-hidden">
+  <motion.div
+    className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white/40 via-white/20 to-transparent"
+    animate={{ y: ["-100%", "100%"], opacity: [0, 0.5, 0] }}
+    transition={{ duration: 8, repeat: Infinity, repeatDelay: 10, delay: 1, ease: "easeInOut" }}
+  />
+</div>
+
+{/* Horizontal Lines */}
+<div className="absolute right-0 top-1/3 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden">
+  <motion.div
+    className="absolute top-0 right-0 w-32 h-full bg-gradient-to-r from-white/40 via-white/20 to-transparent"
+    animate={{ x: ["100%", "-100%"], opacity: [0, 0.4, 0] }}
+    transition={{ duration: 6, repeat: Infinity, repeatDelay: 9, ease: "easeInOut" }}
+  />
+</div>
+
+<div className="absolute right-0 top-2/3 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden">
+  <motion.div
+    className="absolute top-0 right-0 w-32 h-full bg-gradient-to-r from-white/40 via-white/20 to-transparent"
+    animate={{ x: ["100%", "-100%"], opacity: [0, 0.4, 0] }}
+    transition={{ duration: 7, repeat: Infinity, repeatDelay: 10, delay: 1, ease: "easeInOut" }}
+  />
+</div>
+
+
+          <div className="absolute right-0 top-2/3 w-full h-[1px] overflow-hidden">
+            <motion.div
+              className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-white/30 via-white/10 to-transparent"
+              animate={{ x: ["100%", "-100%"], opacity: [0, 0.4, 0] }}
+              transition={{ duration: 7, repeat: Infinity, repeatDelay: 10, delay: 1, ease: "easeInOut" }}
+            />
+          </div>
+
+          {/* Ambient Glow */}
+          <motion.div
+            className="absolute top-1/4 left-1/3 w-32 h-32 bg-white/5 rounded-full blur-2xl"
+            animate={{ scale: [0.9, 1.1, 0.9], opacity: [0.2, 0.35, 0.2] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute bottom-1/4 right-1/3 w-24 h-24 bg-white/5 rounded-full blur-2xl"
+            animate={{ scale: [1, 0.85, 1], opacity: [0.15, 0.3, 0.15] }}
+            transition={{ duration: 9, repeat: Infinity, delay: 2, ease: "easeInOut" }}
+          />
         </div>
         <div className="relative z-10 w-full max-w-md space-y-6">
           <div className="inline-block border border-white/20 px-3 py-1 text-sm text-white/80">Contact Us</div>
@@ -80,11 +140,33 @@ export function Contact() {
               </div>
             </div>
             <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input id="phone" type="tel" placeholder="Your Phone Number" autoComplete="tel" />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="service">Service</Label>
+                <Select name="service">
+                    <SelectTrigger id="service">
+                        <SelectValue placeholder="Select a service" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="web-development">Web Development</SelectItem>
+                        <SelectItem value="ui-ux-design">UI/UX Design</SelectItem>
+                        <SelectItem value="mobile-app-development">Mobile App Development</SelectItem>
+                        <SelectItem value="software-development">Software Development</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="message">Message</Label>
               <Textarea id="message" placeholder="Tell us about your project" required className="min-h-[150px]" />
             </div>
             <Button type="submit" className="w-full">Send Message</Button>
           </form>
+           <p className="text-center text-sm text-muted-foreground">
+              We will contact you soon.
+            </p>
         </div>
       </motion.div>
     </section>
