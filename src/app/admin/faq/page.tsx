@@ -12,6 +12,15 @@ import { getFaqContent, updateFaqContent, FaqContent, FaqItem, uploadImageAndGet
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import { X, PlusCircle, Trash2 } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function AdminFaqPage() {
   const { toast } = useToast();
@@ -274,3 +283,5 @@ export default function AdminFaqPage() {
     </div>
   );
 }
+
+    
