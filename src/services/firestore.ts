@@ -444,18 +444,17 @@ export const getFaqContent = async (): Promise<FaqContent> => {
     const data = docSnap.data();
     return deepMerge(defaultFaqContent, data) as FaqContent;
   } else {
+    // If the document doesn't exist, create it with default content.
+    await setDoc(docRef, defaultFaqContent);
     return defaultFaqContent;
   }
 };
 
 // Function to update FAQ content in Firestore
-export const updateFaqContent = async (content: FaqContent): Promise<void> => {
+export const updateFaqContent = async (content: Partial<FaqContent>): Promise<void> => {
   const docRef = doc(db, CONTENT_COLLECTION_ID, FAQ_CONTENT_DOC_ID);
   try {
-    const existingDoc = await getDoc(docRef);
-    const existingData = existingDoc.exists() ? existingDoc.data() : {};
-    const mergedContent = deepMerge(existingData, content);
-    await setDoc(docRef, mergedContent);
+    await setDoc(docRef, content, { merge: true });
   } catch (error) {
     console.error("Error updating FAQ content: ", error);
     throw new Error("Could not update FAQ content.");
