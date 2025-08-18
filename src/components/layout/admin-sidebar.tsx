@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, UserSquare, Briefcase, ServerCog } from 'lucide-react';
+import { Home, UserSquare, Briefcase, ServerCog, Mail } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
@@ -105,6 +105,21 @@ export function Sidebar({ isExpanded, toggleSidebar }: SidebarProps) {
                         </Link>
                     </TooltipTrigger>
                     {!isExpanded && <TooltipContent side="right">Services Page</TooltipContent>}
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Link
+                            href="/admin/contact"
+                            className={cn("flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
+                            isExpanded && "w-full justify-start pl-2"
+                            )}
+                        >
+                            <Mail className="h-5 w-5" />
+                            {isExpanded && <span className="ml-4">Contact Page</span>}
+                            <span className="sr-only">Contact Page</span>
+                        </Link>
+                    </TooltipTrigger>
+                    {!isExpanded && <TooltipContent side="right">Contact Page</TooltipContent>}
                 </Tooltip>
             </nav>
             <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">

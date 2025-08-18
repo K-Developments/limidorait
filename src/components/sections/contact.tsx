@@ -9,9 +9,33 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Twitter, Linkedin, Github } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { getContactContent, ContactContent, getServices, Service } from "@/services/firestore";
+import { Skeleton } from "../ui/skeleton";
 
 export function Contact() {
   const { toast } = useToast();
+  const [content, setContent] = useState<ContactContent | null>(null);
+  const [services, setServices] = useState<Service[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const [contactData, servicesData] = await Promise.all([
+          getContactContent(),
+          getServices()
+        ]);
+        setContent(contactData);
+        setServices(servicesData);
+      } catch (error) {
+        console.error("Failed to fetch contact page content:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchContent();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,15 +45,28 @@ export function Contact() {
     });
     (e.target as HTMLFormElement).reset();
   };
+  
+  if (isLoading) {
+    return (
+        <section className="w-full grid lg:grid-cols-2 min-h-screen">
+             <div className="flex items-center justify-center p-8 md:p-12 lg:p-16 bg-neutral-900">
+                <Skeleton className="w-full max-w-md h-64" />
+             </div>
+             <div className="flex items-center justify-center p-8 md:p-12 lg:p-16 bg-background">
+                <Skeleton className="w-full max-w-md h-96" />
+            </div>
+        </section>
+    )
+  }
 
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="w-full grid lg:grid-cols-2">
+    <section id="contact" aria-labelledby="contact-heading" className="w-full grid lg:grid-cols-2 min-h-screen">
        <motion.div 
         initial={{ opacity: 0, x: 50 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="flex items-center justify-center p-8 md:p-12 lg:p-16 bg-neutral-900 text-white relative overflow-hidden min-h-[60vh] lg:min-h-screen lg:order-last"
+        className="flex items-center justify-center p-8 md:p-12 lg:p-16 bg-neutral-900 text-white relative overflow-hidden min-h-[60vh] lg:min-h-0 lg:order-last"
       >
          {/* Gentle Decorative Lines */}
          <div className="absolute inset-0 w-full h-full pointer-events-none">
@@ -99,9 +136,9 @@ export function Contact() {
         </div>
         <div className="relative z-10 w-full max-w-md space-y-6">
           <div className="inline-block border border-white/20 px-3 py-1 text-sm text-white/80">Contact Us</div>
-          <h2 id="contact-heading" className="text-4xl font-medium tracking-tighter sm:text-5xl font-body uppercase">Let's Build Something Great</h2>
+          <h2 id="contact-heading" className="text-4xl font-medium tracking-tighter sm:text-5xl font-body uppercase">{content?.title}</h2>
           <p className="max-w-[600px] text-white/70 md:text-xl/relaxed">
-            Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas.
+            {content?.description}
           </p>
           <div className="flex space-x-4 pt-4">
             <a href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
@@ -121,7 +158,7 @@ export function Contact() {
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="flex items-center justify-center p-8 md:p-12 lg:p-16 bg-background min-h-screen"
+        className="flex items-center justify-center p-8 md:p-12 lg:p-16 bg-background min-h-screen lg:min-h-0"
       >
         <div className="w-full max-w-md space-y-8">
           <div>
@@ -150,10 +187,9 @@ export function Contact() {
                         <SelectValue placeholder="Select a service" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="web-development">Web Development</SelectItem>
-                        <SelectItem value="ui-ux-design">UI/UX Design</SelectItem>
-                        <SelectItem value="mobile-app-development">Mobile App Development</SelectItem>
-                        <SelectItem value="software-development">Software Development</SelectItem>
+                        {services.map(service => (
+                             <SelectItem key={service.id} value={service.id}>{service.title}</SelectItem>
+                        ))}
                         <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                 </Select>

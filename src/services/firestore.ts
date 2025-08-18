@@ -113,10 +113,16 @@ export interface SubmittedQuestion {
     submittedAt: Date;
 }
 
+export interface ContactContent {
+    title: string;
+    description: string;
+}
+
 const HERO_CONTENT_DOC_ID = 'heroContent';
 const ABOUT_CONTENT_DOC_ID = 'aboutContent';
 const PORTFOLIO_CONTENT_DOC_ID = 'portfolioContent';
 const FAQ_CONTENT_DOC_ID = 'faqContent';
+const CONTACT_CONTENT_DOC_ID = 'contactContent';
 const CONTENT_COLLECTION_ID = 'homepage';
 const PORTFOLIO_COLLECTION_ID = 'portfolio';
 const SERVICES_COLLECTION_ID = 'services';
@@ -239,6 +245,11 @@ const defaultFaqContent: FaqContent = {
       answer: "Yes, we offer ongoing support and maintenance packages to ensure your website or application remains secure, up-to-date, and performs optimally. We're here to be your long-term technology partner."
     }
   ]
+};
+
+const defaultContactContent: ContactContent = {
+    title: "Let's Build Something Great",
+    description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas."
 };
 
 // Deep merge utility to combine existing and new content
@@ -566,4 +577,21 @@ export const updateService = async (id: string, data: Partial<Omit<Service, 'id'
 export const deleteService = async (id: string): Promise<void> => {
     const serviceDoc = doc(db, SERVICES_COLLECTION_ID, id);
     await deleteDoc(serviceDoc);
+};
+
+// Contact Page Content
+export const getContactContent = async (): Promise<ContactContent> => {
+    const docRef = doc(db, CONTENT_COLLECTION_ID, CONTACT_CONTENT_DOC_ID);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        return deepMerge(defaultContactContent, docSnap.data()) as ContactContent;
+    } else {
+        await setDoc(docRef, defaultContactContent);
+        return defaultContactContent;
+    }
+};
+
+export const updateContactContent = async (content: Partial<ContactContent>): Promise<void> => {
+    const docRef = doc(db, CONTENT_COLLECTION_ID, CONTACT_CONTENT_DOC_ID);
+    await setDoc(docRef, content, { merge: true });
 };
