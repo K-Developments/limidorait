@@ -123,7 +123,6 @@ export interface FaqItem {
 export interface FaqContent {
   heroTitle: string;
   heroSubtitle: string;
-  heroImageUrl: string;
   title: string;
   description: string;
   faqs: FaqItem[];
@@ -266,7 +265,6 @@ const defaultPortfolioContent: PortfolioContent = {
 const defaultFaqContent: FaqContent = {
   heroTitle: "Help Center",
   heroSubtitle: "Your questions, answered. Find the information you need about our services.",
-  heroImageUrl: "https://placehold.co/1600x960.png",
   title: "Frequently Asked Questions",
   description: "Find answers to common questions about our services, processes, and how we can help your business succeed.",
   faqs: [

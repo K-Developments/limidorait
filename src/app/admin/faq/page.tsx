@@ -10,7 +10,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { getFaqContent, updateFaqContent, FaqContent, FaqItem, uploadImageAndGetURL, getSubmittedQuestions, SubmittedQuestion, deleteSubmittedQuestion } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
-import Image from 'next/image';
 import { X, PlusCircle, Trash2 } from 'lucide-react';
 import {
   Dialog,
@@ -28,7 +27,6 @@ export default function AdminFaqPage() {
   const [submittedQuestions, setSubmittedQuestions] = useState<SubmittedQuestion[]>([]);
   const [newAnswers, setNewAnswers] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
 
   const fetchContent = async () => {
     setIsLoading(true);
@@ -57,29 +55,6 @@ export default function AdminFaqPage() {
     const { name, value } = e.target;
     if (faqContent) {
       setFaqContent({ ...faqContent, [name]: value });
-    }
-  };
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0] && faqContent) {
-      const file = e.target.files[0];
-      setIsUploading(true);
-      try {
-        const { url } = await uploadImageAndGetURL(file);
-        setFaqContent({ ...faqContent, heroImageUrl: url });
-        toast({
-          title: "Success!",
-          description: "Image uploaded successfully. Click 'Save All Changes' to apply.",
-        });
-      } catch (error) {
-        toast({
-          title: "Upload Error",
-          description: "Failed to upload image. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsUploading(false);
-      }
     }
   };
 
@@ -171,7 +146,7 @@ export default function AdminFaqPage() {
         <Card>
           <CardHeader>
             <CardTitle>FAQ Page Hero Section</CardTitle>
-            <CardDescription>Update the title, subtitle, and background image for the FAQ page hero.</CardDescription>
+            <CardDescription>Update the title and subtitle for the FAQ page hero.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
@@ -181,21 +156,6 @@ export default function AdminFaqPage() {
             <div className="space-y-2">
               <Label htmlFor="heroSubtitle">Hero Subtitle</Label>
               <Textarea id="heroSubtitle" name="heroSubtitle" value={faqContent?.heroSubtitle || ''} onChange={handleInputChange} />
-            </div>
-            <div className="space-y-2">
-              <Label>Current Hero Image</Label>
-              <div className="relative group w-full aspect-video">
-                <Image src={faqContent?.heroImageUrl || 'https://placehold.co/1600x640.png'} alt={faqContent?.heroTitle || 'FAQ hero image'} layout="fill" className="object-cover rounded-md" />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="heroImageUrl">Image URL</Label>
-              <Input id="heroImageUrl" name="heroImageUrl" value={faqContent?.heroImageUrl || ''} onChange={handleInputChange} placeholder="https://example.com/image.png" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="hero-image-upload">Or Upload a New Hero Image</Label>
-              <Input id="hero-image-upload" type="file" onChange={handleImageUpload} accept="image/*" disabled={isUploading} />
-              {isUploading && <p>Uploading...</p>}
             </div>
           </CardContent>
         </Card>
@@ -283,5 +243,3 @@ export default function AdminFaqPage() {
     </div>
   );
 }
-
-    
