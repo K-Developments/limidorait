@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getPortfolioContent, updatePortfolioContent, PortfolioContent, getProjects, Project, updateProject, addProject, deleteProject, uploadImageAndGetURL } from '@/services/firestore';
+import { getPortfolioContent, updatePortfolioContent, PortfolioContent, getProjects, Project, updateProject, addProject, deleteProject, uploadImageAndGetURL, ClientLogo } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import Image from 'next/image';
@@ -61,6 +61,58 @@ export default function AdminPortfolioPage() {
     if (portfolioContent) {
         setPortfolioContent({ ...portfolioContent, [name]: value });
     }
+  };
+  
+  const handleClientsSectionChange = (field: keyof PortfolioContent['clientsSection'], value: string) => {
+    if (portfolioContent) {
+        setPortfolioContent({
+            ...portfolioContent,
+            clientsSection: {
+                ...portfolioContent.clientsSection,
+                [field]: value,
+            }
+        });
+    }
+  };
+
+  const handleClientLogoChange = (index: number, field: keyof ClientLogo, value: string) => {
+      if (portfolioContent) {
+          const updatedLogos = [...portfolioContent.clientsSection.logos];
+          updatedLogos[index] = { ...updatedLogos[index], [field]: value };
+          setPortfolioContent({
+              ...portfolioContent,
+              clientsSection: {
+                  ...portfolioContent.clientsSection,
+                  logos: updatedLogos
+              }
+          });
+      }
+  };
+
+  const addClientLogo = () => {
+      if (portfolioContent) {
+          const newLogos = [...portfolioContent.clientsSection.logos, { name: "New Client", logoUrl: "https://placehold.co/144x80.png" }];
+          setPortfolioContent({
+              ...portfolioContent,
+              clientsSection: {
+                  ...portfolioContent.clientsSection,
+                  logos: newLogos
+              }
+          });
+      }
+  };
+
+  const removeClientLogo = (index: number) => {
+      if (portfolioContent) {
+          const updatedLogos = portfolioContent.clientsSection.logos.filter((_, i) => i !== index);
+           setPortfolioContent({
+              ...portfolioContent,
+              clientsSection: {
+                  ...portfolioContent.clientsSection,
+                  logos: updatedLogos
+              }
+          });
+      }
   };
 
   const handleProjectChange = (id: string, field: keyof EditableProject, value: string) => {
@@ -198,6 +250,41 @@ export default function AdminPortfolioPage() {
               />
             </div>
           </CardContent>
+        </Card>
+        
+        <Card>
+            <CardHeader>
+                <CardTitle>Clients Section</CardTitle>
+                <CardDescription>Manage the content for the "Trusted by" section on the portfolio page.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+                <div className="space-y-2">
+                    <Label htmlFor="clients-title">Title</Label>
+                    <Input id="clients-title" value={portfolioContent?.clientsSection?.title || ''} onChange={(e) => handleClientsSectionChange('title', e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="clients-subtitle">Subtitle</Label>
+                    <Textarea id="clients-subtitle" value={portfolioContent?.clientsSection?.subtitle || ''} onChange={(e) => handleClientsSectionChange('subtitle', e.target.value)} />
+                </div>
+                <div className="space-y-4">
+                    <Label>Client Logos</Label>
+                    {portfolioContent?.clientsSection?.logos.map((logo, index) => (
+                        <Card key={index} className="p-4 flex items-center gap-4">
+                            <Image src={logo.logoUrl} alt={logo.name} width={100} height={40} className="object-contain bg-muted p-1 rounded-md" />
+                            <div className="flex-grow space-y-2">
+                                <Input value={logo.name} onChange={(e) => handleClientLogoChange(index, 'name', e.target.value)} placeholder="Client Name" />
+                                <Input value={logo.logoUrl} onChange={(e) => handleClientLogoChange(index, 'logoUrl', e.target.value)} placeholder="Logo URL" />
+                            </div>
+                            <Button type="button" variant="destructive" size="icon" onClick={() => removeClientLogo(index)}>
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                        </Card>
+                    ))}
+                     <Button type="button" variant="outline" onClick={addClientLogo}>
+                        <PlusCircle className="mr-2 h-4 w-4" /> Add Client Logo
+                    </Button>
+                </div>
+            </CardContent>
         </Card>
 
         <Card>

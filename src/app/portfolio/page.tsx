@@ -7,25 +7,30 @@ import { PortfolioCard } from "@/components/PortfolioCard";
 import { PortfolioHero } from "@/components/sections/portfolio-hero";
 import { ClientsCarousel } from "@/components/sections/clients-carousel";
 import { useEffect, useState } from "react";
-import { getProjects, Project } from "@/services/firestore";
+import { getProjects, Project, getPortfolioContent, PortfolioContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function PortfolioPage() {
     const [projects, setProjects] = useState<(Project & { link: string })[]>([]);
+    const [portfolioContent, setPortfolioContent] = useState<PortfolioContent | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-      const fetchProjects = async () => {
+      const fetchContent = async () => {
         try {
-          const projectData = await getProjects();
+          const [projectData, contentData] = await Promise.all([
+            getProjects(),
+            getPortfolioContent()
+          ]);
           setProjects(projectData);
+          setPortfolioContent(contentData);
         } catch (error) {
-          console.error("Failed to fetch projects:", error);
+          console.error("Failed to fetch page content:", error);
         } finally {
           setIsLoading(false);
         }
       };
-      fetchProjects();
+      fetchContent();
     }, []);
 
     return (
@@ -73,7 +78,18 @@ export default function PortfolioPage() {
 
           </div>
         </section>
-        <ClientsCarousel />
+        {isLoading && (
+            <div className="container mx-auto px-4 py-20">
+                <Skeleton className="h-48 w-full" />
+            </div>
+        )}
+        {portfolioContent && (
+            <ClientsCarousel 
+                title={portfolioContent.clientsSection.title}
+                subtitle={portfolioContent.clientsSection.subtitle}
+                logos={portfolioContent.clientsSection.logos}
+            />
+        )}
       </>
     );
 }

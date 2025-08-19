@@ -94,9 +94,19 @@ export interface AboutContent {
   };
 }
 
+export interface ClientLogo {
+  name: string;
+  logoUrl: string;
+}
+
 export interface PortfolioContent {
   heroTitle: string;
   heroSubtitle: string;
+  clientsSection: {
+    title: string;
+    subtitle: string;
+    logos: ClientLogo[];
+  };
 }
 
 export interface Project {
@@ -260,6 +270,19 @@ const defaultAboutContent: AboutContent = {
 const defaultPortfolioContent: PortfolioContent = {
   heroTitle: "Our Works",
   heroSubtitle: "A glimpse into our creative world and the impact we deliver.",
+  clientsSection: {
+    title: "Trusted by Industry Leaders",
+    subtitle: "We partner with ambitious brands and people. We'd love to build something great with you.",
+    logos: [
+        { name: 'Generic Circle Co', logoUrl: 'https://placehold.co/144x80.png?text=Circle' },
+        { name: 'Square Blocks Inc', logoUrl: 'https://placehold.co/144x80.png?text=Square' },
+        { name: 'Star Industries', logoUrl: 'https://placehold.co/144x80.png?text=Star' },
+        { name: 'Check Marks LLC', logoUrl: 'https://placehold.co/144x80.png?text=Check' },
+        { name: 'House Builders', logoUrl: 'https://placehold.co/144x80.png?text=House' },
+        { name: 'Mail Services', logoUrl: 'https://placehold.co/144x80.png?text=Mail' },
+        { name: 'Chainlink Co', logoUrl: 'https://placehold.co/144x80.png?text=Chain' },
+    ]
+  }
 };
 
 const defaultFaqContent: FaqContent = {
