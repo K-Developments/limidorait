@@ -2,7 +2,6 @@
 import { db, storage } from '@/lib/firebase';
 import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp, getDocs, deleteDoc, updateDoc, query, orderBy, where, limit, documentId } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { moderateQuestion } from '@/ai/flows/moderate-question-flow';
 
 export interface Slide {
   type: 'video' | 'image';
@@ -568,10 +567,6 @@ export const uploadImageAndGetURL = async (imageFile: File): Promise<{
 // Function to submit a new question
 export const submitQuestion = async (data: { email: string; question: string }): Promise<void> => {
     try {
-        const isSafe = await moderateQuestion(data.question);
-        if (!isSafe) {
-            throw new Error("Your question was flagged as inappropriate and could not be submitted.");
-        }
         await addDoc(collection(db, SUBMITTED_QUESTIONS_COLLECTION_ID), {
             ...data,
             submittedAt: serverTimestamp(),
@@ -579,9 +574,6 @@ export const submitQuestion = async (data: { email: string; question: string }):
         });
     } catch (error) {
         console.error("Error submitting question: ", error);
-        if (error instanceof Error) {
-            throw error;
-        }
         throw new Error("Could not submit question due to a server error.");
     }
 };
