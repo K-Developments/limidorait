@@ -55,7 +55,7 @@ export function Contact() {
         ]);
         setContent(contactData);
         setServices(servicesData);
-      } catch (error)
+      } catch (error) {
         console.error("Failed to fetch contact page content:", error);
       } finally {
         setIsLoading(false);
