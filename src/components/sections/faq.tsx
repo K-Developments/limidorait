@@ -24,13 +24,34 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+
+
+const QuestionFormSchema = z.object({
+    email: z.string().email({ message: "Please enter a valid email address." }),
+    question: z.string().min(10, { message: "Question must be at least 10 characters long." }),
+});
+
+type QuestionFormValues = z.infer<typeof QuestionFormSchema>;
 
 export function Faq() {
   const { toast } = useToast();
   const [content, setContent] = useState<FaqContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const searchParams = useSearchParams();
   const cameFromAbout = searchParams.get('from') === 'about';
+  
+  const form = useForm<QuestionFormValues>({
+    resolver: zodResolver(QuestionFormSchema),
+    defaultValues: {
+      email: "",
+      question: "",
+    },
+  });
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -46,25 +67,25 @@ export function Faq() {
     fetchContent();
   }, []);
 
-  const handleQuestionSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const email = formData.get('email') as string;
-    const question = formData.get('question') as string;
-
+  const handleQuestionSubmit = async (data: QuestionFormValues) => {
+    setIsSubmitting(true);
     try {
-        await submitQuestion({ email, question });
+        await submitQuestion(data);
         toast({
             title: "Question Sent!",
             description: "Thanks for reaching out. We'll review your question and may add it to our FAQs.",
         });
-        (e.target as HTMLFormElement).reset();
+        form.reset();
+        // Manually close dialog if needed, assuming DialogClose is used inside the form.
     } catch (error) {
+        const errorMessage = (error instanceof Error) ? error.message : "There was a problem sending your question. Please try again.";
         toast({
             title: "Submission Error",
-            description: "There was a problem sending your question. Please try again.",
+            description: errorMessage,
             variant: "destructive",
         });
+    } finally {
+        setIsSubmitting(false);
     }
   };
 
@@ -137,7 +158,7 @@ export function Faq() {
             </Accordion>
         </motion.div>
         <div className="text-center mt-12">
-           <Dialog>
+           <Dialog onOpenChange={(open) => !open && form.reset()}>
               <DialogTrigger asChild>
                 <Button size="lg">Ask a Question</Button>
               </DialogTrigger>
@@ -148,27 +169,43 @@ export function Faq() {
                     Can't find the answer you're looking for? Fill out the form below and we'll get back to you.
                   </DialogDescription>
                 </DialogHeader>
-                <form onSubmit={handleQuestionSubmit}>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="email" className="text-right">
-                        Email
-                      </Label>
-                      <Input id="email" name="email" type="email" required className="col-span-3" placeholder="your@email.com" autoComplete="email" />
-                    </div>
-                    <div className="grid grid-cols-4 items-start gap-4">
-                      <Label htmlFor="question" className="text-right pt-2">
-                        Question
-                      </Label>
-                      <Textarea id="question" name="question" required className="col-span-3 min-h-[120px]" placeholder="What would you like to know?" />
-                    </div>
-                  </div>
-                   <div className="flex justify-end">
-                      <DialogClose asChild>
-                          <Button type="submit">Submit Question</Button>
-                      </DialogClose>
-                    </div>
-                </form>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(handleQuestionSubmit)} className="space-y-4">
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="your@email.com" {...field} autoComplete="email" />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="question"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Question</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="What would you like to know?" {...field} className="min-h-[120px]" />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <div className="flex justify-end">
+                            <DialogClose asChild>
+                                <Button type="submit" disabled={isSubmitting}>
+                                    {isSubmitting ? 'Submitting...' : 'Submit Question'}
+                                </Button>
+                            </DialogClose>
+                        </div>
+                    </form>
+                </Form>
               </DialogContent>
             </Dialog>
         </div>
