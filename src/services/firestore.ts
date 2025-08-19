@@ -150,6 +150,17 @@ export interface ContactContent {
     description: string;
 }
 
+export interface ContactSubmission {
+    id: string;
+    name: string;
+    email: string;
+    phone?: string;
+    service: string;
+    message: string;
+    submittedAt: Date;
+}
+
+
 const HERO_CONTENT_DOC_ID = 'heroContent';
 const ABOUT_CONTENT_DOC_ID = 'aboutContent';
 const PORTFOLIO_CONTENT_DOC_ID = 'portfolioContent';
@@ -159,6 +170,7 @@ const CONTENT_COLLECTION_ID = 'homepage';
 const PORTFOLIO_COLLECTION_ID = 'portfolio';
 const SERVICES_COLLECTION_ID = 'services';
 const SUBMITTED_QUESTIONS_COLLECTION_ID = 'submittedQuestions';
+const CONTACT_SUBMISSIONS_COLLECTION_ID = 'contactSubmissions';
 
 const defaultHeroContent: Omit<HeroContent, 'services'> = {
     title: "Creative Agency",
@@ -661,4 +673,40 @@ export const getContactContent = async (): Promise<ContactContent> => {
 export const updateContactContent = async (content: Partial<ContactContent>): Promise<void> => {
     const docRef = doc(db, CONTENT_COLLECTION_ID, CONTACT_CONTENT_DOC_ID);
     await setDoc(docRef, content, { merge: true });
+};
+
+
+// Contact Form Submissions
+export const submitContactForm = async (data: Omit<ContactSubmission, 'id' | 'submittedAt'>): Promise<void> => {
+    try {
+        await addDoc(collection(db, CONTACT_SUBMISSIONS_COLLECTION_ID), {
+            ...data,
+            submittedAt: serverTimestamp(),
+        });
+    } catch (error) {
+        console.error("Error submitting contact form: ", error);
+        throw new Error("Could not submit your message due to a server error.");
+    }
+};
+
+export const getContactSubmissions = async (): Promise<ContactSubmission[]> => {
+    const submissionsCol = collection(db, CONTACT_SUBMISSIONS_COLLECTION_ID);
+    const snapshot = await getDocs(query(submissionsCol, orderBy("submittedAt", "desc")));
+    return snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+            id: doc.id,
+            ...data,
+            submittedAt: data.submittedAt?.toDate(),
+        } as ContactSubmission;
+    });
+};
+
+export const deleteContactSubmission = async (id: string): Promise<void> => {
+    try {
+        await deleteDoc(doc(db, CONTACT_SUBMISSIONS_COLLECTION_ID, id));
+    } catch (error) {
+        console.error("Error deleting contact submission: ", error);
+        throw new Error("Could not delete contact submission.");
+    }
 };

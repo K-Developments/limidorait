@@ -10,14 +10,41 @@ import { Twitter, Linkedin, Github } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { getContactContent, ContactContent, getServices, Service } from "@/services/firestore";
+import { getContactContent, ContactContent, getServices, Service, submitContactForm } from "@/services/firestore";
 import { Skeleton } from "../ui/skeleton";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+
+
+const ContactFormSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  email: z.string().email({ message: "Please enter a valid email." }),
+  phone: z.string().optional(),
+  service: z.string({ required_error: "Please select a service." }),
+  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
+});
+
+type ContactFormValues = z.infer<typeof ContactFormSchema>;
+
 
 export function Contact() {
   const { toast } = useToast();
   const [content, setContent] = useState<ContactContent | null>(null);
   const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(ContactFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    },
+  });
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -28,7 +55,7 @@ export function Contact() {
         ]);
         setContent(contactData);
         setServices(servicesData);
-      } catch (error) {
+      } catch (error)
         console.error("Failed to fetch contact page content:", error);
       } finally {
         setIsLoading(false);
@@ -37,13 +64,24 @@ export function Contact() {
     fetchContent();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    toast({
-      title: "Message Sent!",
-      description: "Thanks for reaching out. We'll get back to you soon.",
-    });
-    (e.target as HTMLFormElement).reset();
+  const onSubmit = async (data: ContactFormValues) => {
+    setIsSubmitting(true);
+    try {
+        await submitContactForm(data);
+        toast({
+            title: "Message Sent!",
+            description: "Thanks for reaching out. We'll get back to you soon.",
+        });
+        form.reset();
+    } catch (error) {
+        toast({
+            title: "Error",
+            description: "There was a problem sending your message. Please try again later.",
+            variant: "destructive",
+        });
+    } finally {
+        setIsSubmitting(false);
+    }
   };
   
   if (isLoading) {
@@ -167,41 +205,90 @@ export function Contact() {
             <h2 className="text-3xl font-medium tracking-tighter sm:text-4xl font-body uppercase">Get in Touch</h2>
             <p className="mt-2 text-muted-foreground">Fill out the form and we'll get back to you as soon as possible.</p>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Your Name" required autoComplete="name" />
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Your Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="your@email.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="your@email.com" required autoComplete="email" />
-              </div>
-            </div>
-            <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
-                <Input id="phone" type="tel" placeholder="Your Phone Number" autoComplete="tel" />
-            </div>
-            <div className="space-y-2">
-                <Label htmlFor="service">Service</Label>
-                <Select name="service">
-                    <SelectTrigger id="service">
-                        <SelectValue placeholder="Select a service" />
-                    </SelectTrigger>
-                    <SelectContent>
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Your Phone Number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="service"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Service</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a service" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
                         {services.map(service => (
-                             <SelectItem key={service.id} value={service.id}>{service.title}</SelectItem>
+                          <SelectItem key={service.id} value={service.title}>{service.title}</SelectItem>
                         ))}
-                        <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="message">Message</Label>
-              <Textarea id="message" placeholder="Tell us about your project" required className="min-h-[150px]" />
-            </div>
-            <Button type="submit" className="w-full">Send Message</Button>
-          </form>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="message"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Message</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Tell us about your project" className="min-h-[120px]" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? "Sending..." : "Send Message"}
+              </Button>
+            </form>
+          </Form>
            <p className="text-center text-sm text-muted-foreground">
               We will contact you soon.
             </p>

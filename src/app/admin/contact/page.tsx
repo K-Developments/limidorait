@@ -8,31 +8,39 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getContactContent, updateContactContent, ContactContent } from '@/services/firestore';
+import { getContactContent, updateContactContent, ContactContent, getContactSubmissions, ContactSubmission, deleteContactSubmission } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
+import { format } from 'date-fns';
+import { Trash2 } from 'lucide-react';
 
 export default function AdminContactPage() {
   const { toast } = useToast();
   const [contactContent, setContactContent] = useState<ContactContent | null>(null);
+  const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const fetchContent = async () => {
+    setIsLoading(true);
+    try {
+      const [content, submissionsData] = await Promise.all([
+        getContactContent(),
+        getContactSubmissions(),
+      ]);
+      setContactContent(content);
+      setSubmissions(submissionsData);
+    } catch (error) {
+      console.error("Failed to fetch contact content:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load content from the database.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchContent = async () => {
-      setIsLoading(true);
-      try {
-        const content = await getContactContent();
-        setContactContent(content);
-      } catch (error) {
-        console.error("Failed to fetch contact content:", error);
-        toast({
-          title: "Error",
-          description: "Failed to load content from the database.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchContent();
   }, [toast]);
 
@@ -40,6 +48,24 @@ export default function AdminContactPage() {
     const { name, value } = e.target;
     if (contactContent) {
       setContactContent({ ...contactContent, [name]: value });
+    }
+  };
+  
+  const handleDeleteSubmission = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this message?")) return;
+    try {
+      await deleteContactSubmission(id);
+      setSubmissions(prev => prev.filter(s => s.id !== id));
+      toast({
+        title: "Success",
+        description: "Submission deleted successfully."
+      });
+    } catch (error) {
+       toast({
+        title: "Error",
+        description: "Could not delete submission.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -76,6 +102,14 @@ export default function AdminContactPage() {
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-10 w-24" />
           </CardContent>
+        </Card>
+        <Card>
+            <CardHeader>
+                <Skeleton className="h-8 w-1/3" />
+            </CardHeader>
+            <CardContent>
+                <Skeleton className="h-48 w-full" />
+            </CardContent>
         </Card>
       </div>
     );
@@ -116,6 +150,42 @@ export default function AdminContactPage() {
         
         <Button type="submit" size="lg">Save All Changes</Button>
       </form>
+      
+      <Card>
+          <CardHeader>
+              <CardTitle>Contact Submissions</CardTitle>
+              <CardDescription>View messages submitted through your contact form.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+              {submissions.length > 0 ? (
+                  submissions.map(submission => (
+                      <Card key={submission.id} className="p-4 space-y-3 relative">
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-2 right-2 h-7 w-7"
+                            onClick={() => handleDeleteSubmission(submission.id)}
+                          >
+                              <Trash2 className="h-4 w-4" />
+                          </Button>
+                          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+                            <p><span className="font-semibold">From:</span> {submission.name}</p>
+                            <p><span className="font-semibold">Email:</span> {submission.email}</p>
+                            {submission.phone && <p><span className="font-semibold">Phone:</span> {submission.phone}</p>}
+                            <p><span className="font-semibold">Service:</span> {submission.service}</p>
+                          </div>
+                          <p className="text-base border-t pt-3 mt-3">{submission.message}</p>
+                          <p className="text-xs text-muted-foreground">
+                            Received: {format(new Date(submission.submittedAt), "PPP p")}
+                          </p>
+                      </Card>
+                  ))
+              ) : (
+                  <p className="text-muted-foreground text-center py-8">No submissions yet.</p>
+              )}
+          </CardContent>
+      </Card>
+
     </div>
   );
 }
