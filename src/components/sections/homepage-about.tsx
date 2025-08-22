@@ -16,7 +16,7 @@ interface HomepageAboutProps {
 export function HomepageAbout({ aboutSection }: HomepageAboutProps) {
   return (
     <section id="homepage-about" className="bg-background">
-      <div className="container mx-auto px-0 md:px-[5rem] py-16 md:py-24">
+      <div className="container mx-auto py-16 md:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 items-center min-h-[500px]">
           <motion.div
             initial={{ opacity: 0, x: -50 }}

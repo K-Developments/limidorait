@@ -9,6 +9,13 @@ export default {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    container: {
+        center: true,
+        padding: {
+            DEFAULT: '1rem',
+            md: '5rem',
+        },
+    },
     extend: {
       fontFamily: {
         body: ['var(--font-body)', 'sans-serif'],

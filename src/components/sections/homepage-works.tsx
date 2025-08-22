@@ -37,7 +37,7 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
 
   return (
     <section id="homepage-works" className="py-12 sm:py-16 md:py-24 bg-background">
-      <div className="container mx-auto px-4 md:px-[5rem]">
+      <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}

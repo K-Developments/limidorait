@@ -37,7 +37,7 @@ export default function PortfolioPage() {
       <>
         <PortfolioHero />
         <section id="portfolio" className="py-20 md:py-28 bg-background">
-          <div className=" mx-auto px-4 md:px-[5rem]">
+          <div className="container mx-auto">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
