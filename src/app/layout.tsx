@@ -10,12 +10,35 @@ import { Footer } from '@/components/layout/footer';
 import { useState, useEffect } from 'react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { cn } from '@/lib/utils';
+import type { Metadata } from 'next';
 
 const fontBody = Montserrat({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
   variable: '--font-body',
 });
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | Limidora Digital',
+    default: 'Limidora Digital | Creative IT Solutions',
+  },
+  description: 'Limidora is a creative agency offering modern IT solutions including web development, UI/UX design, and brand strategy.',
+  keywords: ['web development', 'ui/ux design', 'creative agency', 'it solutions', 'limidora'],
+  openGraph: {
+    title: 'Limidora Digital | Creative IT Solutions',
+    description: 'Limidora is a creative agency offering modern IT solutions including web development, UI/UX design, and brand strategy.',
+    url: 'https://limidora.com',
+    siteName: 'Limidora Digital',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Limidora Digital | Creative IT Solutions',
+    description: 'Limidora is a creative agency offering modern IT solutions including web development, UI/UX design, and brand strategy.',
+  }
+};
 
 
 export default function RootLayout({
@@ -46,7 +69,7 @@ export default function RootLayout({
   ];
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning={true}>
       <body className={cn("font-body antialiased", fontBody.variable)}>
         {!isAdminPage && <Header onMenuClick={() => setSidebarOpen(true)} />}
         {!isAdminPage && <Sidebar navItems={navItems} isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />}
