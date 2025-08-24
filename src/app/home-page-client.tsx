@@ -18,6 +18,7 @@ import { HomepageWorks } from "@/components/sections/homepage-works";
 import { Testimonials } from "@/components/sections/homepage-testimonials";
 import { HomepageAbout } from "@/components/sections/homepage-about";
 import { HomepageCta } from "@/components/sections/homepage-cta";
+import { ArrowRight } from "lucide-react";
 
 const HeroSection = ({ content }: { content: HeroContent | null }) => {
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
@@ -174,8 +175,11 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
           <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-medium uppercase mb-4 font-headline" style={{lineHeight:1.2}}>
             {content.title}
           </h1>
-          <Button asChild size="lg">
-            <Link href={content.buttonLink || '#'}>{content.buttonText}</Link>
+          <Button asChild size="lg" className="animate-arrow-on-hover">
+            <Link href={content.buttonLink || '#'}>
+                {content.buttonText}
+                <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
         </div>
       </motion.div>
