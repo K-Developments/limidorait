@@ -734,5 +734,3 @@ export const deleteContactSubmission = async (id: string): Promise<void> => {
         throw new Error("Could not delete contact submission.");
     }
 };
-
-    
