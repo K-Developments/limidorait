@@ -31,7 +31,7 @@ export function ServicesList() {
 
   return (
     <section id="services-list" className="w-full bg-background relative py-20 md:py-28">
-      <div className="container mx-auto">
+      <div className="container">
         <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

@@ -5,12 +5,23 @@ import { WhyUs } from "@/components/sections/why-us";
 import { Testimonials } from "@/components/sections/homepage-testimonials";
 import { HomepageCta } from "@/components/sections/homepage-cta";
 import { getHeroContent, getAboutContent } from "@/services/firestore";
-import type { Metadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'About Limidora | Our Vision & Process',
-  description: 'Learn about the vision, team, and creative process at Limidora. We are a digital agency dedicated to building exceptional IT solutions and web experiences.',
-};
+export async function generateMetadata(
+  {},
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const aboutContent = await getAboutContent();
+  const previousImages = (await parent).openGraph?.images || []
+
+  return {
+    title: aboutContent.heroTitle ? `${aboutContent.heroTitle} | Limidora` : 'About Limidora | Our Vision & Process',
+    description: aboutContent.heroSubtitle || 'Learn about the vision, team, and creative process at Limidora. We are a digital agency dedicated to building exceptional IT solutions and web experiences.',
+    openGraph: {
+      images: [aboutContent.heroImageUrl, ...previousImages],
+    },
+  }
+}
 
 export default async function AboutPage() {
     const heroContent = await getHeroContent();

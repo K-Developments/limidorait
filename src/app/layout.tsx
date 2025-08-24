@@ -1,9 +1,8 @@
 
 'use client';
 
-import type { Metadata } from 'next';
 import { usePathname } from 'next/navigation';
-import { Montserrat } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from '@/components/layout/header';
@@ -12,12 +11,7 @@ import { useState, useEffect } from 'react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { cn } from '@/lib/utils';
 
-const metadata: Metadata = {
-  title: 'Limidora Digital | Creative IT Solutions',
-  description: 'Limidora is a creative agency offering modern IT solutions including web development, UI/UX design, and brand strategy.',
-};
-
-const fontBody = Montserrat({
+const fontBody = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
   variable: '--font-body',

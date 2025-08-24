@@ -9,6 +9,12 @@ import { ClientsCarousel } from "@/components/sections/clients-carousel";
 import { useEffect, useState } from "react";
 import { getProjects, Project, getPortfolioContent, PortfolioContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Portfolio | Limidora Digital',
+  description: 'Explore our portfolio of web development, UI/UX design, and mobile app projects. See how we help businesses achieve their goals with creative solutions.',
+};
 
 export default function PortfolioPage() {
     const [projects, setProjects] = useState<(Project & { link: string })[]>([]);
@@ -37,7 +43,7 @@ export default function PortfolioPage() {
       <>
         <PortfolioHero />
         <section id="portfolio" className="py-20 md:py-28 bg-background">
-          <div className="container mx-auto">
+          <div className="container">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -79,7 +85,7 @@ export default function PortfolioPage() {
           </div>
         </section>
         {isLoading && (
-            <div className="container mx-auto px-4 py-20">
+            <div className="container py-20">
                 <Skeleton className="h-48 w-full" />
             </div>
         )}
