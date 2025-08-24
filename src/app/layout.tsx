@@ -2,7 +2,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { Inter } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from '@/components/layout/header';
@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { cn } from '@/lib/utils';
 
-const fontBody = Inter({
+const fontBody = Montserrat({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
   variable: '--font-body',
