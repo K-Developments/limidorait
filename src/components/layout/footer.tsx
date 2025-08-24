@@ -5,24 +5,26 @@ import Link from 'next/link';
 import { Separator } from '../ui/separator';
 import { SocialIcon } from './SocialIcon';
 import { useEffect, useState } from 'react';
-import { getHeroContent, SocialLink } from '@/services/firestore';
+import { getHeroContent, SocialLink, HeroContent } from '@/services/firestore';
+import Image from 'next/image';
+import { Skeleton } from '../ui/skeleton';
 
 export function Footer() {
-  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
+  const [content, setContent] = useState<HeroContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-      const fetchLinks = async () => {
+      const fetchContent = async () => {
           try {
-              const content = await getHeroContent();
-              setSocialLinks(content.socialLinks || []);
+              const heroContent = await getHeroContent();
+              setContent(heroContent);
           } catch (error) {
               console.error("Failed to fetch social links:", error);
           } finally {
               setIsLoading(false);
           }
       };
-      fetchLinks();
+      fetchContent();
   }, []);
 
   const companyLinks = [
@@ -46,16 +48,22 @@ export function Footer() {
           
           {/* Column 1: Company Info */}
           <div className="col-span-1 md:col-span-2">
-            <Link href="/">
-              <span className="text-2xl font-medium uppercase tracking-wider">Limidora</span>
+            <Link href="/" className="relative h-12 w-40 block">
+              {isLoading ? (
+                <Skeleton className="h-12 w-40 bg-white/10" />
+              ) : content?.logoUrl ? (
+                <Image src={content.logoUrl} alt={content.logoText || "Limidora Logo"} fill className="object-contain object-left" />
+              ) : (
+                <span className="text-2xl font-medium uppercase tracking-wider">{content?.logoText || "Limidora"}</span>
+              )}
               <span className="sr-only">Limidora Home</span>
             </Link>
             <p className="mt-4 max-w-xs text-primary-foreground/70">
               Creative agency crafting modern IT solutions and web experiences.
             </p>
-            {!isLoading && socialLinks.length > 0 && (
+            {!isLoading && content?.socialLinks && content.socialLinks.length > 0 && (
                 <div className="flex gap-4 mt-6">
-                    {socialLinks.map((link) => (
+                    {content.socialLinks.map((link) => (
                         <Link key={link.platform} href={link.url} aria-label={link.platform} target="_blank" rel="noopener noreferrer">
                             <SocialIcon platform={link.platform} className="h-5 w-5 text-primary-foreground/70 hover:text-primary-foreground transition-colors" />
                         </Link>

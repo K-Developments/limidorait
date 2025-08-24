@@ -9,13 +9,34 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+import { useEffect, useState } from 'react';
+import { getHeroContent, HeroContent } from '@/services/firestore';
+import Image from 'next/image';
+import { Skeleton } from '../ui/skeleton';
 
 interface HeaderProps {
     onMenuClick: () => void;
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
+  const [content, setContent] = useState<HeroContent | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const heroContent = await getHeroContent();
+        setContent(heroContent);
+      } catch (error) {
+        console.error("Failed to fetch hero content:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchContent();
+  }, []);
+
   const navLinks = [
     { name: 'About', href: '/about' },
     { name: 'Portfolio', href: '/portfolio' },
@@ -34,15 +55,21 @@ export function Header({ onMenuClick }: HeaderProps) {
       className="fixed top-0 left-0 right-0 z-40 flex items-center h-20 border-b bg-background/90 backdrop-blur-sm"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative flex justify-between items-center h-full">
-          <Link href="/">
-            <span 
-              className="font-medium uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 text-2xl"
-              style={{
-                textShadow: '0 2px 10px hsla(var(--primary), 0.3)',
-              }}
-            >
-              Limidora
-            </span>
+          <Link href="/" className="relative h-12 w-40">
+            {isLoading ? (
+              <Skeleton className="h-full w-full" />
+            ) : content?.logoUrl ? (
+              <Image src={content.logoUrl} alt={content.logoText || "Limidora Logo"} fill className="object-contain" />
+            ) : (
+              <span 
+                className="font-medium uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 text-2xl"
+                style={{
+                  textShadow: '0 2px 10px hsla(var(--primary), 0.3)',
+                }}
+              >
+                {content?.logoText || "Limidora"}
+              </span>
+            )}
             <span className="sr-only">Limidora Home</span>
           </Link>
 

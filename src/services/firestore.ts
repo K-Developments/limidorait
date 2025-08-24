@@ -69,6 +69,8 @@ export interface HeroContent {
   ctaSection: HomepageCtaSection;
   aboutSection: HomepageAboutSection;
   services?: Service[]; // Optional field to hold resolved services
+  logoUrl?: string;
+  logoText?: string;
 }
 
 export interface AboutContent {
@@ -183,6 +185,8 @@ const CONTACT_SUBMISSIONS_COLLECTION_ID = 'contactSubmissions';
 
 const defaultHeroContent: Omit<HeroContent, 'services'> = {
     title: "Creative Agency",
+    logoText: "Limidora",
+    logoUrl: "",
     slides: [
       { type: 'video', url: 'https://cdn.pixabay.com/video/2024/05/27/211904_large.mp4' },
       { type: 'image', url: 'https://placehold.co/1920x1080/eeece9/6e3d23', alt: 'Placeholder image 1' },
@@ -581,7 +585,7 @@ export const uploadImageAndGetURL = async (imageFile: File): Promise<{
     throw new Error("No image file provided.");
   }
 
-  const storageRef = ref(storage, `page-images/${Date.now()}_${imageFile.name}`);
+  const storageRef = ref(storage, `site-assets/${Date.now()}_${imageFile.name}`);
   
   try {
     const snapshot = await uploadBytes(storageRef, imageFile);

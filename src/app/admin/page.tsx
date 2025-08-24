@@ -8,12 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getHeroContent, updateHeroContent, HeroContent, Service, HomepageWork, HomepageTestimonial, HomepageAboutSection, HomepageCtaSection, getServices, SocialLink, SocialPlatform } from '@/services/firestore';
+import { getHeroContent, updateHeroContent, HeroContent, Service, HomepageWork, HomepageTestimonial, HomepageAboutSection, HomepageCtaSection, getServices, SocialLink, SocialPlatform, uploadImageAndGetURL } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import Image from 'next/image';
 
 const socialPlatforms: SocialPlatform[] = ['Facebook', 'Instagram', 'WhatsApp', 'Twitter', 'LinkedIn', 'Github'];
 
@@ -22,6 +23,7 @@ export default function AdminHomePage() {
   const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
   const [allServices, setAllServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -49,6 +51,32 @@ export default function AdminHomePage() {
       setHeroContent({ ...heroContent, [field]: value });
     }
   }
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        setIsUploading(true);
+        try {
+            const { url } = await uploadImageAndGetURL(file);
+            if (heroContent) {
+              setHeroContent({ ...heroContent, logoUrl: url });
+            }
+            toast({
+                title: "Success!",
+                description: "Logo uploaded successfully. Click 'Save All Changes' to apply.",
+            });
+        } catch (error) {
+            toast({
+                title: "Upload Error",
+                description: `Failed to upload logo. Please try again.`,
+                variant: "destructive",
+            });
+        } finally {
+            setIsUploading(false);
+        }
+    }
+  };
+
 
   const handleSlideChange = (index: number, value: string) => {
     if (heroContent) {
@@ -199,6 +227,41 @@ export default function AdminHomePage() {
     <div className="space-y-8">
       <h1 className="text-3xl font-medium uppercase">Homepage Content Management</h1>
       <form onSubmit={handleSubmit} className="space-y-8">
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Site Logo</CardTitle>
+            <CardDescription>Upload your company logo. This will appear in the header and footer.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label>Current Logo</Label>
+              <div className="relative h-16 w-48 bg-muted rounded-md flex items-center justify-center">
+                {heroContent?.logoUrl ? (
+                  <Image src={heroContent.logoUrl} alt="Current Logo" layout="fill" className="object-contain p-2" />
+                ) : (
+                  <p className="text-sm text-muted-foreground">{heroContent?.logoText || 'Limidora'}</p>
+                )}
+              </div>
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="logoUrl">Logo Text Fallback</Label>
+                <Input
+                    id="logoText"
+                    name="logoText"
+                    value={heroContent?.logoText || ''}
+                    onChange={(e) => handleInputChange('logoText', e.target.value)}
+                    placeholder="Limidora"
+                />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="logo-upload">Upload New Logo</Label>
+                <Input id="logo-upload" type="file" onChange={handleLogoUpload} accept="image/png, image/jpeg, image/svg+xml" disabled={isUploading}/>
+                {isUploading && <p>Uploading...</p>}
+            </div>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader>
             <CardTitle>Hero Section Title</CardTitle>
