@@ -17,12 +17,6 @@ export default {
         },
     },
     extend: {
-      fontWeight: {
-        normal: '400',
-        medium: '500',
-        semibold: '600',
-        bold: '700',
-      },
       fontFamily: {
         body: ['var(--font-body)', 'sans-serif'],
         headline: ['var(--font-body)', 'sans-serif'],
