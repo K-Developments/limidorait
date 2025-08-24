@@ -1,9 +1,30 @@
 
+"use client";
+
 import Link from 'next/link';
-import { Twitter, Linkedin, Github } from 'lucide-react';
 import { Separator } from '../ui/separator';
+import { SocialIcon } from './SocialIcon';
+import { useEffect, useState } from 'react';
+import { getHeroContent, SocialLink } from '@/services/firestore';
 
 export function Footer() {
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+      const fetchLinks = async () => {
+          try {
+              const content = await getHeroContent();
+              setSocialLinks(content.socialLinks || []);
+          } catch (error) {
+              console.error("Failed to fetch social links:", error);
+          } finally {
+              setIsLoading(false);
+          }
+      };
+      fetchLinks();
+  }, []);
+
   const companyLinks = [
     { name: 'About', href: '/about' },
     { name: 'Blog', href: '/blog' },
@@ -32,17 +53,15 @@ export function Footer() {
             <p className="mt-4 max-w-xs text-primary-foreground/70">
               Creative agency crafting modern IT solutions and web experiences.
             </p>
-            <div className="flex gap-4 mt-6">
-              <Link href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
-                <Twitter className="h-5 w-5 text-primary-foreground/70 hover:text-primary-foreground transition-colors" />
-              </Link>
-              <Link href="#" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
-                <Linkedin className="h-5 w-5 text-primary-foreground/70 hover:text-primary-foreground transition-colors" />
-              </Link>
-              <Link href="#" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
-                <Github className="h-5 w-5 text-primary-foreground/70 hover:text-primary-foreground transition-colors" />
-              </Link>
-            </div>
+            {!isLoading && socialLinks.length > 0 && (
+                <div className="flex gap-4 mt-6">
+                    {socialLinks.map((link) => (
+                        <Link key={link.platform} href={link.url} aria-label={link.platform} target="_blank" rel="noopener noreferrer">
+                            <SocialIcon platform={link.platform} className="h-5 w-5 text-primary-foreground/70 hover:text-primary-foreground transition-colors" />
+                        </Link>
+                    ))}
+                </div>
+            )}
           </div>
           
           {/* Column 2: Company Links */}
@@ -84,3 +103,5 @@ export function Footer() {
     </footer>
   );
 }
+
+    

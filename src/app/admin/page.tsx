@@ -8,11 +8,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getHeroContent, updateHeroContent, HeroContent, Service, HomepageWork, HomepageTestimonial, HomepageAboutSection, HomepageCtaSection, getServices } from '@/services/firestore';
+import { getHeroContent, updateHeroContent, HeroContent, Service, HomepageWork, HomepageTestimonial, HomepageAboutSection, HomepageCtaSection, getServices, SocialLink, SocialPlatform } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+const socialPlatforms: SocialPlatform[] = ['Facebook', 'Instagram', 'WhatsApp', 'Twitter', 'LinkedIn', 'Github'];
 
 export default function AdminHomePage() {
   const { toast } = useToast();
@@ -131,6 +134,28 @@ export default function AdminHomePage() {
     }
   };
 
+  const handleSocialLinkChange = (index: number, field: keyof SocialLink, value: string) => {
+    if (heroContent) {
+        const newSocialLinks = [...heroContent.socialLinks];
+        newSocialLinks[index] = { ...newSocialLinks[index], [field]: value };
+        setHeroContent({ ...heroContent, socialLinks: newSocialLinks });
+    }
+  };
+
+  const addSocialLink = () => {
+    if (heroContent) {
+        const newSocialLinks = [...heroContent.socialLinks, { platform: 'Facebook', url: '' }];
+        setHeroContent({ ...heroContent, socialLinks: newSocialLinks });
+    }
+  };
+
+  const removeSocialLink = (index: number) => {
+    if (heroContent) {
+        const newSocialLinks = heroContent.socialLinks.filter((_, i) => i !== index);
+        setHeroContent({ ...heroContent, socialLinks: newSocialLinks });
+    }
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -224,6 +249,44 @@ export default function AdminHomePage() {
                     <Label htmlFor="buttonLink">Button Link</Label>
                     <Input id="buttonLink" value={heroContent?.buttonLink || ''} onChange={(e) => handleInputChange('buttonLink', e.target.value)} />
                  </div>
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>Social Media Links</CardTitle>
+                <CardDescription>Manage the social media links displayed in the footer.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                {heroContent?.socialLinks.map((link, index) => (
+                    <Card key={index} className="p-4 space-y-4 relative">
+                         <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-7 w-7" onClick={() => removeSocialLink(index)}>
+                            <Trash2 className="h-4 w-4" />
+                        </Button>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label>Platform</Label>
+                                <Select value={link.platform} onValueChange={(value) => handleSocialLinkChange(index, 'platform', value as SocialPlatform)}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a platform" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {socialPlatforms.map(platform => (
+                                            <SelectItem key={platform} value={platform}>{platform}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor={`social-url-${index}`}>URL</Label>
+                                <Input id={`social-url-${index}`} value={link.url} onChange={(e) => handleSocialLinkChange(index, 'url', e.target.value)} placeholder="https://example.com/profile" />
+                            </div>
+                        </div>
+                    </Card>
+                ))}
+                <Button type="button" variant="outline" onClick={addSocialLink}>
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add Social Link
+                </Button>
             </CardContent>
         </Card>
 

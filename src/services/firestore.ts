@@ -9,6 +9,13 @@ export interface Slide {
   alt?: string;
 }
 
+export type SocialPlatform = 'Facebook' | 'Instagram' | 'WhatsApp' | 'Twitter' | 'LinkedIn' | 'Github';
+
+export interface SocialLink {
+  platform: SocialPlatform;
+  url: string;
+}
+
 export interface Service {
   id: string;
   title: string;
@@ -55,6 +62,7 @@ export interface HeroContent {
   slides: Slide[];
   buttonText: string;
   buttonLink: string;
+  socialLinks: SocialLink[];
   featuredServices: string[]; // Now stores service IDs
   works: HomepageWork[];
   testimonials: HomepageTestimonial[];
@@ -66,7 +74,6 @@ export interface HeroContent {
 export interface AboutContent {
   heroTitle: string;
   heroSubtitle: string;
-  heroImageUrl: string;
   aboutTitle: string;
   aboutDescription: string;
   interactivePanels: {
@@ -181,6 +188,11 @@ const defaultHeroContent: Omit<HeroContent, 'services'> = {
     ],
     buttonText: "View Our Work",
     buttonLink: "/portfolio",
+    socialLinks: [
+        { platform: 'Facebook', url: '#' },
+        { platform: 'Instagram', url: '#' },
+        { platform: 'WhatsApp', url: '#' },
+    ],
     featuredServices: [],
     works: [
         {
@@ -251,7 +263,6 @@ const defaultHeroContent: Omit<HeroContent, 'services'> = {
 const defaultAboutContent: AboutContent = {
   heroTitle: "Building Brands With Purpose",
   heroSubtitle: "We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences that drive success and inspire change.",
-  heroImageUrl: "https://placehold.co/1600x640.png",
   aboutTitle: "Our Vision",
   aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.",
    interactivePanels: {
@@ -710,3 +721,5 @@ export const deleteContactSubmission = async (id: string): Promise<void> => {
         throw new Error("Could not delete contact submission.");
     }
 };
+
+    
