@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getContactContent, updateContactContent, ContactContent, getContactSubmissions, ContactSubmission, deleteContactSubmission } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { format } from 'date-fns';
-import { Trash2 } from 'lucide-react';
+import { Trash2, PlusCircle, X } from 'lucide-react';
 
 export default function AdminContactPage() {
   const { toast } = useToast();
@@ -48,6 +48,28 @@ export default function AdminContactPage() {
     const { name, value } = e.target;
     if (contactContent) {
       setContactContent({ ...contactContent, [name]: value });
+    }
+  };
+
+  const handleServiceOptionChange = (index: number, value: string) => {
+    if (contactContent) {
+      const updatedOptions = [...contactContent.serviceOptions];
+      updatedOptions[index] = value;
+      setContactContent({ ...contactContent, serviceOptions: updatedOptions });
+    }
+  };
+
+  const addServiceOption = () => {
+    if (contactContent) {
+      const updatedOptions = [...contactContent.serviceOptions, "New Service"];
+      setContactContent({ ...contactContent, serviceOptions: updatedOptions });
+    }
+  };
+
+  const removeServiceOption = (index: number) => {
+    if (contactContent) {
+      const updatedOptions = contactContent.serviceOptions.filter((_, i) => i !== index);
+      setContactContent({ ...contactContent, serviceOptions: updatedOptions });
     }
   };
   
@@ -147,6 +169,29 @@ export default function AdminContactPage() {
             <p className="text-sm text-muted-foreground">Note: Social media links are managed in the Footer section of the site.</p>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Contact Form Services</CardTitle>
+            <CardDescription>Manage the service options available in the contact form dropdown.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {contactContent?.serviceOptions.map((option, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <Input
+                  value={option}
+                  onChange={(e) => handleServiceOptionChange(index, e.target.value)}
+                />
+                <Button type="button" variant="destructive" size="icon" onClick={() => removeServiceOption(index)} aria-label="Remove service option">
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button type="button" variant="outline" onClick={addServiceOption}>
+              <PlusCircle className="mr-2 h-4 w-4" /> Add Service Option
+            </Button>
+          </CardContent>
+        </Card>
         
         <Button type="submit" size="lg">Save All Changes</Button>
       </form>
@@ -189,3 +234,5 @@ export default function AdminContactPage() {
     </div>
   );
 }
+
+    

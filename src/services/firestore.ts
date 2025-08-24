@@ -74,6 +74,7 @@ export interface HeroContent {
 export interface AboutContent {
   heroTitle: string;
   heroSubtitle: string;
+  heroImageUrl: string;
   aboutTitle: string;
   aboutDescription: string;
   interactivePanels: {
@@ -155,6 +156,7 @@ export interface SubmittedQuestion {
 export interface ContactContent {
     title: string;
     description: string;
+    serviceOptions: string[];
 }
 
 export interface ContactSubmission {
@@ -263,6 +265,7 @@ const defaultHeroContent: Omit<HeroContent, 'services'> = {
 const defaultAboutContent: AboutContent = {
   heroTitle: "Building Brands With Purpose",
   heroSubtitle: "We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences that drive success and inspire change.",
+  heroImageUrl: "https://placehold.co/1600x640.png",
   aboutTitle: "Our Vision",
   aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.",
    interactivePanels: {
@@ -339,7 +342,13 @@ const defaultFaqContent: FaqContent = {
 
 const defaultContactContent: ContactContent = {
     title: "Let's Build Something Great",
-    description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas."
+    description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas.",
+    serviceOptions: [
+        "Web Development",
+        "UI/UX Design",
+        "Mobile App Development",
+        "General Inquiry"
+    ]
 };
 
 // Deep merge utility to combine existing and new content

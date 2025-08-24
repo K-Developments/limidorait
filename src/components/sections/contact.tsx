@@ -10,7 +10,7 @@ import { Twitter, Linkedin, Github } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { getContactContent, ContactContent, getServices, Service, submitContactForm } from "@/services/firestore";
+import { getContactContent, ContactContent, submitContactForm } from "@/services/firestore";
 import { Skeleton } from "../ui/skeleton";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,7 +32,6 @@ type ContactFormValues = z.infer<typeof ContactFormSchema>;
 export function Contact() {
   const { toast } = useToast();
   const [content, setContent] = useState<ContactContent | null>(null);
-  const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -49,12 +48,8 @@ export function Contact() {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const [contactData, servicesData] = await Promise.all([
-          getContactContent(),
-          getServices()
-        ]);
+        const contactData = await getContactContent();
         setContent(contactData);
-        setServices(servicesData);
       } catch (error) {
         console.error("Failed to fetch contact page content:", error);
       } finally {
@@ -261,8 +256,8 @@ export function Contact() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {services.map(service => (
-                          <SelectItem key={service.id} value={service.title}>{service.title}</SelectItem>
+                        {content?.serviceOptions.map(option => (
+                          <SelectItem key={option} value={option}>{option}</SelectItem>
                         ))}
                         <SelectItem value="Other">Other</SelectItem>
                       </SelectContent>
@@ -297,3 +292,5 @@ export function Contact() {
     </section>
   );
 }
+
+    
