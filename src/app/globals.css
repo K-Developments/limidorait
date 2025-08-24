@@ -200,6 +200,29 @@ html{
     .animate-scroll-horizontal {
       animation: scroll-horizontal 40s linear infinite;
     }
+
+    @keyframes move-arrow {
+        0% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        50% {
+            transform: translateX(8px);
+            opacity: 0;
+        }
+        51% {
+            transform: translateX(-8px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .animate-arrow-on-hover:hover svg {
+        animation: move-arrow 0.8s ease-in-out infinite;
+    }
 }
 
 /* Swiper custom styles */

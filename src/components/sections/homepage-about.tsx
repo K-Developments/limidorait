@@ -34,7 +34,7 @@ export function HomepageAbout({ aboutSection }: HomepageAboutProps) {
             <p className="text-lg mb-8 text-primary-foreground/80">
               {aboutSection.description}
             </p>
-            <Button asChild size="lg" className="self-start">
+            <Button asChild size="lg" className="self-start animate-arrow-on-hover">
               <Link href={aboutSection.buttonLink}>
                 {aboutSection.buttonText}
                 <ArrowRight className="ml-2 h-5 w-5" />

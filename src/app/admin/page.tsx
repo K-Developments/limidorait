@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -14,7 +13,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import Image from 'next/image';
 
 const socialPlatforms: SocialPlatform[] = ['Facebook', 'Instagram', 'WhatsApp', 'Twitter', 'LinkedIn', 'Github'];
 
@@ -157,7 +155,6 @@ export default function AdminHomePage() {
     }
   };
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!heroContent) return;
@@ -209,9 +206,21 @@ export default function AdminHomePage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label>Current Logo</Label>
-              <div className="relative h-16 w-48 bg-muted rounded-md flex items-center justify-center">
+              <div className="relative h-16 w-48 bg-muted rounded-md flex items-center justify-center overflow-hidden">
                 {heroContent?.logoUrl ? (
-                  <Image src={heroContent.logoUrl} alt="Current Logo" layout="fill" className="object-contain p-2" />
+                  <img 
+                    src={heroContent.logoUrl} 
+                    alt="Current Logo" 
+                    className="h-full w-full object-contain p-2"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        parent.innerHTML = `<p class="text-sm text-muted-foreground">${heroContent?.logoText || 'Limidora'}</p>`;
+                      }
+                    }}
+                  />
                 ) : (
                   <p className="text-sm text-muted-foreground">{heroContent?.logoText || 'Limidora'}</p>
                 )}
@@ -451,7 +460,6 @@ export default function AdminHomePage() {
           </CardContent>
         </Card>
 
-
         <Card>
           <CardHeader>
             <CardTitle>Homepage About Section</CardTitle>
@@ -488,7 +496,6 @@ export default function AdminHomePage() {
             </div>
           </CardContent>
         </Card>
-
 
         <Button type="submit" size="lg">Save All Changes</Button>
       </form>

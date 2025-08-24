@@ -198,7 +198,7 @@ const WorkCard = ({ work, className }: { work: HomepageWork, className?: string 
             <div className="sm:hidden mt-3 px-1">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{work.category}</p>
                 <h3 className="text-lg font-medium mt-1 font-body uppercase text-foreground">{work.title}</h3>
-                <Link href={work.link} className="inline-flex items-center gap-1 mt-3 text-sm text-foreground hover:text-primary transition-colors duration-200">
+                <Link href={work.link} className="inline-flex items-center gap-1 mt-3 text-sm text-foreground hover:text-primary transition-colors duration-200 animate-arrow-on-hover">
                     <ArrowRight className="h-4 w-4" />
                     View Project
                 </Link>
