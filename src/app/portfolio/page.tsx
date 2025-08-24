@@ -1,11 +1,9 @@
 
-import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { PortfolioCard } from "@/components/PortfolioCard";
 import { PortfolioHero } from "@/components/sections/portfolio-hero";
 import { ClientsCarousel } from "@/components/sections/clients-carousel";
 import { getProjects, Project, getPortfolioContent, PortfolioContent } from "@/services/firestore";
-import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -24,11 +22,7 @@ export default async function PortfolioPage() {
         <PortfolioHero />
         <section id="portfolio" className="py-20 md:py-28 bg-background">
           <div className="container">
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
+            <div 
               className="text-center mb-16"
             >
               <Badge variant="outline" className="mb-4">Our Work</Badge>
@@ -38,19 +32,11 @@ export default async function PortfolioPage() {
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 A glimpse into our creative world and the impact we deliver.
               </p>
-            </motion.div>
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {projects.map((project, index) => (
-                <motion.div
-                  key={project.id}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <PortfolioCard project={project} />
-                </motion.div>
+                  <PortfolioCard project={project} index={index} />
               ))}
             </div>
           </div>

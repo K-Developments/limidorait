@@ -10,15 +10,17 @@ import type { Project, HomepageWork } from "@/services/firestore";
 
 interface PortfolioCardProps {
   project: (Project & { link: string }) | HomepageWork;
+  index: number;
 }
 
-export function PortfolioCard({ project }: PortfolioCardProps) {
+export function PortfolioCard({ project, index }: PortfolioCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
       viewport={{ once: true }}
+      key={project.id || project.title}
     >
       <Card className="group overflow-hidden relative h-full transition-shadow duration-300 aspect-video">
         <Link href={project.link} className="block w-full h-full">
