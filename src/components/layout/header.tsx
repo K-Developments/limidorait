@@ -3,17 +3,12 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Menu, ChevronDown } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Menu } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { getHeroContent, HeroContent } from '@/services/firestore';
+import { getHeroContent, HeroContent, getServices, Service } from '@/services/firestore';
 import Image from 'next/image';
 import { Skeleton } from '../ui/skeleton';
+import { MegaMenu } from './mega-menu';
 
 interface HeaderProps {
     onMenuClick: () => void;
@@ -21,15 +16,20 @@ interface HeaderProps {
 
 export function Header({ onMenuClick }: HeaderProps) {
   const [content, setContent] = useState<HeroContent | null>(null);
+  const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const heroContent = await getHeroContent();
+        const [heroContent, servicesData] = await Promise.all([
+            getHeroContent(),
+            getServices()
+        ]);
         setContent(heroContent);
+        setServices(servicesData);
       } catch (error) {
-        console.error("Failed to fetch hero content:", error);
+        console.error("Failed to fetch header content:", error);
       } finally {
         setIsLoading(false);
       }
@@ -42,13 +42,6 @@ export function Header({ onMenuClick }: HeaderProps) {
     { name: 'Portfolio', href: '/portfolio' },
     { name: 'FAQs', href: '/faq' },
   ];
-
-  const servicesLinks = [
-      { name: 'Web Developments', href: '/services'},
-      { name: 'Mobile App Developments', href: '/services'},
-      { name: 'Software Developments', href: '/services'},
-      { name: 'Web App Developments', href: '/services'},
-  ]
 
   return (
     <header
@@ -79,20 +72,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                     {link.name}
                  </Link>
             ))}
-             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors px-0 hover:bg-transparent">
-                  Services <ChevronDown className="ml-1 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {servicesLinks.map((link) => (
-                    <DropdownMenuItem key={link.name} asChild>
-                        <Link href={link.href}>{link.name}</Link>
-                    </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <MegaMenu services={services} />
           </nav>
           
           <div className="flex items-center gap-4">
