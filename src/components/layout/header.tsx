@@ -9,6 +9,8 @@ import { getHeroContent, HeroContent, getServices, Service } from '@/services/fi
 import Image from 'next/image';
 import { Skeleton } from '../ui/skeleton';
 import { MegaMenu } from './mega-menu';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 
 interface HeaderProps {
     onMenuClick: () => void;
@@ -18,6 +20,7 @@ export function Header({ onMenuClick }: HeaderProps) {
   const [content, setContent] = useState<HeroContent | null>(null);
   const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isServicesHovered, setServicesHovered] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -46,6 +49,7 @@ export function Header({ onMenuClick }: HeaderProps) {
   return (
     <header
       className="fixed top-0 left-0 right-0 z-40 flex items-center h-20 border-b bg-background/90 backdrop-blur-sm"
+      onMouseLeave={() => setServicesHovered(false)}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative flex justify-between items-center h-full">
           <Link href="/" className="relative h-12 w-40">
@@ -72,7 +76,11 @@ export function Header({ onMenuClick }: HeaderProps) {
                     {link.name}
                  </Link>
             ))}
-            <MegaMenu services={services} />
+            <div onMouseEnter={() => setServicesHovered(true)}>
+              <Button variant="ghost" className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors px-0 hover:bg-transparent">
+                Services <ChevronDown className="ml-1 h-4 w-4" />
+              </Button>
+            </div>
           </nav>
           
           <div className="flex items-center gap-4">
@@ -88,6 +96,10 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <Menu className="h-6 w-6 text-foreground" />
               </button>
           </div>
+          
+          <AnimatePresence>
+            {isServicesHovered && <MegaMenu services={services} />}
+          </AnimatePresence>
       </div>
     </header>
   );
