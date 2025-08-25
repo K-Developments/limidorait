@@ -1,16 +1,12 @@
 
-'use client';
-
-import { usePathname } from 'next/navigation';
+import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { useState, useEffect } from 'react';
-import { Sidebar } from '@/components/layout/sidebar';
-import { cn } from '@/lib/utils';
-import { HeroContent, Service } from '@/services/firestore';
+import { getHeroContent, getServices } from '@/services/firestore';
+import { LayoutClient } from '@/components/layout/layout-client';
 
 const fontBody = Inter({
   subsets: ['latin'],
@@ -18,12 +14,34 @@ const fontBody = Inter({
   variable: '--font-body',
 });
 
-interface RootLayoutProps {
-  children: React.ReactNode;
-  headerFooterData: {
-    heroContent: HeroContent | null,
-    services: Service[]
+export const metadata: Metadata = {
+  title: {
+    template: '%s | Limidora Digital',
+    default: 'Limidora Digital | Creative IT Solutions',
+  },
+  description: 'Limidora is a creative agency offering modern IT solutions including web development, UI/UX design, and brand strategy.',
+  keywords: ['web development', 'ui/ux design', 'creative agency', 'it solutions', 'limidora'],
+  openGraph: {
+    title: 'Limidora Digital | Creative IT Solutions',
+    description: 'Limidora is a creative agency offering modern IT solutions including web development, UI/UX design, and brand strategy.',
+    url: 'https://limidora.com',
+    siteName: 'Limidora Digital',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Limidora Digital | Creative IT Solutions',
+    description: 'Limidora is a creative agency offering modern IT solutions including web development, UI/UX design, and brand strategy.',
   }
+};
+
+async function HeaderFooterDataProvider({ children }: { children: (data: any) => React.ReactNode }) {
+    const [heroContent, services] = await Promise.all([
+        getHeroContent(),
+        getServices()
+    ]);
+    return <>{children({ heroContent, services })}</>;
 }
 
 export default function RootLayout({
@@ -31,17 +49,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const isAdminPage = pathname.startsWith('/admin');
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-
-  useEffect(() => {
-    if (isSidebarOpen) {
-      document.body.classList.add('sidebar-open');
-    } else {
-      document.body.classList.remove('sidebar-open');
-    }
-  }, [isSidebarOpen]);
 
   const navItems = [
     { name: 'Home', href: '/' },
@@ -55,13 +62,14 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body className={cn("font-body antialiased", fontBody.variable)}>
-        {!isAdminPage && <Header onMenuClick={() => setSidebarOpen(true)} />}
-        {!isAdminPage && <Sidebar navItems={navItems} isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />}
-        <div id="main-content-wrapper" className="flex min-h-screen flex-col pt-20">
-          <main className="flex-1">{children}</main>
-          {!isAdminPage && <Footer />}
-        </div>
+      <body className={`${fontBody.variable} font-body antialiased`}>
+        <HeaderFooterDataProvider>
+            {({ heroContent, services }) => (
+                <LayoutClient navItems={navItems} services={services} heroContent={heroContent}>
+                    {children}
+                </LayoutClient>
+            )}
+        </HeaderFooterDataProvider>
         <Toaster />
       </body>
     </html>

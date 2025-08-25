@@ -4,8 +4,8 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { getHeroContent, HeroContent, getServices, Service } from '@/services/firestore';
+import { useState } from 'react';
+import { HeroContent, Service } from '@/services/firestore';
 import Image from 'next/image';
 import { Skeleton } from '../ui/skeleton';
 import { MegaMenu } from './mega-menu';
@@ -14,31 +14,12 @@ import { ChevronDown } from 'lucide-react';
 
 interface HeaderProps {
     onMenuClick: () => void;
+    content: HeroContent | null;
+    services: Service[];
 }
 
-export function Header({ onMenuClick }: HeaderProps) {
-  const [content, setContent] = useState<HeroContent | null>(null);
-  const [services, setServices] = useState<Service[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+export function Header({ onMenuClick, content, services }: HeaderProps) {
   const [isServicesHovered, setServicesHovered] = useState(false);
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const [heroContent, servicesData] = await Promise.all([
-            getHeroContent(),
-            getServices()
-        ]);
-        setContent(heroContent);
-        setServices(servicesData);
-      } catch (error) {
-        console.error("Failed to fetch header content:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchContent();
-  }, []);
 
   const navLinks = [
     { name: 'About', href: '/about' },
@@ -53,7 +34,7 @@ export function Header({ onMenuClick }: HeaderProps) {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative flex justify-between items-center h-full">
           <Link href="/" className="relative h-12 w-40">
-            {isLoading ? (
+            {!content ? (
               <Skeleton className="h-full w-full" />
             ) : content?.logoUrl ? (
               <Image src={content.logoUrl} alt={content.logoText || "Limidora Logo"} fill className="object-contain" />

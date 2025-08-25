@@ -2,11 +2,14 @@
 import Link from 'next/link';
 import { Separator } from '../ui/separator';
 import { SocialIcon } from './SocialIcon';
-import { getHeroContent } from '@/services/firestore';
+import { HeroContent } from '@/services/firestore';
 import Image from 'next/image';
 
-export async function Footer() {
-  const content = await getHeroContent();
+interface FooterProps {
+    content: HeroContent | null;
+}
+
+export function Footer({ content }: FooterProps) {
 
   const companyLinks = [
     { name: 'About', href: '/about' },
