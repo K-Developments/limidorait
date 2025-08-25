@@ -1,4 +1,5 @@
 import { Contact } from "@/components/sections/contact";
+import { getContactContent } from "@/services/firestore";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -6,10 +7,11 @@ export const metadata: Metadata = {
   description: 'Get in touch with the Limidora team. Have a project in mind or just want to say hello? We are excited to hear from you and learn about your ideas.',
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+    const contactContent = await getContactContent();
     return (
         <div>
-            <Contact />
+            <Contact content={contactContent} />
         </div>
     );
 }

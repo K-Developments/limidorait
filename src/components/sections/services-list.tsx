@@ -1,8 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { getServices, Service } from "@/services/firestore";
+import { Service } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { Badge } from "../ui/badge";
@@ -11,23 +10,8 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-export function ServicesList() {
-  const [services, setServices] = useState<Service[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const content = await getServices();
-        setServices(content);
-      } catch (error) {
-        console.error("Failed to fetch services content:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchContent();
-  }, []);
+export function ServicesList({ services }: { services: Service[] }) {
+  const isLoading = services.length === 0;
 
   return (
     <section id="services-list" className="w-full bg-background relative py-20 md:py-28">

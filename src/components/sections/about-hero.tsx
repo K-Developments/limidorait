@@ -1,26 +1,11 @@
+
 "use client";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { getAboutContent, AboutContent } from "@/services/firestore";
+import type { AboutContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function AboutHero() {
-  const [content, setContent] = useState<AboutContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const aboutContent = await getAboutContent();
-        setContent(aboutContent);
-      } catch (error) {
-        console.error("Failed to fetch about content:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchContent();
-  }, []);
+export function AboutHero({ content }: { content: AboutContent | null }) {
+  const isLoading = !content;
 
   return (
     <section 

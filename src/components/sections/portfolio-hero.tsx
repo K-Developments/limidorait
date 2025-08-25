@@ -2,27 +2,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { getPortfolioContent, PortfolioContent } from "@/services/firestore";
+import type { PortfolioContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function PortfolioHero() {
-  const [content, setContent] = useState<PortfolioContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const portfolioContent = await getPortfolioContent();
-        setContent(portfolioContent);
-      } catch (error) {
-        console.error("Failed to fetch portfolio content:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchContent();
-  }, []);
+export function PortfolioHero({ content }: { content: PortfolioContent | null }) {
+  const isLoading = !content;
 
   return (
     <section 

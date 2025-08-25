@@ -4,7 +4,7 @@ import { AboutHero } from "@/components/sections/about-hero";
 import { WhyUs } from "@/components/sections/why-us";
 import { Testimonials } from "@/components/sections/homepage-testimonials";
 import { HomepageCta } from "@/components/sections/homepage-cta";
-import { getHeroContent, getAboutContent } from "@/services/firestore";
+import { getHeroContent, getAboutContent, AboutContent } from "@/services/firestore";
 import type { Metadata, ResolvingMetadata } from 'next';
 
 export async function generateMetadata(
@@ -28,8 +28,8 @@ export default async function AboutPage() {
     const aboutContent = await getAboutContent();
     return (
         <div>
-            <AboutHero />
-            <About />
+            <AboutHero content={aboutContent} />
+            <About content={aboutContent} />
             <WhyUs />
             {heroContent && <Testimonials testimonials={heroContent.testimonials} />}
             {heroContent && <HomepageCta ctaSection={heroContent.ctaSection} />}

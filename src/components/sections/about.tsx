@@ -1,28 +1,12 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { getAboutContent, AboutContent } from "@/services/firestore";
+import type { AboutContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 
-export function About() {
-  const [content, setContent] = useState<AboutContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const aboutContent = await getAboutContent();
-        setContent(aboutContent);
-      } catch (error) {
-        console.error("Failed to fetch about content:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchContent();
-  }, []);
+export function About({ content }: { content: AboutContent | null }) {
+  const isLoading = !content;
 
   return (
     <section id="about-vision" className="w-full bg-background relative py-20 md:py-28">

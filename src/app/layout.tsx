@@ -2,7 +2,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { Montserrat } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from '@/components/layout/header';
@@ -10,12 +10,21 @@ import { Footer } from '@/components/layout/footer';
 import { useState, useEffect } from 'react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { cn } from '@/lib/utils';
+import { HeroContent, Service } from '@/services/firestore';
 
-const fontBody = Montserrat({
+const fontBody = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
   variable: '--font-body',
 });
+
+interface RootLayoutProps {
+  children: React.ReactNode;
+  headerFooterData: {
+    heroContent: HeroContent | null,
+    services: Service[]
+  }
+}
 
 export default function RootLayout({
   children,

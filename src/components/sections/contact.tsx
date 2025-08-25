@@ -9,10 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Twitter, Linkedin, Github } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { getContactContent, ContactContent, submitContactForm } from "@/services/firestore";
+import { useState } from "react";
+import { ContactContent, submitContactForm } from "@/services/firestore";
 import { Skeleton } from "../ui/skeleton";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -29,11 +29,10 @@ const ContactFormSchema = z.object({
 type ContactFormValues = z.infer<typeof ContactFormSchema>;
 
 
-export function Contact() {
+export function Contact({ content }: { content: ContactContent | null }) {
   const { toast } = useToast();
-  const [content, setContent] = useState<ContactContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isLoading = !content;
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(ContactFormSchema),
@@ -44,20 +43,6 @@ export function Contact() {
       message: "",
     },
   });
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const contactData = await getContactContent();
-        setContent(contactData);
-      } catch (error) {
-        console.error("Failed to fetch contact page content:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchContent();
-  }, []);
 
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
@@ -292,5 +277,3 @@ export function Contact() {
     </section>
   );
 }
-
-    

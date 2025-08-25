@@ -4,9 +4,9 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { getFaqContent, FaqContent, submitQuestion } from "@/services/firestore";
+import { FaqContent, submitQuestion } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,13 +37,12 @@ const QuestionFormSchema = z.object({
 
 type QuestionFormValues = z.infer<typeof QuestionFormSchema>;
 
-export function Faq() {
+export function Faq({ content }: { content: FaqContent | null }) {
   const { toast } = useToast();
-  const [content, setContent] = useState<FaqContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const searchParams = useSearchParams();
   const cameFromAbout = searchParams.get('from') === 'about';
+  const isLoading = !content;
   
   const form = useForm<QuestionFormValues>({
     resolver: zodResolver(QuestionFormSchema),
@@ -52,20 +51,6 @@ export function Faq() {
       question: "",
     },
   });
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const faqContent = await getFaqContent();
-        setContent(faqContent);
-      } catch (error) {
-        console.error("Failed to fetch FAQ content:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchContent();
-  }, []);
 
   const handleQuestionSubmit = async (data: QuestionFormValues) => {
     setIsSubmitting(true);

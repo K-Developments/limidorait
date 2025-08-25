@@ -2,27 +2,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { getFaqContent, FaqContent } from "@/services/firestore";
+import type { FaqContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function FaqHero() {
-  const [content, setContent] = useState<FaqContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const faqContent = await getFaqContent();
-        setContent(faqContent);
-      } catch (error) {
-        console.error("Failed to fetch FAQ content:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchContent();
-  }, []);
+export function FaqHero({ content }: { content: FaqContent | null }) {
+  const isLoading = !content;
 
   return (
     <section 

@@ -5,11 +5,18 @@ import { notFound } from 'next/navigation';
 import { ChevronRight, GanttChartSquare, CheckSquare, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { getProjectBySlug } from '@/services/firestore';
+import { getProjectBySlug, getProjects } from '@/services/firestore';
 import type { Metadata, ResolvingMetadata } from 'next';
 
 type Props = {
   params: { slug: string }
+}
+
+export async function generateStaticParams() {
+  const projects = await getProjects();
+  return projects.map((project) => ({
+    slug: project.slug,
+  }));
 }
 
 export async function generateMetadata(

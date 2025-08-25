@@ -20,10 +20,11 @@ export async function generateMetadata(
 
 export default async function FaqPage() {
     const heroContent = await getHeroContent();
+    const faqContent = await getFaqContent();
     return (
         <MotionWrapper>
-            <FaqHero />
-            <Faq />
+            <FaqHero content={faqContent} />
+            <Faq content={faqContent} />
             {heroContent && <HomepageCta ctaSection={heroContent.ctaSection} />}
         </MotionWrapper>
     );

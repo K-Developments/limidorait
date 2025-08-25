@@ -1,31 +1,12 @@
 
-"use client";
-
 import Link from 'next/link';
 import { Separator } from '../ui/separator';
 import { SocialIcon } from './SocialIcon';
-import { useEffect, useState } from 'react';
-import { getHeroContent, SocialLink, HeroContent } from '@/services/firestore';
+import { getHeroContent } from '@/services/firestore';
 import Image from 'next/image';
-import { Skeleton } from '../ui/skeleton';
 
-export function Footer() {
-  const [content, setContent] = useState<HeroContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-      const fetchContent = async () => {
-          try {
-              const heroContent = await getHeroContent();
-              setContent(heroContent);
-          } catch (error) {
-              console.error("Failed to fetch social links:", error);
-          } finally {
-              setIsLoading(false);
-          }
-      };
-      fetchContent();
-  }, []);
+export async function Footer() {
+  const content = await getHeroContent();
 
   const companyLinks = [
     { name: 'About', href: '/about' },
@@ -49,9 +30,7 @@ export function Footer() {
           {/* Column 1: Company Info */}
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="relative h-12 w-40 block">
-              {isLoading ? (
-                <Skeleton className="h-12 w-40 bg-white/10" />
-              ) : content?.logoUrl ? (
+              {content?.logoUrl ? (
                 <Image src={content.logoUrl} alt={content.logoText || "Limidora Logo"} fill className="object-contain object-left" />
               ) : (
                 <span className="text-2xl font-medium uppercase tracking-wider">{content?.logoText || "Limidora"}</span>
@@ -61,7 +40,7 @@ export function Footer() {
             <p className="mt-4 max-w-xs text-primary-foreground/70">
               Creative agency crafting modern IT solutions and web experiences.
             </p>
-            {!isLoading && content?.socialLinks && content.socialLinks.length > 0 && (
+            {content?.socialLinks && content.socialLinks.length > 0 && (
                 <div className="flex gap-4 mt-6">
                     {content.socialLinks.map((link) => (
                         <Link key={link.platform} href={link.url} aria-label={link.platform} target="_blank" rel="noopener noreferrer">
@@ -111,5 +90,3 @@ export function Footer() {
     </footer>
   );
 }
-
-    

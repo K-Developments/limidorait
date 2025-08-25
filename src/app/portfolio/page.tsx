@@ -19,7 +19,7 @@ export default async function PortfolioPage() {
 
     return (
       <>
-        <PortfolioHero />
+        <PortfolioHero content={portfolioContent} />
         <section id="portfolio" className="py-20 md:py-28 bg-background">
           <div className="container">
             <div 
