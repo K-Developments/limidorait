@@ -14,19 +14,35 @@ interface MegaMenuProps {
 export function MegaMenu({ services }: MegaMenuProps) {
 
   const menuVariants = {
-    hidden: { opacity: 0, y: -10, height: 0 },
+    hidden: { 
+        opacity: 0, 
+        y: -10,
+        transition: { duration: 0.2, ease: 'easeOut' }
+    },
     visible: { 
         opacity: 1, 
         y: 0, 
-        height: 'auto',
-        transition: { duration: 0.3, ease: 'easeInOut' }
+        transition: { 
+            duration: 0.3, 
+            ease: 'easeInOut',
+            staggerChildren: 0.07,
+            delayChildren: 0.1
+        }
     },
     exit: { 
         opacity: 0, 
-        y: -10, 
-        height: 0,
+        y: -10,
         transition: { duration: 0.2, ease: 'easeOut' }
     },
+  };
+  
+  const itemVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { 
+        opacity: 1, 
+        y: 0,
+        transition: { duration: 0.3, ease: 'easeOut' }
+    }
   };
 
   const featuredServices = services.slice(0, 4);
@@ -43,7 +59,7 @@ export function MegaMenu({ services }: MegaMenuProps) {
         <div className="grid grid-cols-12">
             
             {/* Left side: List of all services */}
-            <div className="col-span-4 p-6 border-r">
+            <motion.div variants={itemVariants} className="col-span-4 p-6 border-r">
                 <h3 className="text-sm font-semibold uppercase text-muted-foreground mb-4">All Services</h3>
                 <ul className="space-y-2">
                 {services.map(service => (
@@ -54,10 +70,10 @@ export function MegaMenu({ services }: MegaMenuProps) {
                     </li>
                 ))}
                 </ul>
-            </div>
+            </motion.div>
             
             {/* Right side: Featured services with images */}
-            <div className="col-span-8 p-6">
+            <motion.div variants={itemVariants} className="col-span-8 p-6">
                 <h3 className="text-sm font-semibold uppercase text-muted-foreground mb-4">Featured Services</h3>
                 <div className="grid grid-cols-2 gap-4">
                 {featuredServices.map(service => (
@@ -80,16 +96,16 @@ export function MegaMenu({ services }: MegaMenuProps) {
                     </li>
                 ))}
                 </div>
-            </div>
+            </motion.div>
 
             </div>
             
             {/* Bottom "View All" link */}
-            <div className="bg-muted/50 p-4 text-center">
+            <motion.div variants={itemVariants} className="bg-muted/50 p-4 text-center">
             <Button asChild variant="link" className="text-sm font-medium">
                 <Link href="/services">View All Services &rarr;</Link>
             </Button>
-            </div>
+            </motion.div>
         </div>
     </motion.div>
   );
