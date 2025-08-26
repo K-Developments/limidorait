@@ -6,6 +6,8 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import { HomepageCta } from "@/components/sections/homepage-cta";
 import { getHeroContent, getFaqContent } from "@/services/firestore";
 
+export const dynamic = "force-static";
+
 export async function generateMetadata(
   {},
   parent: ResolvingMetadata

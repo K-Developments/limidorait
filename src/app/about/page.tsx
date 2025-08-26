@@ -7,6 +7,8 @@ import { HomepageCta } from "@/components/sections/homepage-cta";
 import { getHeroContent, getAboutContent, AboutContent } from "@/services/firestore";
 import type { Metadata, ResolvingMetadata } from 'next';
 
+export const dynamic = "force-static";
+
 export async function generateMetadata(
   {},
   parent: ResolvingMetadata

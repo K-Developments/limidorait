@@ -3,6 +3,8 @@ import { getHeroContent, HeroContent } from "@/services/firestore";
 import type { Metadata } from 'next';
 import HomePageClient from "./home-page-client";
 
+export const dynamic = "force-static";
+
 export const metadata: Metadata = {
   title: {
     template: '%s | Limidora Digital',
