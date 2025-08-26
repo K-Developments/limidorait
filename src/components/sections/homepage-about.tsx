@@ -23,18 +23,18 @@ export function HomepageAbout({ aboutSection }: HomepageAboutProps) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-neutral-900 text-primary-foreground p-8 md:p-16 h-full flex flex-col justify-center order-2 md:order-1"
+            className="bg-neutral-900 text-white p-8 md:p-16 h-full flex flex-col justify-center order-2 md:order-1"
           >
-            <Badge variant="secondary" className="mb-4 self-start">
+            <Badge variant="secondary" className="mb-4 self-start bg-white/10 text-white hover:bg-white/20">
               {aboutSection.badge}
             </Badge>
             <h2 className="text-3xl md:text-4xl font-medium mb-4 font-body uppercase">
               {aboutSection.title}
             </h2>
-            <p className="text-lg mb-8 text-primary-foreground/80">
+            <p className="text-lg mb-8 text-white/80">
               {aboutSection.description}
             </p>
-            <Button asChild size="lg" className="self-start animate-arrow-on-hover">
+            <Button asChild size="lg" className="self-start animate-arrow-on-hover" variant="default">
               <Link href={aboutSection.buttonLink}>
                 {aboutSection.buttonText}
                 <ArrowRight className="ml-2 h-5 w-5" />
