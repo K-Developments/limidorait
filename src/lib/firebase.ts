@@ -14,7 +14,18 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+let app;
+if (!getApps().length) {
+  console.log("🔥 Initializing Firebase App...");
+  app = initializeApp(firebaseConfig);
+} else {
+  console.log("♻️ Using existing Firebase App.");
+  app = getApp();
+}
+
+console.log("🔑 Firebase Project ID loaded:", firebaseConfig.projectId ? firebaseConfig.projectId : "❗️ UNDEFINED ❗️");
+
+
 const db = getFirestore(app);
 const storage = getStorage(app);
 const auth = getAuth(app);
