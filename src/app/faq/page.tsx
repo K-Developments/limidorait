@@ -7,6 +7,8 @@ import { HomepageCta } from "@/components/sections/homepage-cta";
 import { getHeroContent, getFaqContent } from "@/services/firestore";
 import { PublicLayout } from "../public-layout";
 
+export const dynamic = 'force-static';
+
 export async function generateMetadata(
   {},
   parent: ResolvingMetadata

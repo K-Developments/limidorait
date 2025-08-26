@@ -11,6 +11,8 @@ import { HomepageCta } from '@/components/sections/homepage-cta';
 import { getHeroContent } from '@/services/firestore';
 import { PublicLayout } from '../../public-layout';
 
+export const dynamic = 'force-static';
+
 type Props = {
   params: { slug: string }
 }

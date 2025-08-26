@@ -6,6 +6,8 @@ import { ServicesList } from "@/components/sections/services-list";
 import { getHeroContent, getServices } from "@/services/firestore";
 import { PublicLayout } from "../public-layout";
 
+export const dynamic = 'force-static';
+
 export default async function ServicesPage() {
     const heroContent = await getHeroContent();
     const services = await getServices();
