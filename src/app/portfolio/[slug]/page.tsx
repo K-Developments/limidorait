@@ -106,7 +106,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                   <div>
                       <h3 className="font-semibold text-foreground uppercase tracking-wider">Services</h3>
                       <div className="flex flex-wrap gap-2 mt-2">
-                          {project.services.map(service => (
+                          {(project.services || []).map(service => (
                              <Badge key={service} variant="secondary">{service}</Badge>
                           ))}
                       </div>
@@ -137,7 +137,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                       Features
                       </h2>
                       <ul className="space-y-2 text-muted-foreground list-none pl-2">
-                        {project.features.map((feature, index) => (
+                        {(project.features || []).map((feature, index) => (
                           <li key={index} className="flex items-start">
                             <span className="h-2.5 w-2.5 bg-primary mt-1.5 mr-3 flex-shrink-0" />
                             <span>{feature}</span>
@@ -154,7 +154,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                       Highlights
                       </h2>
                       <ul className="space-y-2 text-muted-foreground list-none pl-2">
-                        {project.highlights.map((highlight, index) => (
+                        {(project.highlights || []).map((highlight, index) => (
                           <li key={index} className="flex items-start">
                             <span className="h-2.5 w-2.5 bg-primary mt-1.5 mr-3 flex-shrink-0" />
                             <span>{highlight}</span>
