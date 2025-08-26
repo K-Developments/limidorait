@@ -16,7 +16,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
@@ -28,23 +28,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Listen for auth state changes
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
       setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-  // Redirect logic
   useEffect(() => {
-    if (!loading) {
-      if (!user && pathname !== "/admin/login") {
-        router.push("/admin/login");
-      } else if (user && pathname === "/admin/login") {
-        router.push("/admin");
-      }
+    if (!loading && !user && pathname !== "/admin/login") {
+      router.push("/admin/login");
+    }
+    if (!loading && user && pathname === "/admin/login") {
+      router.push("/admin");
     }
   }, [user, loading, pathname, router]);
 
@@ -57,7 +54,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // While loading, show spinner or skeleton
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -67,16 +63,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   // Render login page without layout if user is not authenticated and on login page
-  if (!user && pathname === "/admin/login") {
-    return <>{children}</>;
-  }
+  if (!user && pathname === "/admin/login") return <>{children}</>;
 
-  // Block rendering if user is not authenticated (redirect handled in useEffect)
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
-  // Render children for authenticated users
   return (
     <AuthContext.Provider value={{ user, loading, signOutUser }}>
       {children}
