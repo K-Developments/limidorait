@@ -19,9 +19,11 @@ type Props = {
 
 export async function generateStaticParams() {
   const projects = await getProjects();
-  return projects.map((project) => ({
-    slug: project.slug,
-  }));
+  return projects
+    .filter(project => project && project.slug)
+    .map((project) => ({
+      slug: project.slug,
+    }));
 }
 
 export async function generateMetadata(
@@ -31,14 +33,12 @@ export async function generateMetadata(
   const project = await getProjectBySlug(params.slug);
 
   if (!project) {
-    return {
-      title: 'Project Not Found'
-    }
+    notFound();
   }
 
   return {
     title: `${project.title} | Limidora Digital`,
-    description: project.about.substring(0, 160),
+    description: project.about?.substring(0, 160) || 'Limidora Digital Project',
   }
 }
 
@@ -167,7 +167,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
               </div>
           </div>
         </section>
-        {heroContent && <HomepageCta ctaSection={heroContent.ctaSection} />}
+        {heroContent && heroContent.ctaSection && <HomepageCta ctaSection={heroContent.ctaSection} />}
       </main>
     </PublicLayout>
   );
