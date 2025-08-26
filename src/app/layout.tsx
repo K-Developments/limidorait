@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { getHeroContent, getServices } from '@/services/firestore';
-import { LayoutClient } from '@/components/layout/layout-client';
+import { SidebarProvider } from '@/components/layout/sidebar-provider';
 
 const fontBody = Montserrat({
   subsets: ['latin'],
@@ -36,19 +36,16 @@ export const metadata: Metadata = {
   }
 };
 
-async function HeaderFooterDataProvider({ children }: { children: (data: any) => React.ReactNode }) {
-    const [heroContent, services] = await Promise.all([
-        getHeroContent(),
-        getServices()
-    ]);
-    return <>{children({ heroContent, services })}</>;
-}
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const [heroContent, services] = await Promise.all([
+      getHeroContent(),
+      getServices()
+  ]);
 
   const navItems = [
     { name: 'Home', href: '/' },
@@ -63,13 +60,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={`${fontBody.variable} font-body antialiased`}>
-        <HeaderFooterDataProvider>
-            {({ heroContent, services }) => (
-                <LayoutClient navItems={navItems} services={services} heroContent={heroContent}>
-                    {children}
-                </LayoutClient>
-            )}
-        </HeaderFooterDataProvider>
+        <SidebarProvider navItems={navItems}>
+            <div className="flex min-h-screen flex-col pt-20">
+                <Header content={heroContent} services={services} />
+                <main className="flex-1">{children}</main>
+                <Footer content={heroContent} />
+            </div>
+        </SidebarProvider>
         <Toaster />
       </body>
     </html>

@@ -5,21 +5,28 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { X, ChevronRight, ChevronLeft } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSidebar } from './sidebar-provider';
 
-interface NavItem {
-  name: string;
-  href?: string;
-}
-
-interface SidebarProps {
-  navItems: NavItem[];
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
+export function Sidebar() {
+  const { isOpen, setOpen, navItems } = useSidebar();
   const [menu, setMenu] = useState<'main' | 'services'>('main');
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('sidebar-open');
+    } else {
+      document.body.classList.remove('sidebar-open');
+      // Reset to main menu when sidebar is closed
+      setTimeout(() => setMenu('main'), 300);
+    }
+
+    return () => {
+      document.body.classList.remove('sidebar-open');
+    };
+  }, [isOpen]);
+
+  const onClose = () => setOpen(false);
 
   const backdropVariants = {
     hidden: { opacity: 0 },
@@ -81,7 +88,7 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
                     <X className="h-6 w-6" />
                 </Button>
             </div>
-             <AnimatePresence initial={false}>
+             <AnimatePresence initial={false} mode="wait">
                 {menu === 'main' && (
                     <motion.div
                         key="main"
@@ -176,3 +183,4 @@ export function Sidebar({ navItems, isOpen, onClose }: SidebarProps) {
     </AnimatePresence>
   );
 }
+

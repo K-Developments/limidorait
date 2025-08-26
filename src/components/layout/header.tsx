@@ -2,23 +2,35 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Menu } from 'lucide-react';
-import { useState } from 'react';
 import { HeroContent, Service } from '@/services/firestore';
 import Image from 'next/image';
 import { Skeleton } from '../ui/skeleton';
 import { MegaMenu } from './mega-menu';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Menu } from 'lucide-react';
+import { useState } from 'react';
+import { useSidebar } from './sidebar-provider';
+
 
 interface HeaderProps {
-    onMenuClick: () => void;
     content: HeroContent | null;
     services: Service[];
 }
 
-export function Header({ onMenuClick, content, services }: HeaderProps) {
+function MobileMenuToggle() {
+    const { setOpen } = useSidebar();
+    return (
+        <button
+            onClick={() => setOpen(true)}
+            className="p-2 rounded-full transition-colors hover:bg-primary/10 md:hidden"
+            aria-label="Toggle menu"
+            >
+            <Menu className="h-6 w-6 text-foreground" />
+        </button>
+    );
+}
+
+export function Header({ content, services }: HeaderProps) {
   const [isServicesHovered, setServicesHovered] = useState(false);
 
   const navLinks = [
@@ -58,24 +70,18 @@ export function Header({ onMenuClick, content, services }: HeaderProps) {
                  </Link>
             ))}
             <div onMouseEnter={() => setServicesHovered(true)}>
-              <Button variant="ghost" className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors px-0 hover:bg-transparent">
+              <button className="flex items-center text-sm font-medium text-foreground/70 hover:text-foreground transition-colors px-0 hover:bg-transparent">
                 Services <ChevronDown className="ml-1 h-4 w-4" />
-              </Button>
+              </button>
             </div>
           </nav>
           
           <div className="flex items-center gap-4">
-            <Button asChild className="hidden md:flex">
-              <Link href="/contact">Get in Touch</Link>
-            </Button>
+            <Link href="/contact" className="hidden md:inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+                Get in Touch
+            </Link>
             
-             <button
-                onClick={onMenuClick}
-                className="p-2 rounded-full transition-colors hover:bg-primary/10 md:hidden"
-                aria-label="Toggle menu"
-              >
-                <Menu className="h-6 w-6 text-foreground" />
-              </button>
+            <MobileMenuToggle />
           </div>
           
           <AnimatePresence>
@@ -85,3 +91,4 @@ export function Header({ onMenuClick, content, services }: HeaderProps) {
     </header>
   );
 }
+

@@ -12,25 +12,25 @@ html{
 
 @layer base {
   :root {
-    --background: 25 33% 95%;
-    --foreground: 25 20% 15%;
-    --card: 25 25% 100%;
-    --card-foreground: 25 20% 15%;
-    --popover: 25 25% 100%;
-    --popover-foreground: 25 20% 15%;
-    --primary: 25 55% 45%;
-    --primary-foreground: 25 20% 98%;
-    --secondary: 25 25% 96%;
-    --secondary-foreground: 25 20% 25%;
-    --muted: 25 25% 96%;
-    --muted-foreground: 25 15% 45%;
-    --accent: 25 55% 45%;
-    --accent-foreground: 25 20% 98%;
+    --background: 40 43% 96%;
+    --foreground: 24 10% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 24 10% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 24 10% 10%;
+    --primary: 23 51% 28%;
+    --primary-foreground: 30 13% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 24 6% 45%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 25 20% 88%;
-    --input: 25 20% 88%;
-    --ring: 25 55% 45%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 24 10% 10%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -39,25 +39,25 @@ html{
     --radius: 0rem;
   }
   .dark {
-    --background: 25 15% 8%;
-    --foreground: 25 10% 92%;
-    --card: 25 15% 12%;
-    --card-foreground: 25 10% 92%;
-    --popover: 25 15% 8%;
-    --popover-foreground: 25 10% 92%;
-    --primary: 25 60% 65%;
-    --primary-foreground: 25 15% 10%;
-    --secondary: 25 15% 15%;
-    --secondary-foreground: 25 10% 92%;
-    --muted: 25 15% 15%;
-    --muted-foreground: 25 10% 60%;
-    --accent: 25 60% 55%;
-    --accent-foreground: 25 15% 10%;
+    --background: 20 12% 8%;
+    --foreground: 30 13% 92%;
+    --card: 20 12% 12%;
+    --card-foreground: 30 13% 92%;
+    --popover: 20 12% 8%;
+    --popover-foreground: 30 13% 92%;
+    --primary: 23 51% 75%;
+    --primary-foreground: 23 51% 15%;
+    --secondary: 20 12% 15%;
+    --secondary-foreground: 30 13% 92%;
+    --muted: 20 12% 15%;
+    --muted-foreground: 30 13% 60%;
+    --accent: 23 51% 65%;
+    --accent-foreground: 23 51% 15%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 25 15% 20%;
-    --input: 25 15% 20%;
-    --ring: 25 60% 65%;
+    --border: 20 12% 15%;
+    --input: 20 12% 15%;
+    --ring: 23 51% 75%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -200,29 +200,6 @@ html{
     .animate-scroll-horizontal {
       animation: scroll-horizontal 40s linear infinite;
     }
-
-    @keyframes move-arrow {
-        0% {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        50% {
-            transform: translateX(8px);
-            opacity: 0;
-        }
-        51% {
-            transform: translateX(-8px);
-            opacity: 0;
-        }
-        100% {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-
-    .animate-arrow-on-hover:hover svg {
-        animation: move-arrow 0.8s ease-in-out infinite;
-    }
 }
 
 /* Swiper custom styles */
@@ -230,101 +207,6 @@ html{
   transition-property: opacity, transform !important;
 }
 
-/* react-chatbot-kit overrides */
-.react-chatbot-kit-chat-inner-container {
-    background-color: transparent !important;
-    width: 100% !important;
-    padding:0 !important;
-}
-.react-chatbot-kit-chat-bot-message {
-  margin-left: inherit !important;
-  font-size: 1rem !important;
-  line-height: 1.5 !important;
-  color: hsl(var(--foreground)) !important;
-  background: hsla(var(--primary) / 0.08) !important;
-  border: 1px solid hsla(var(--primary) / 0.15) !important;
-  padding: 1.25rem !important;
-  border-radius: 1.25rem 1.25rem 1.25rem 0.25rem !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  box-shadow: 
-      0 2px 4px hsla(var(--primary) / 0.05),
-      0 4px 12px hsla(var(--primary) / 0.08) !important;
-  transition: all 0.2s ease-out !important;
-  max-width: 85% !important;
-}
-
-.react-chatbot-kit-chat-bot-message-container {
-  align-items: flex-start !important;
-}
-
-/* Add a subtle floating effect on hover */
-.react-chatbot-kit-chat-bot-message:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 
-      0 4px 6px hsla(var(--primary) / 0.1),
-      0 8px 16px hsla(var(--primary) / 0.12) !important;
-}
-
-/* Modern message arrow/triangle */
-.react-chatbot-kit-chat-bot-message-arrow {
-  width: 0 !important;
-  height: 0 !important;
-  border-right: 8px solid hsla(var(--primary) / 0.15) !important;
-  border-top: 8px solid transparent !important;
-  border-bottom: 8px solid transparent !important;
-  left: -8px !important;
-}
-
-/* Typing animation for modern feel */
-@keyframes modernTyping {
-  0% { opacity: 0.4; transform: translateY(2px); }
-  50% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0.4; transform: translateY(2px); }
-}
-
-.react-chatbot-kit-chat-bot-message::before {
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: hsl(var(--primary));
-  margin-right: 6px;
-  opacity: 0;
-  animation: modernTyping 1.5s infinite;
-}
-
-.react-chatbot-kit-chat-bot-loading .react-chatbot-kit-chat-bot-message::before {
-  opacity: 1;
-}
-.react-chatbot-kit-chat-container{
-  width: 100% !important;
-  height: 100% !important;
-}
-.react-chatbot-kit-chat-message-container {
-  padding: inherit !important;
-
-}
-.react-chatbot-kit-chat-header{
-  display: none !important;
-}
-.react-chatbot-kit-chat-message-container::-webkit-scrollbar {
-  width: 0px;
-  background: transparent; /* make scrollbar transparent */
-}
-.react-chatbot-kit-chat-input-container {
-    position: relative;
-    bottom:0;
-}
-@media (min-width: 768px) {
-  .react-chatbot-kit-chat-input-container {
-    bottom: -40px !important;
-  }
-}
-
 .swiper-fade .swiper-slide {
   transition-property: opacity, transform !important;
 }
-
-    
