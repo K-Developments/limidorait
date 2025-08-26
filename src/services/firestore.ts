@@ -151,8 +151,10 @@ const parseFirestoreResponse = (doc: any, isCollection = false) => {
 
     const parseFields = (fields: any) => {
         const parsed: { [key: string]: any } = {};
+        if (!fields) return parsed;
         for (const key in fields) {
             const value = fields[key];
+            if (!value) continue;
             const valueKey = Object.keys(value)[0];
             switch (valueKey) {
                 case 'stringValue':
@@ -170,11 +172,12 @@ const parseFirestoreResponse = (doc: any, isCollection = false) => {
                 case 'arrayValue':
                      parsed[key] = (value.arrayValue.values || []).map((v: any) => {
                         const nestedValueKey = Object.keys(v)[0];
+                        if (!nestedValueKey) return null;
                         if (nestedValueKey === 'mapValue') {
                             return parseFields(v.mapValue.fields || {});
                         }
                         return v[nestedValueKey];
-                    });
+                    }).filter(v => v !== null);
                     break;
                 case 'nullValue':
                     parsed[key] = null;
@@ -200,11 +203,8 @@ const parseFirestoreResponse = (doc: any, isCollection = false) => {
 
 const fetchFirestoreDoc = cache(async (path: string) => {
     const url = `${API_BASE_URL}/${path}?key=${API_KEY}`;
-    const res = await fetch(url, { next: { revalidate: false } }); // Ensure no revalidation
+    const res = await fetch(url, { next: { revalidate: false } }); 
     if (!res.ok) {
-      // If document is not found, it's not an error, just return null.
-      if (res.status === 404) return null;
-      // For any other error, fail the build.
       throw new Error(`Failed to fetch doc '${path}': ${res.status} ${res.statusText}`);
     }
     const json = await res.json();
@@ -237,13 +237,9 @@ const deepMerge = <T extends Record<string, any>>(target: T, source: Partial<T>)
     if (isObject(target) && isObject(source)) {
         Object.keys(source).forEach(key => {
             const sourceKey = key as keyof T;
-            if (isObject(source[sourceKey])) {
-                if (!(sourceKey in target)) {
-                    Object.assign(output, { [sourceKey]: source[sourceKey] });
-                } else {
-                    output[sourceKey] = deepMerge(target[sourceKey], source[sourceKey] as Partial<T[Extract<keyof T, string>]>);
-                }
-            } else {
+            if (isObject(source[sourceKey]) && sourceKey in target && isObject(target[sourceKey])) {
+                 output[sourceKey] = deepMerge(target[sourceKey], source[sourceKey] as Partial<T[Extract<keyof T, string>]>);
+            } else if (source[sourceKey] !== undefined) {
                 Object.assign(output, { [sourceKey]: source[sourceKey] });
             }
         });
@@ -258,9 +254,11 @@ const CONTENT_COLLECTION_ID = 'homepage';
 const PORTFOLIO_COLLECTION_ID = 'portfolio';
 const SERVICES_COLLECTION_ID = 'services';
 
-export const getHeroContent = async (): Promise<HeroContent> => {
+export const getHeroContent = cache(async (): Promise<HeroContent> => {
     const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/heroContent`);
-    const contentData = fetchedData ? deepMerge(defaultHeroContent, fetchedData) : defaultHeroContent;
+    if (!fetchedData) throw new Error("Failed to fetch essential document: heroContent. The build cannot continue without it.");
+    
+    const contentData = deepMerge(defaultHeroContent, fetchedData);
     
     contentData.works = contentData.works.map((work: HomepageWork) => ({ ...work, link: work.link || `/portfolio/${work.title.toLowerCase().replace(/\s+/g, '-')}` }));
 
@@ -270,26 +268,36 @@ export const getHeroContent = async (): Promise<HeroContent> => {
         services = allServices.filter(service => contentData.featuredServices.includes(service.id));
     }
     return { ...contentData, services };
-};
-export const getAboutContent = async (): Promise<AboutContent> => {
+});
+
+export const getAboutContent = cache(async (): Promise<AboutContent> => {
     const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/aboutContent`);
-    return fetchedData ? deepMerge(defaultAboutContent, fetchedData) : defaultAboutContent;
-};
-export const getPortfolioContent = async (): Promise<PortfolioContent> => {
+    if (!fetchedData) throw new Error("Failed to fetch essential document: aboutContent. The build cannot continue without it.");
+    return deepMerge(defaultAboutContent, fetchedData);
+});
+
+export const getPortfolioContent = cache(async (): Promise<PortfolioContent> => {
     const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/portfolioContent`);
-    return fetchedData ? deepMerge(defaultPortfolioContent, fetchedData) : defaultPortfolioContent;
-};
-export const getFaqContent = async (): Promise<FaqContent> => {
+     if (!fetchedData) throw new Error("Failed to fetch essential document: portfolioContent. The build cannot continue without it.");
+    return deepMerge(defaultPortfolioContent, fetchedData);
+});
+
+export const getFaqContent = cache(async (): Promise<FaqContent> => {
     const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/faqContent`);
-    return fetchedData ? deepMerge(defaultFaqContent, fetchedData) : defaultFaqContent;
-};
-export const getContactContent = async (): Promise<ContactContent> => {
+    if (!fetchedData) throw new Error("Failed to fetch essential document: faqContent. The build cannot continue without it.");
+    return deepMerge(defaultFaqContent, fetchedData);
+});
+
+export const getContactContent = cache(async (): Promise<ContactContent> => {
     const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/contactContent`);
-    return fetchedData ? deepMerge(defaultContactContent, fetchedData) : defaultContactContent;
-};
+    if (!fetchedData) throw new Error("Failed to fetch essential document: contactContent. The build cannot continue without it.");
+    return deepMerge(defaultContactContent, fetchedData);
+});
+
 export const getServices = cache(async (): Promise<Service[]> => {
     return (await fetchFirestoreCollection(SERVICES_COLLECTION_ID) as Service[]) || [];
 });
+
 export const getProjects = cache(async (): Promise<(Project & { link: string })[]> => {
     const projects = (await fetchFirestoreCollection(PORTFOLIO_COLLECTION_ID) as Project[]) || [];
     return projects.map(p => {
@@ -297,8 +305,9 @@ export const getProjects = cache(async (): Promise<(Project & { link: string })[
         return { ...p, slug, link: `/portfolio/${slug}`};
     });
 });
-export const getProjectBySlug = async (slug: string): Promise<(Project & { link: string }) | null> => {
+
+export const getProjectBySlug = cache(async (slug: string): Promise<(Project & { link: string }) | null> => {
     const allProjects = await getProjects();
     const project = allProjects.find(p => p.slug === slug);
     return project || null;
-};
+});
