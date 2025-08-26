@@ -30,7 +30,7 @@ export function HomepageServices({ services }: HomepageServicesProps) {
           <h2 className="text-3xl md:text-4xl font-medium text-foreground mb-4 font-body uppercase">
             What We Do
           </h2>
-          <p className="text-lg max-w-2xl mx-auto text-foreground">
+          <p className="text-lg max-w-2xl mx-auto text-muted-foreground">
             We deliver high-quality digital solutions to help your business grow and succeed in the modern world.
           </p>
         </motion.div>
