@@ -102,7 +102,7 @@ export function MegaMenu({ services }: MegaMenuProps) {
             
             {/* Bottom "View All" link */}
             <motion.div variants={itemVariants} className="bg-muted/50 p-4 text-center">
-            <Button asChild variant="link" className="text-sm font-medium">
+            <Button asChild variant="link" className="text-sm font-medium text-[hsl(var(--accent))] hover:text-[]/90">
                 <Link href="/services">View All Services &rarr;</Link>
             </Button>
             </motion.div>

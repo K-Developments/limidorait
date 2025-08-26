@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -45,7 +46,7 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
           className="text-center mb-8 sm:mb-12"
         >
           <Badge variant="outline" className="mb-4">Our Portfolio</Badge>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium text-foreground mb-4 font-body uppercase">
+          <h2 className="text-3xl md:text-4xl font-medium text-foreground mb-4 font-body uppercase">
             Our Recent Works
           </h2>
           <p className="text-base sm:text-lg max-w-2xl mx-auto text-muted-foreground px-4">
