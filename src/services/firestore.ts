@@ -1,4 +1,3 @@
-
 import { cache } from 'react';
 
 // Interfaces remain the same
@@ -145,7 +144,6 @@ if (!PROJECT_ID || !API_KEY) {
 
 const API_BASE_URL = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
-
 const parseFirestoreResponse = (doc: any, isCollection = false) => {
     if (!doc) return null;
 
@@ -183,7 +181,6 @@ const parseFirestoreResponse = (doc: any, isCollection = false) => {
                     parsed[key] = null;
                     break;
                 default:
-                    // For other types like geoPointValue, referenceValue, etc.
                     parsed[key] = value[valueKey];
                     break;
             }
@@ -202,33 +199,180 @@ const parseFirestoreResponse = (doc: any, isCollection = false) => {
 };
 
 const fetchFirestoreDoc = cache(async (path: string) => {
+    console.log(`🔍 Fetching Firestore doc: ${path}`);
+    console.log(`🌐 Full URL: ${API_BASE_URL}/${path}?key=${API_KEY?.substring(0, 10)}...`);
+    
     const url = `${API_BASE_URL}/${path}?key=${API_KEY}`;
-    const res = await fetch(url, { next: { revalidate: false } }); 
-    if (!res.ok) {
-      throw new Error(`Failed to fetch doc '${path}': ${res.status} ${res.statusText}`);
+    
+    try {
+        const res = await fetch(url, { next: { revalidate: false } });
+        console.log(`📡 Response status for ${path}: ${res.status}`);
+        
+        if (!res.ok) {
+            if (res.status === 404) {
+                console.log(`⚠️ Document not found: ${path} - will use defaults`);
+                return null;
+            }
+            
+            // Log the full error response for debugging
+            const errorText = await res.text();
+            console.error(`❌ API Error for ${path}:`, {
+                status: res.status,
+                statusText: res.statusText,
+                body: errorText
+            });
+            throw new Error(`Failed to fetch doc '${path}': ${res.status} ${res.statusText}`);
+        }
+        
+        const json = await res.json();
+        console.log(`📄 Raw Firestore response for ${path}:`, JSON.stringify(json, null, 2));
+        
+        const parsed = parseFirestoreResponse(json);
+        console.log(`✅ Successfully parsed ${path}:`, JSON.stringify(parsed, null, 2));
+        return parsed;
+    } catch (error) {
+        console.error(`💥 Network/Parse error for ${path}:`, error);
+        // Always return null during build to continue with defaults
+        console.log(`🔄 Continuing with defaults for ${path}`);
+        return null;
     }
-    const json = await res.json();
-    return parseFirestoreResponse(json);
 });
 
 const fetchFirestoreCollection = cache(async (path: string) => {
+    console.log(`🔍 Fetching Firestore collection: ${path}`);
+    console.log(`🌐 Full URL: ${API_BASE_URL}/${path}?key=${API_KEY?.substring(0, 10)}...`);
+    
     const url = `${API_BASE_URL}/${path}?key=${API_KEY}`;
-    const res = await fetch(url, { next: { revalidate: false } });
-    if (!res.ok) {
-        throw new Error(`Failed to fetch collection '${path}': ${res.status} ${res.statusText}`);
+    
+    try {
+        const res = await fetch(url, { next: { revalidate: false } });
+        console.log(`📡 Response status for collection ${path}: ${res.status}`);
+        
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.error(`❌ Failed to fetch collection '${path}':`, {
+                status: res.status,
+                statusText: res.statusText,
+                body: errorText
+            });
+            throw new Error(`Failed to fetch collection '${path}': ${res.status} ${res.statusText}`);
+        }
+        
+        const json = await res.json();
+        console.log(`📄 Raw collection response for ${path}:`, JSON.stringify(json, null, 2));
+        
+        const parsed = parseFirestoreResponse(json, true);
+        console.log(`✅ Collection ${path} parsed:`, Array.isArray(parsed) ? `${parsed.length} items` : 'No items');
+        return parsed;
+    } catch (error) {
+        console.error(`💥 Error fetching collection ${path}:`, error);
+        console.log(`🔄 Continuing with empty array for ${path}`);
+        return [];
     }
-    const json = await res.json();
-    return parseFirestoreResponse(json, true);
 });
-
 
 // --- Data Default Values ---
 
-const defaultHeroContent: Omit<HeroContent, 'services'> = { title: "Creative Agency", logoText: "Limidora", logoUrl: "", slides: [ { type: 'video', url: 'https://cdn.pixabay.com/video/2024/05/27/211904_large.mp4' }, { type: 'image', url: 'https://placehold.co/1920x1080/eeece9/6e3d23', alt: 'Placeholder image 1' }, { type: 'image', url: 'https://placehold.co/1920x1080/6e3d23/eeece9', alt: 'Placeholder image 2' }, ], buttonText: "View Our Work", buttonLink: "/portfolio", socialLinks: [ { platform: 'Facebook', url: '#' }, { platform: 'Instagram', url: '#' }, { platform: 'WhatsApp', url: '#' }, ], featuredServices: [], works: [ { title: "E-commerce Platform", category: "Web Development", imageUrl: "https://placehold.co/800x600.png", aiHint: "website mockup", link: "/portfolio/ecommerce-platform" }, { title: "Mobile Banking App", category: "UI/UX Design", imageUrl: "https://placehold.co/600x400.png", aiHint: "app interface", link: "/portfolio/mobile-banking" }, { title: "SaaS Dashboard", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "dashboard analytics", link: "/portfolio/saas-dashboard" } ], testimonials: [ { quote: "Limidora transformed our online presence. Their team is professional, creative, and delivered beyond our expectations. We've seen a significant increase in engagement since the launch.", author: "Jane Doe", company: "Tech Solutions Inc.", avatarUrl: "https://placehold.co/100x100.png" }, { quote: "The best web development agency we've worked with. Their attention to detail and commitment to quality is unparalleled. Highly recommended for any business looking to grow.", author: "John Smith", company: "Innovate Co.", avatarUrl: "https://placehold.co/100x100.png" }, { quote: "From start to finish, the process was seamless. The team at Limidora was always available to answer our questions and provided valuable insights that helped shape our project.", author: "Emily White", company: "Creative Minds", avatarUrl: "https://placehold.co/100x100.png" }, { quote: "An absolutely stellar experience. The final product was not only beautiful but also highly functional and user-friendly. We couldn't be happier with the results.", author: "Michael Brown", company: "Future Enterprises", avatarUrl: "https://placehold.co/100x100.png" } ], ctaSection: { title: "Let's Build Something Great", description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas.", buttonText: "Get in Touch", buttonLink: "/contact" }, aboutSection: { badge: "Who We Are", title: "About Limidora", description: "We are a creative agency that blends design, technology, and strategy to build exceptional digital experiences. Our passion is to help businesses thrive in the digital world.", buttonText: "More About Limidora", buttonLink: "/about", imageUrl: "https://placehold.co/800x600.png", aiHint: "office team collaboration" } };
-const defaultAboutContent: AboutContent = { heroTitle: "Building Brands With Purpose", heroSubtitle: "We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences that drive success and inspire change.", heroImageUrl: "https://placehold.co/1600x640.png", aboutTitle: "Our Vision", aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.", interactivePanels: { faq: { title: "Your Questions, Answered.", description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", imageUrl: "https://placehold.co/800x600.png?text=FAQs", imageHint: "question mark abstract", link: "/faq?from=about" }, testimonials: { title: "Trusted by Ambitious Brands.", description: "We take pride in our work and are honored to have the trust of our amazing clients.", imageUrl: "https://placehold.co/800x600.png?text=Testimonials", imageHint: "client meeting handshake", link: "/about#testimonials" }, solutions: { title: "Innovative Digital Solutions.", description: "We leverage the latest technologies to build cutting-edge solutions that give you a competitive edge.", imageUrl: "https://placehold.co/800x600.png?text=Solutions", imageHint: "technology code screen", link: "/services" } } };
-const defaultPortfolioContent: PortfolioContent = { heroTitle: "Our Works", heroSubtitle: "A glimpse into our creative world and the impact we deliver.", clientsSection: { title: "Trusted by Industry Leaders", subtitle: "We partner with ambitious brands and people. We'd love to build something great with you.", logos: [ { name: 'Generic Circle Co', logoUrl: 'https://placehold.co/144x80.png?text=Circle' }, { name: 'Square Blocks Inc', logoUrl: 'https://placehold.co/144x80.png?text=Square' }, { name: 'Star Industries', logoUrl: 'https://placehold.co/144x80.png?text=Star' }, { name: 'Check Marks LLC', logoUrl: 'https://placehold.co/144x80.png?text=Check' }, { name: 'House Builders', logoUrl: 'https://placehold.co/144x80.png?text=House' }, { name: 'Mail Services', logoUrl: 'https://placehold.co/144x80.png?text=Mail' }, { name: 'Chainlink Co', logoUrl: 'https://placehold.co/144x80.png?text=Chain' }, ] } };
-const defaultFaqContent: FaqContent = { heroTitle: "Help Center", heroSubtitle: "Your questions, answered. Find the information you need about our services.", title: "Frequently Asked Questions", description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", faqs: [ { question: "What services do you offer?", answer: "We offer a wide range of services including custom web development, UI/UX design, brand strategy, and mobile application development. Our goal is to provide comprehensive digital solutions tailored to your business needs." }, { question: "How long does a typical project take?", answer: "The timeline for a project varies depending on its scope and complexity. A simple website might take 4-6 weeks, while a complex web application could take several months. We provide a detailed project timeline after our initial discovery phase." }, { question: "What is your development process?", answer: "Our process is collaborative and transparent. We start with a discovery phase to understand your goals, followed by strategy, design, development, testing, and deployment. We maintain open communication throughout the project to ensure we're aligned with your vision." }, { question: "How much does a project cost?", answer: "Project costs are based on the specific requirements and complexity of the work. We provide a detailed proposal and quote after discussing your needs. We offer flexible pricing models to accommodate various budgets." }, { question: "Do you provide support after the project is launched?", answer: "Yes, we offer ongoing support and maintenance packages to ensure your website or application remains secure, up-to-date, and performs optimally. We're here to be your long-term technology partner." } ] };
-const defaultContactContent: ContactContent = { title: "Let's Build Something Great", description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas.", serviceOptions: [ "Web Development", "UI/UX Design", "Mobile App Development", "General Inquiry" ] };
+const defaultHeroContent: Omit<HeroContent, 'services'> = { 
+    title: "Creative Agency", 
+    logoText: "Limidora", 
+    logoUrl: "", 
+    slides: [ 
+        { type: 'video', url: 'https://cdn.pixabay.com/video/2024/05/27/211904_large.mp4' }, 
+        { type: 'image', url: 'https://placehold.co/1920x1080/eeece9/6e3d23', alt: 'Placeholder image 1' }, 
+        { type: 'image', url: 'https://placehold.co/1920x1080/6e3d23/eeece9', alt: 'Placeholder image 2' }, 
+    ], 
+    buttonText: "View Our Work", 
+    buttonLink: "/portfolio", 
+    socialLinks: [ 
+        { platform: 'Facebook', url: '#' }, 
+        { platform: 'Instagram', url: '#' }, 
+        { platform: 'WhatsApp', url: '#' }, 
+    ], 
+    featuredServices: [], 
+    works: [ 
+        { title: "E-commerce Platform", category: "Web Development", imageUrl: "https://placehold.co/800x600.png", aiHint: "website mockup", link: "/portfolio/ecommerce-platform" }, 
+        { title: "Mobile Banking App", category: "UI/UX Design", imageUrl: "https://placehold.co/600x400.png", aiHint: "app interface", link: "/portfolio/mobile-banking" }, 
+        { title: "SaaS Dashboard", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "dashboard analytics", link: "/portfolio/saas-dashboard" } 
+    ], 
+    testimonials: [ 
+        { quote: "Limidora transformed our online presence. Their team is professional, creative, and delivered beyond our expectations. We've seen a significant increase in engagement since the launch.", author: "Jane Doe", company: "Tech Solutions Inc.", avatarUrl: "https://placehold.co/100x100.png" }, 
+        { quote: "The best web development agency we've worked with. Their attention to detail and commitment to quality is unparalleled. Highly recommended for any business looking to grow.", author: "John Smith", company: "Innovate Co.", avatarUrl: "https://placehold.co/100x100.png" }, 
+        { quote: "From start to finish, the process was seamless. The team at Limidora was always available to answer our questions and provided valuable insights that helped shape our project.", author: "Emily White", company: "Creative Minds", avatarUrl: "https://placehold.co/100x100.png" }, 
+        { quote: "An absolutely stellar experience. The final product was not only beautiful but also highly functional and user-friendly. We couldn't be happier with the results.", author: "Michael Brown", company: "Future Enterprises", avatarUrl: "https://placehold.co/100x100.png" } 
+    ], 
+    ctaSection: { 
+        title: "Let's Build Something Great", 
+        description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas.", 
+        buttonText: "Get in Touch", 
+        buttonLink: "/contact" 
+    }, 
+    aboutSection: { 
+        badge: "Who We Are", 
+        title: "About Limidora", 
+        description: "We are a creative agency that blends design, technology, and strategy to build exceptional digital experiences. Our passion is to help businesses thrive in the digital world.", 
+        buttonText: "More About Limidora", 
+        buttonLink: "/about", 
+        imageUrl: "https://placehold.co/800x600.png", 
+        aiHint: "office team collaboration" 
+    } 
+};
+
+const defaultAboutContent: AboutContent = { 
+    heroTitle: "Building Brands With Purpose", 
+    heroSubtitle: "We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences that drive success and inspire change.", 
+    heroImageUrl: "https://placehold.co/1600x640.png", 
+    aboutTitle: "Our Vision", 
+    aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.", 
+    interactivePanels: { 
+        faq: { title: "Your Questions, Answered.", description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", imageUrl: "https://placehold.co/800x600.png?text=FAQs", imageHint: "question mark abstract", link: "/faq?from=about" }, 
+        testimonials: { title: "Trusted by Ambitious Brands.", description: "We take pride in our work and are honored to have the trust of our amazing clients.", imageUrl: "https://placehold.co/800x600.png?text=Testimonials", imageHint: "client meeting handshake", link: "/about#testimonials" }, 
+        solutions: { title: "Innovative Digital Solutions.", description: "We leverage the latest technologies to build cutting-edge solutions that give you a competitive edge.", imageUrl: "https://placehold.co/800x600.png?text=Solutions", imageHint: "technology code screen", link: "/services" } 
+    } 
+};
+
+const defaultPortfolioContent: PortfolioContent = { 
+    heroTitle: "Our Works", 
+    heroSubtitle: "A glimpse into our creative world and the impact we deliver.", 
+    clientsSection: { 
+        title: "Trusted by Industry Leaders", 
+        subtitle: "We partner with ambitious brands and people. We'd love to build something great with you.", 
+        logos: [ 
+            { name: 'Generic Circle Co', logoUrl: 'https://placehold.co/144x80.png?text=Circle' }, 
+            { name: 'Square Blocks Inc', logoUrl: 'https://placehold.co/144x80.png?text=Square' }, 
+            { name: 'Star Industries', logoUrl: 'https://placehold.co/144x80.png?text=Star' }, 
+            { name: 'Check Marks LLC', logoUrl: 'https://placehold.co/144x80.png?text=Check' }, 
+            { name: 'House Builders', logoUrl: 'https://placehold.co/144x80.png?text=House' }, 
+            { name: 'Mail Services', logoUrl: 'https://placehold.co/144x80.png?text=Mail' }, 
+            { name: 'Chainlink Co', logoUrl: 'https://placehold.co/144x80.png?text=Chain' }, 
+        ] 
+    } 
+};
+
+const defaultFaqContent: FaqContent = { 
+    heroTitle: "Help Center", 
+    heroSubtitle: "Your questions, answered. Find the information you need about our services.", 
+    title: "Frequently Asked Questions", 
+    description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", 
+    faqs: [ 
+        { question: "What services do you offer?", answer: "We offer a wide range of services including custom web development, UI/UX design, brand strategy, and mobile application development. Our goal is to provide comprehensive digital solutions tailored to your business needs." }, 
+        { question: "How long does a typical project take?", answer: "The timeline for a project varies depending on its scope and complexity. A simple website might take 4-6 weeks, while a complex web application could take several months. We provide a detailed project timeline after our initial discovery phase." }, 
+        { question: "What is your development process?", answer: "Our process is collaborative and transparent. We start with a discovery phase to understand your goals, followed by strategy, design, development, testing, and deployment. We maintain open communication throughout the project to ensure we're aligned with your vision." }, 
+        { question: "How much does a project cost?", answer: "Project costs are based on the specific requirements and complexity of the work. We provide a detailed proposal and quote after discussing your needs. We offer flexible pricing models to accommodate various budgets." }, 
+        { question: "Do you provide support after the project is launched?", answer: "Yes, we offer ongoing support and maintenance packages to ensure your website or application remains secure, up-to-date, and performs optimally. We're here to be your long-term technology partner." } 
+    ] 
+};
+
+const defaultContactContent: ContactContent = { 
+    title: "Let's Build Something Great", 
+    description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas.", 
+    serviceOptions: [ 
+        "Web Development", 
+        "UI/UX Design", 
+        "Mobile App Development", 
+        "General Inquiry" 
+    ] 
+};
 
 const isObject = (item: any): item is Record<string, any> => (item && typeof item === 'object' && !Array.isArray(item));
 
@@ -247,7 +391,6 @@ const deepMerge = <T extends Record<string, any>>(target: T, source: Partial<T>)
     return output;
 };
 
-
 // --- Build-Time Data Fetching Functions ---
 
 const CONTENT_COLLECTION_ID = 'homepage';
@@ -255,59 +398,122 @@ const PORTFOLIO_COLLECTION_ID = 'portfolio';
 const SERVICES_COLLECTION_ID = 'services';
 
 export const getHeroContent = cache(async (): Promise<HeroContent> => {
-    const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/heroContent`);
-    if (!fetchedData) throw new Error("Failed to fetch essential document: heroContent. The build cannot continue without it.");
+    console.log('🚀 Starting getHeroContent...');
+    console.log('🔧 Environment:', {
+        NODE_ENV: process.env.NODE_ENV,
+        PROJECT_ID: !!PROJECT_ID,
+        API_KEY: !!API_KEY,
+        API_BASE_URL
+    });
     
-    const contentData = deepMerge(defaultHeroContent, fetchedData);
-    
-    contentData.works = contentData.works.map((work: HomepageWork) => ({ ...work, link: work.link || `/portfolio/${work.title.toLowerCase().replace(/\s+/g, '-')}` }));
+    try {
+        const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/heroContent`);
+        
+        // FIXED: Don't throw if no data, just use defaults
+        const contentData = fetchedData 
+            ? deepMerge(defaultHeroContent, fetchedData)
+            : defaultHeroContent;
+        
+        console.log('📊 Hero content result:', {
+            source: fetchedData ? 'Firestore + defaults' : 'defaults only',
+            title: contentData.title,
+            slidesCount: contentData.slides?.length,
+            worksCount: contentData.works?.length
+        });
+        
+        contentData.works = contentData.works.map((work: HomepageWork) => ({ 
+            ...work, 
+            link: work.link || `/portfolio/${work.title.toLowerCase().replace(/\s+/g, '-')}` 
+        }));
 
-    let services: Service[] = [];
-    if (contentData.featuredServices && contentData.featuredServices.length > 0) {
-        const allServices = await getServices();
-        services = allServices.filter(service => contentData.featuredServices.includes(service.id));
+        let services: Service[] = [];
+        if (contentData.featuredServices && contentData.featuredServices.length > 0) {
+            try {
+                const allServices = await getServices();
+                services = allServices.filter(service => contentData.featuredServices.includes(service.id));
+            } catch (error) {
+                console.warn('⚠️ Failed to fetch services, continuing without them');
+                services = [];
+            }
+        }
+        
+        return { ...contentData, services };
+    } catch (error) {
+        console.error('💥 Critical error in getHeroContent:', error);
+        console.log('🔄 Falling back to complete defaults');
+        return { ...defaultHeroContent, services: [] };
     }
-    return { ...contentData, services };
 });
 
 export const getAboutContent = cache(async (): Promise<AboutContent> => {
-    const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/aboutContent`);
-    if (!fetchedData) throw new Error("Failed to fetch essential document: aboutContent. The build cannot continue without it.");
-    return deepMerge(defaultAboutContent, fetchedData);
+    try {
+        const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/aboutContent`);
+        return fetchedData ? deepMerge(defaultAboutContent, fetchedData) : defaultAboutContent;
+    } catch (error) {
+        console.error('💥 Error in getAboutContent:', error);
+        return defaultAboutContent;
+    }
 });
 
 export const getPortfolioContent = cache(async (): Promise<PortfolioContent> => {
-    const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/portfolioContent`);
-     if (!fetchedData) throw new Error("Failed to fetch essential document: portfolioContent. The build cannot continue without it.");
-    return deepMerge(defaultPortfolioContent, fetchedData);
+    try {
+        const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/portfolioContent`);
+        return fetchedData ? deepMerge(defaultPortfolioContent, fetchedData) : defaultPortfolioContent;
+    } catch (error) {
+        console.error('💥 Error in getPortfolioContent:', error);
+        return defaultPortfolioContent;
+    }
 });
 
 export const getFaqContent = cache(async (): Promise<FaqContent> => {
-    const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/faqContent`);
-    if (!fetchedData) throw new Error("Failed to fetch essential document: faqContent. The build cannot continue without it.");
-    return deepMerge(defaultFaqContent, fetchedData);
+    try {
+        const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/faqContent`);
+        return fetchedData ? deepMerge(defaultFaqContent, fetchedData) : defaultFaqContent;
+    } catch (error) {
+        console.error('💥 Error in getFaqContent:', error);
+        return defaultFaqContent;
+    }
 });
 
 export const getContactContent = cache(async (): Promise<ContactContent> => {
-    const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/contactContent`);
-    if (!fetchedData) throw new Error("Failed to fetch essential document: contactContent. The build cannot continue without it.");
-    return deepMerge(defaultContactContent, fetchedData);
+    try {
+        const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/contactContent`);
+        return fetchedData ? deepMerge(defaultContactContent, fetchedData) : defaultContactContent;
+    } catch (error) {
+        console.error('💥 Error in getContactContent:', error);
+        return defaultContactContent;
+    }
 });
 
 export const getServices = cache(async (): Promise<Service[]> => {
-    return (await fetchFirestoreCollection(SERVICES_COLLECTION_ID) as Service[]) || [];
+    try {
+        return (await fetchFirestoreCollection(SERVICES_COLLECTION_ID) as Service[]) || [];
+    } catch (error) {
+        console.error('💥 Error in getServices:', error);
+        return [];
+    }
 });
 
 export const getProjects = cache(async (): Promise<(Project & { link: string })[]> => {
-    const projects = (await fetchFirestoreCollection(PORTFOLIO_COLLECTION_ID) as Project[]) || [];
-    return projects.map(p => {
-        const slug = p.slug || p.title.toLowerCase().replace(/\s+/g, '-');
-        return { ...p, slug, link: `/portfolio/${slug}`};
-    });
+    try {
+        const projects = (await fetchFirestoreCollection(PORTFOLIO_COLLECTION_ID) as Project[]) || [];
+        return projects.map(p => {
+            const slug = p.slug || p.title.toLowerCase().replace(/\s+/g, '-');
+            return { ...p, slug, link: `/portfolio/${slug}`};
+        });
+    } catch (error) {
+        console.error('💥 Error in getProjects:', error);
+        return [];
+    }
 });
 
 export const getProjectBySlug = cache(async (slug: string): Promise<(Project & { link: string }) | null> => {
-    const allProjects = await getProjects();
-    const project = allProjects.find(p => p.slug === slug);
-    return project || null;
+    try {
+        const allProjects = await getProjects();
+        const project = allProjects.find(p => p.slug === slug);
+        return project || null;
+    } catch (error) {
+        console.error('💥 Error in getProjectBySlug:', error);
+        return null;
+    }
 });
