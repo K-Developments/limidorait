@@ -4,7 +4,7 @@ import { getContactContent } from "@/services/firestore";
 import type { Metadata } from 'next';
 import { PublicLayout } from "../public-layout";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: 'Contact Limidora | Lets Build Something Great',

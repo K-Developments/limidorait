@@ -2,7 +2,7 @@
 import { MotionWrapper } from "@/components/motion-wrapper";
 import { PublicLayout } from "../public-layout";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 export default function CareersPage() {
     return (

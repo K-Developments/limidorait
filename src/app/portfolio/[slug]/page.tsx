@@ -15,7 +15,7 @@ type Props = {
   params: { slug: string }
 }
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
   const projects = await getProjects();

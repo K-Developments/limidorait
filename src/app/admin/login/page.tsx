@@ -55,7 +55,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
             <div className="mx-auto h-12 w-40 relative mb-4">
-                <Image src="/logo-dark.png" alt="Limidora Logo" fill className="object-contain" />
+                <Image src="https://cdn.jsdelivr.net/gh/K-Developments/media@main/logo.png" alt="Limidora Logo" fill className="object-contain" />
             </div>
           <CardTitle className="text-2xl">Admin Login</CardTitle>
           <CardDescription>Enter your credentials to access the dashboard.</CardDescription>
