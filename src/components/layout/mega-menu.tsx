@@ -53,7 +53,7 @@ export function MegaMenu({ services }: MegaMenuProps) {
         animate="visible"
         exit="exit"
         variants={menuVariants}
-        className="absolute top-full left-0 w-full bg-background shadow-lg border-t"
+        className="absolute top-full left-0 w-full bg-card shadow-lg border-t"
     >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-12">
@@ -64,7 +64,7 @@ export function MegaMenu({ services }: MegaMenuProps) {
                 <ul className="space-y-2">
                 {services.map(service => (
                     <li key={service.id}>
-                    <Link href={service.link} className="block p-2 rounded-md hover:bg-primary/10 text-sm font-medium text-foreground transition-colors">
+                    <Link href={service.link} className="block p-2 rounded-md hover:bg-accent hover:text-accent-foreground text-sm font-medium text-foreground transition-colors">
                         {service.title}
                     </Link>
                     </li>
@@ -78,7 +78,7 @@ export function MegaMenu({ services }: MegaMenuProps) {
                 <div className="grid grid-cols-2 gap-4">
                 {featuredServices.map(service => (
                     <li key={service.id} className="list-none">
-                    <Link href={service.link} className="group flex items-center gap-4 p-2 rounded-md hover:bg-primary/10 transition-colors">
+                    <Link href={service.link} className="group flex items-center gap-4 p-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
                         <div className="relative w-12 h-12 rounded-md overflow-hidden flex-shrink-0">
                             <Image 
                                 src={service.imageUrl} 
@@ -89,8 +89,8 @@ export function MegaMenu({ services }: MegaMenuProps) {
                             />
                         </div>
                         <div>
-                            <p className="font-semibold text-sm text-foreground">{service.title}</p>
-                            <p className="text-xs text-muted-foreground line-clamp-2">{service.description}</p>
+                            <p className="font-semibold text-sm group-hover:text-accent-foreground text-foreground">{service.title}</p>
+                            <p className="text-xs group-hover:text-accent-foreground/80 text-muted-foreground line-clamp-2">{service.description}</p>
                         </div>
                     </Link>
                     </li>
