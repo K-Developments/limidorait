@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -12,8 +11,10 @@ import { getContactContent, updateContactContent, ContactContent, getContactSubm
 import { Skeleton } from '@/components/ui/skeleton';
 import { format } from 'date-fns';
 import { Trash2, PlusCircle, X } from 'lucide-react';
+import { Sidebar } from '@/components/layout/admin-sidebar';
+import { cn } from '@/lib/utils';
 
-export default function AdminContactPage() {
+function AdminDashboard() {
   const { toast } = useToast();
   const [contactContent, setContactContent] = useState<ContactContent | null>(null);
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
@@ -42,7 +43,7 @@ export default function AdminContactPage() {
 
   useEffect(() => {
     fetchContent();
-  }, [toast]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -235,4 +236,27 @@ export default function AdminContactPage() {
   );
 }
 
+export default function AdminContactPage() {
+  const [isSidebarExpanded, setSidebarExpanded] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarExpanded(!isSidebarExpanded);
+  };
+
+  return (
+    <div className="flex min-h-screen w-full bg-muted/40">
+      <Sidebar isExpanded={isSidebarExpanded} toggleSidebar={toggleSidebar} />
+      <div
+        className={cn(
+          "flex flex-col sm:gap-4 sm:py-4 w-full transition-all duration-300 ease-in-out",
+          isSidebarExpanded ? "sm:pl-52" : "sm:pl-14"
+        )}
+      >
+        <main className="flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          <AdminDashboard />
+        </main>
+      </div>
+    </div>
+  );
+}
     

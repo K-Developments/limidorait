@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -12,8 +11,10 @@ import { getServices, updateService, addService, deleteService, Service, uploadI
 import { Skeleton } from '@/components/ui/skeleton';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import Image from 'next/image';
+import { Sidebar } from '@/components/layout/admin-sidebar';
+import { cn } from '@/lib/utils';
 
-export default function AdminServicesPage() {
+function AdminDashboard() {
   const { toast } = useToast();
   const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +39,7 @@ export default function AdminServicesPage() {
 
   useEffect(() => {
     fetchServices();
-  }, [toast]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleServiceChange = (id: string, field: keyof Omit<Service, 'id'>, value: string) => {
     setServices(services.map(s => s.id === id ? { ...s, [field]: value } : s));
@@ -188,6 +189,30 @@ export default function AdminServicesPage() {
             </CardContent>
           </Card>
         ))}
+      </div>
+    </div>
+  );
+}
+
+export default function AdminServicesPage() {
+  const [isSidebarExpanded, setSidebarExpanded] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarExpanded(!isSidebarExpanded);
+  };
+
+  return (
+    <div className="flex min-h-screen w-full bg-muted/40">
+      <Sidebar isExpanded={isSidebarExpanded} toggleSidebar={toggleSidebar} />
+      <div
+        className={cn(
+          "flex flex-col sm:gap-4 sm:py-4 w-full transition-all duration-300 ease-in-out",
+          isSidebarExpanded ? "sm:pl-52" : "sm:pl-14"
+        )}
+      >
+        <main className="flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          <AdminDashboard />
+        </main>
       </div>
     </div>
   );

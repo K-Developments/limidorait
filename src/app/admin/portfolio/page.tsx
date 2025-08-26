@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -12,6 +11,8 @@ import { getPortfolioContent, updatePortfolioContent, PortfolioContent, getProje
 import { Skeleton } from '@/components/ui/skeleton';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import Image from 'next/image';
+import { Sidebar } from '@/components/layout/admin-sidebar';
+import { cn } from '@/lib/utils';
 
 type EditableProject = Omit<Project, 'features' | 'highlights' | 'services'> & {
     features: string;
@@ -21,7 +22,7 @@ type EditableProject = Omit<Project, 'features' | 'highlights' | 'services'> & {
 };
 
 
-export default function AdminPortfolioPage() {
+function AdminDashboard() {
   const { toast } = useToast();
   const [portfolioContent, setPortfolioContent] = useState<PortfolioContent | null>(null);
   const [projects, setProjects] = useState<EditableProject[]>([]);
@@ -54,7 +55,7 @@ export default function AdminPortfolioPage() {
 
   useEffect(() => {
     fetchContent();
-  }, [toast]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -393,3 +394,28 @@ export default function AdminPortfolioPage() {
     </div>
   );
 }
+
+export default function AdminPortfolioPage() {
+  const [isSidebarExpanded, setSidebarExpanded] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarExpanded(!isSidebarExpanded);
+  };
+
+  return (
+    <div className="flex min-h-screen w-full bg-muted/40">
+      <Sidebar isExpanded={isSidebarExpanded} toggleSidebar={toggleSidebar} />
+      <div
+        className={cn(
+          "flex flex-col sm:gap-4 sm:py-4 w-full transition-all duration-300 ease-in-out",
+          isSidebarExpanded ? "sm:pl-52" : "sm:pl-14"
+        )}
+      >
+        <main className="flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          <AdminDashboard />
+        </main>
+      </div>
+    </div>
+  );
+}
+

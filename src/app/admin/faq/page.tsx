@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -20,8 +19,11 @@ import {
   DialogClose,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Sidebar } from '@/components/layout/admin-sidebar';
+import { cn } from '@/lib/utils';
 
-export default function AdminFaqPage() {
+
+function AdminDashboard() {
   const { toast } = useToast();
   const [faqContent, setFaqContent] = useState<FaqContent | null>(null);
   const [submittedQuestions, setSubmittedQuestions] = useState<SubmittedQuestion[]>([]);
@@ -49,7 +51,7 @@ export default function AdminFaqPage() {
 
   useEffect(() => {
     fetchContent();
-  }, [toast]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -240,6 +242,31 @@ export default function AdminFaqPage() {
 
         <Button type="submit" size="lg">Save All Changes</Button>
       </form>
+    </div>
+  );
+}
+
+
+export default function AdminFaqPage() {
+  const [isSidebarExpanded, setSidebarExpanded] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarExpanded(!isSidebarExpanded);
+  };
+
+  return (
+    <div className="flex min-h-screen w-full bg-muted/40">
+      <Sidebar isExpanded={isSidebarExpanded} toggleSidebar={toggleSidebar} />
+      <div
+        className={cn(
+          "flex flex-col sm:gap-4 sm:py-4 w-full transition-all duration-300 ease-in-out",
+          isSidebarExpanded ? "sm:pl-52" : "sm:pl-14"
+        )}
+      >
+        <main className="flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          <AdminDashboard />
+        </main>
+      </div>
     </div>
   );
 }
