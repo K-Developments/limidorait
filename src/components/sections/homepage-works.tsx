@@ -158,7 +158,7 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
         </div>
 
         <div className="text-center mt-8 sm:mt-12">
-          <Button asChild size="lg">
+          <Button asChild size="lg" variant="outline">
             <Link href="/portfolio">View All Works</Link>
           </Button>
         </div>
