@@ -7,8 +7,8 @@ import '../globals.css';
 import { cn } from '@/lib/utils';
 import { AuthProvider } from '@/context/auth-provider';
 
-// This new inner component will be rendered as a child of AuthProvider,
-// guaranteeing that the context is available to it and all its children (like Sidebar).
+// This inner component is now guaranteed to be a child of AuthProvider,
+// ensuring that the context is available to it and all its children (like Sidebar).
 function AdminDashboard({ children }: { children: React.ReactNode }) {
   const [isSidebarExpanded, setSidebarExpanded] = useState(false);
 
