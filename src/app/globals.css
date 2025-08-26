@@ -121,21 +121,23 @@ html{
     .btn-corners::before {
       top: -1px;
       left: -1px;
-      border-top: 1px solid gray;
-      border-left: 1px solid gray;
+      border-top: 1px solid hsl(var(--accent));
+      border-left: 1px solid hsl(var(--accent));
     }
     .btn-corners::after {
       bottom: -1px;
       right: -1px;
-      border-bottom: 1px solid gray;
-      border-right: 1px solid gray;
+      border-bottom: 1px solid hsl(var(--accent));
+      border-right: 1px solid hsl(var(--accent));
     }
     .btn-corners:hover::before,
     .btn-corners:hover::after {
-      border-color: hsl(var(--foreground));
+      border-color: hsl(var(--accent));
       width: calc(100% + 2px);
       height: calc(100% + 2px);
+
     }
+   
 }
 
 
