@@ -2,6 +2,7 @@
 import { Contact } from "@/components/sections/contact";
 import { getContactContent } from "@/services/firestore";
 import type { Metadata } from 'next';
+import { PublicLayout } from "../public-layout";
 
 export const dynamic = "force-static";
 
@@ -13,8 +14,8 @@ export const metadata: Metadata = {
 export default async function ContactPage() {
     const contactContent = await getContactContent();
     return (
-        <div>
+        <PublicLayout>
             <Contact content={contactContent} />
-        </div>
+        </PublicLayout>
     );
 }

@@ -5,6 +5,7 @@ import { PortfolioHero } from "@/components/sections/portfolio-hero";
 import { ClientsCarousel } from "@/components/sections/clients-carousel";
 import { getProjects, Project, getPortfolioContent, PortfolioContent } from "@/services/firestore";
 import type { Metadata } from 'next';
+import { PublicLayout } from "../public-layout";
 
 export const dynamic = "force-static";
 
@@ -20,7 +21,7 @@ export default async function PortfolioPage() {
     ]);
 
     return (
-      <>
+      <PublicLayout>
         <PortfolioHero content={portfolioContent} />
         <section id="portfolio" className="py-20 md:py-28 bg-background">
           <div className="container">
@@ -51,6 +52,6 @@ export default async function PortfolioPage() {
                 logos={portfolioContent.clientsSection.logos}
             />
         )}
-      </>
+      </PublicLayout>
     );
 }

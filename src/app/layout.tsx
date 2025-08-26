@@ -3,10 +3,6 @@ import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
-import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
-import { getHeroContent, getServices } from '@/services/firestore';
-import { SidebarProvider } from '@/components/layout/sidebar-provider';
 
 const fontBody = Montserrat({
   subsets: ['latin'],
@@ -42,31 +38,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const [heroContent, services] = await Promise.all([
-      getHeroContent(),
-      getServices()
-  ]);
-
-  const navItems = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Portfolio', href: '/portfolio' },
-    { name: 'Services' },
-    { name: 'FAQs', href: '/faq' },
-    { name: 'Blog & News', href: '/blog' },
-    { name: 'Careers', href: '/careers' },
-  ];
-
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={`${fontBody.variable} font-body antialiased`}>
-        <SidebarProvider navItems={navItems}>
-            <div className="flex min-h-screen flex-col pt-20">
-                <Header content={heroContent} services={services} />
-                <main className="flex-1">{children}</main>
-                <Footer content={heroContent} />
-            </div>
-        </SidebarProvider>
+        {children}
         <Toaster />
       </body>
     </html>

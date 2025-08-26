@@ -1,17 +1,20 @@
 
 import { MotionWrapper } from "@/components/motion-wrapper";
+import { PublicLayout } from "../public-layout";
 
 export const dynamic = "force-static";
 
 export default function BlogPage() {
     return (
-        <MotionWrapper>
-            <div className="container mx-auto px-4 py-20 pt-32 text-center">
-                <h1 className="text-4xl font-medium uppercase">Blog & News</h1>
-                <p className="mt-4 text-lg text-muted-foreground">
-                    Our blog is coming soon! Stay tuned for insights and updates.
-                </p>
-            </div>
-        </MotionWrapper>
+        <PublicLayout>
+            <MotionWrapper>
+                <div className="container mx-auto px-4 py-20 pt-32 text-center">
+                    <h1 className="text-4xl font-medium uppercase">Blog & News</h1>
+                    <p className="mt-4 text-lg text-muted-foreground">
+                        Our blog is coming soon! Stay tuned for insights and updates.
+                    </p>
+                </div>
+            </MotionWrapper>
+        </PublicLayout>
     );
 }

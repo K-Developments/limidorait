@@ -5,6 +5,7 @@ import { FaqHero } from "@/components/sections/faq-hero";
 import type { Metadata, ResolvingMetadata } from 'next';
 import { HomepageCta } from "@/components/sections/homepage-cta";
 import { getHeroContent, getFaqContent } from "@/services/firestore";
+import { PublicLayout } from "../public-layout";
 
 export const dynamic = "force-static";
 
@@ -24,10 +25,12 @@ export default async function FaqPage() {
     const heroContent = await getHeroContent();
     const faqContent = await getFaqContent();
     return (
-        <MotionWrapper>
-            <FaqHero content={faqContent} />
-            <Faq content={faqContent} />
-            {heroContent && <HomepageCta ctaSection={heroContent.ctaSection} />}
-        </MotionWrapper>
+        <PublicLayout>
+            <MotionWrapper>
+                <FaqHero content={faqContent} />
+                <Faq content={faqContent} />
+                {heroContent && <HomepageCta ctaSection={heroContent.ctaSection} />}
+            </MotionWrapper>
+        </PublicLayout>
     );
 }

@@ -1,7 +1,8 @@
 
-import { getHeroContent, HeroContent } from "@/services/firestore";
+import { getHeroContent } from "@/services/firestore";
 import type { Metadata } from 'next';
 import HomePageClient from "./home-page-client";
+import { PublicLayout } from "./public-layout";
 
 export const dynamic = "force-static";
 
@@ -31,5 +32,9 @@ export const metadata: Metadata = {
 export default async function Page() {
   const content = await getHeroContent();
 
-  return <HomePageClient content={content} />;
+  return (
+    <PublicLayout>
+        <HomePageClient content={content} />
+    </PublicLayout>
+  );
 }
