@@ -215,7 +215,7 @@ function AdminDashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Questions & Answers</CardTitle>
+            <CardTitle>Questions &amp; Answers</CardTitle>
             <CardDescription>Add, edit, or remove FAQ items.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
