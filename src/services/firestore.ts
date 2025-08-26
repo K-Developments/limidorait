@@ -138,6 +138,11 @@ export interface ContactSubmission {
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+
+if (!PROJECT_ID || !API_KEY) {
+  throw new Error("Firebase Project ID or API Key is not configured in environment variables.");
+}
+
 const API_BASE_URL = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
 
@@ -148,24 +153,36 @@ const parseFirestoreResponse = (doc: any, isCollection = false) => {
         const parsed: { [key: string]: any } = {};
         for (const key in fields) {
             const value = fields[key];
-            if (value.stringValue) parsed[key] = value.stringValue;
-            else if (value.integerValue) parsed[key] = parseInt(value.integerValue, 10);
-            else if (value.doubleValue) parsed[key] = value.doubleValue;
-            else if (value.booleanValue !== undefined) parsed[key] = value.booleanValue;
-            else if (value.timestampValue) parsed[key] = new Date(value.timestampValue);
-            else if (value.arrayValue) {
-                // Check if array is empty before trying to map
-                parsed[key] = value.arrayValue.values ? value.arrayValue.values.map((v: any) => {
-                    // This handles various nested types inside an array
-                    const nestedValueKey = Object.keys(v)[0];
-                    if (nestedValueKey === 'mapValue') {
-                        return parseFields(v.mapValue.fields || {});
-                    }
-                    return v[nestedValueKey];
-                }) : [];
-            }
-             else if (value.mapValue) {
-                parsed[key] = parseFields(value.mapValue.fields || {});
+            const valueKey = Object.keys(value)[0];
+            switch (valueKey) {
+                case 'stringValue':
+                case 'integerValue':
+                case 'doubleValue':
+                case 'booleanValue':
+                    parsed[key] = value[valueKey];
+                    break;
+                case 'timestampValue':
+                    parsed[key] = new Date(value[valueKey]);
+                    break;
+                case 'mapValue':
+                    parsed[key] = parseFields(value.mapValue.fields || {});
+                    break;
+                case 'arrayValue':
+                     parsed[key] = (value.arrayValue.values || []).map((v: any) => {
+                        const nestedValueKey = Object.keys(v)[0];
+                        if (nestedValueKey === 'mapValue') {
+                            return parseFields(v.mapValue.fields || {});
+                        }
+                        return v[nestedValueKey];
+                    });
+                    break;
+                case 'nullValue':
+                    parsed[key] = null;
+                    break;
+                default:
+                    // For other types like geoPointValue, referenceValue, etc.
+                    parsed[key] = value[valueKey];
+                    break;
             }
         }
         return parsed;
@@ -182,19 +199,23 @@ const parseFirestoreResponse = (doc: any, isCollection = false) => {
 };
 
 const fetchFirestoreDoc = cache(async (path: string) => {
-    const res = await fetch(`${API_BASE_URL}/${path}?key=${API_KEY}`);
+    const url = `${API_BASE_URL}/${path}?key=${API_KEY}`;
+    const res = await fetch(url, { next: { revalidate: false } }); // Ensure no revalidation
     if (!res.ok) {
-      if (res.status === 404) return null; 
-      throw new Error(`Failed to fetch ${path}: ${res.statusText}`);
+      // If document is not found, it's not an error, just return null.
+      if (res.status === 404) return null;
+      // For any other error, fail the build.
+      throw new Error(`Failed to fetch doc '${path}': ${res.status} ${res.statusText}`);
     }
     const json = await res.json();
     return parseFirestoreResponse(json);
 });
 
 const fetchFirestoreCollection = cache(async (path: string) => {
-    const res = await fetch(`${API_BASE_URL}/${path}?key=${API_KEY}`);
+    const url = `${API_BASE_URL}/${path}?key=${API_KEY}`;
+    const res = await fetch(url, { next: { revalidate: false } });
     if (!res.ok) {
-      throw new Error(`Failed to fetch collection ${path}: ${res.statusText}`);
+        throw new Error(`Failed to fetch collection '${path}': ${res.status} ${res.statusText}`);
     }
     const json = await res.json();
     return parseFirestoreResponse(json, true);
@@ -208,8 +229,28 @@ const defaultAboutContent: AboutContent = { heroTitle: "Building Brands With Pur
 const defaultPortfolioContent: PortfolioContent = { heroTitle: "Our Works", heroSubtitle: "A glimpse into our creative world and the impact we deliver.", clientsSection: { title: "Trusted by Industry Leaders", subtitle: "We partner with ambitious brands and people. We'd love to build something great with you.", logos: [ { name: 'Generic Circle Co', logoUrl: 'https://placehold.co/144x80.png?text=Circle' }, { name: 'Square Blocks Inc', logoUrl: 'https://placehold.co/144x80.png?text=Square' }, { name: 'Star Industries', logoUrl: 'https://placehold.co/144x80.png?text=Star' }, { name: 'Check Marks LLC', logoUrl: 'https://placehold.co/144x80.png?text=Check' }, { name: 'House Builders', logoUrl: 'https://placehold.co/144x80.png?text=House' }, { name: 'Mail Services', logoUrl: 'https://placehold.co/144x80.png?text=Mail' }, { name: 'Chainlink Co', logoUrl: 'https://placehold.co/144x80.png?text=Chain' }, ] } };
 const defaultFaqContent: FaqContent = { heroTitle: "Help Center", heroSubtitle: "Your questions, answered. Find the information you need about our services.", title: "Frequently Asked Questions", description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", faqs: [ { question: "What services do you offer?", answer: "We offer a wide range of services including custom web development, UI/UX design, brand strategy, and mobile application development. Our goal is to provide comprehensive digital solutions tailored to your business needs." }, { question: "How long does a typical project take?", answer: "The timeline for a project varies depending on its scope and complexity. A simple website might take 4-6 weeks, while a complex web application could take several months. We provide a detailed project timeline after our initial discovery phase." }, { question: "What is your development process?", answer: "Our process is collaborative and transparent. We start with a discovery phase to understand your goals, followed by strategy, design, development, testing, and deployment. We maintain open communication throughout the project to ensure we're aligned with your vision." }, { question: "How much does a project cost?", answer: "Project costs are based on the specific requirements and complexity of the work. We provide a detailed proposal and quote after discussing your needs. We offer flexible pricing models to accommodate various budgets." }, { question: "Do you provide support after the project is launched?", answer: "Yes, we offer ongoing support and maintenance packages to ensure your website or application remains secure, up-to-date, and performs optimally. We're here to be your long-term technology partner." } ] };
 const defaultContactContent: ContactContent = { title: "Let's Build Something Great", description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas.", serviceOptions: [ "Web Development", "UI/UX Design", "Mobile App Development", "General Inquiry" ] };
-const isObject = (item: any) => (item && typeof item === 'object' && !Array.isArray(item));
-const deepMerge = (target: any, source: any) => { const output = { ...target }; if (isObject(target) && isObject(source)) { Object.keys(source).forEach(key => { if (isObject(source[key])) { if (!(key in target)) Object.assign(output, { [key]: source[key] }); else output[key] = deepMerge(target[key], source[key]); } else { Object.assign(output, { [key]: source[key] }); } }); } return output; }
+
+const isObject = (item: any): item is Record<string, any> => (item && typeof item === 'object' && !Array.isArray(item));
+
+const deepMerge = <T extends Record<string, any>>(target: T, source: Partial<T>): T => {
+    const output: T = { ...target };
+    if (isObject(target) && isObject(source)) {
+        Object.keys(source).forEach(key => {
+            const sourceKey = key as keyof T;
+            if (isObject(source[sourceKey])) {
+                if (!(sourceKey in target)) {
+                    Object.assign(output, { [sourceKey]: source[sourceKey] });
+                } else {
+                    output[sourceKey] = deepMerge(target[sourceKey], source[sourceKey] as Partial<T[Extract<keyof T, string>]>);
+                }
+            } else {
+                Object.assign(output, { [sourceKey]: source[sourceKey] });
+            }
+        });
+    }
+    return output;
+};
+
 
 // --- Build-Time Data Fetching Functions ---
 
@@ -250,7 +291,7 @@ export const getServices = cache(async (): Promise<Service[]> => {
     return (await fetchFirestoreCollection(SERVICES_COLLECTION_ID) as Service[]) || [];
 });
 export const getProjects = cache(async (): Promise<(Project & { link: string })[]> => {
-    const projects = await fetchFirestoreCollection(PORTFOLIO_COLLECTION_ID) as Project[];
+    const projects = (await fetchFirestoreCollection(PORTFOLIO_COLLECTION_ID) as Project[]) || [];
     return projects.map(p => {
         const slug = p.slug || p.title.toLowerCase().replace(/\s+/g, '-');
         return { ...p, slug, link: `/portfolio/${slug}`};
