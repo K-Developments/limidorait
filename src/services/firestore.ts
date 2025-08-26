@@ -69,11 +69,6 @@ export interface AboutContent {
   heroImageUrl: string;
   aboutTitle: string;
   aboutDescription: string;
-  interactivePanels: {
-        faq: { title: string; description: string; imageUrl: string; imageHint: string; link: string; };
-        testimonials: { title: string; description: string; imageUrl: string; imageHint: string; link: string; };
-        solutions: { title: string; description: string; imageUrl: string; imageHint: string; link: string; };
-  };
 }
 export interface ClientLogo {
   name: string;
@@ -286,11 +281,6 @@ const defaultAboutContent: AboutContent = {
     heroImageUrl: "https://placehold.co/1600x640.png", 
     aboutTitle: "Our Vision", 
     aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.", 
-    interactivePanels: { 
-        faq: { title: "Your Questions, Answered.", description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", imageUrl: "https://placehold.co/800x600.png?text=FAQs", imageHint: "question mark abstract", link: "/faq?from=about" }, 
-        testimonials: { title: "Trusted by Ambitious Brands.", description: "We take pride in our work and are honored to have the trust of our amazing clients.", imageUrl: "https://placehold.co/800x600.png?text=Testimonials", imageHint: "client meeting handshake", link: "/about#testimonials" }, 
-        solutions: { title: "Innovative Digital Solutions.", description: "We leverage the latest technologies to build cutting-edge solutions that give you a competitive edge.", imageUrl: "https://placehold.co/800x600.png?text=Solutions", imageHint: "technology code screen", link: "/services" } 
-    } 
 };
 
 const defaultPortfolioContent: PortfolioContent = { 
@@ -416,5 +406,3 @@ export const getProjectBySlug = cache(async (slug: string): Promise<(Project & {
     const project = allProjects.find(p => p.slug === slug);
     return project || null;
 });
-
-    

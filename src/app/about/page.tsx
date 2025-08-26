@@ -6,7 +6,6 @@ import { Testimonials } from "@/components/sections/homepage-testimonials";
 import { HomepageCta } from "@/components/sections/homepage-cta";
 import { getHeroContent, getAboutContent, AboutContent } from "@/services/firestore";
 import type { Metadata, ResolvingMetadata } from 'next';
-import { InteractivePanels } from "@/components/sections/interactive-panels";
 import { PublicLayout } from "../public-layout";
 
 export const dynamic = 'force-static';
@@ -35,7 +34,6 @@ export default async function AboutPage() {
             <AboutHero content={aboutContent} />
             <About content={aboutContent} />
             <WhyUs />
-            <InteractivePanels content={aboutContent} />
             {heroContent && <Testimonials testimonials={heroContent.testimonials} />}
             {heroContent && <HomepageCta ctaSection={heroContent.ctaSection} />}
         </PublicLayout>
