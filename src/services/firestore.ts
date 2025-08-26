@@ -2,7 +2,6 @@
 import { db, storage } from '@/lib/firebase';
 import { doc, setDoc, collection, addDoc, serverTimestamp, getDocs, deleteDoc, updateDoc, query, orderBy, where, limit, documentId, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { GoogleAuth } from 'google-auth-library';
 import { cache } from 'react';
 
 // Interfaces remain the same
@@ -141,28 +140,9 @@ export interface ContactSubmission {
 // --- REST API Implementation ---
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 const API_BASE_URL = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
-let authToken: string | null = null;
-const auth = new GoogleAuth({
-  scopes: 'https://www.googleapis.com/auth/datastore',
-});
-
-const getAccessToken = async () => {
-    if (authToken) return authToken;
-    try {
-        const client = await auth.getClient();
-        const token = await client.getAccessToken();
-        if (token.token) {
-          authToken = token.token;
-          return authToken;
-        }
-        throw new Error('Failed to retrieve access token.');
-    } catch(error) {
-        console.error("Error getting access token:", error);
-        throw new Error("Could not authenticate for build-time data fetching.");
-    }
-};
 
 const parseFirestoreResponse = (doc: any, isCollection = false) => {
     if (!doc) return null;
@@ -177,7 +157,15 @@ const parseFirestoreResponse = (doc: any, isCollection = false) => {
             else if (value.booleanValue !== undefined) parsed[key] = value.booleanValue;
             else if (value.timestampValue) parsed[key] = new Date(value.timestampValue);
             else if (value.arrayValue) {
-                parsed[key] = value.arrayValue.values?.map((v: any) => Object.values(v)[0]) || [];
+                // Check if array is empty before trying to map
+                parsed[key] = value.arrayValue.values ? value.arrayValue.values.map((v: any) => {
+                    // This handles various nested types inside an array
+                    const nestedValueKey = Object.keys(v)[0];
+                    if (nestedValueKey === 'mapValue') {
+                        return parseFields(v.mapValue.fields || {});
+                    }
+                    return v[nestedValueKey];
+                }) : [];
             }
              else if (value.mapValue) {
                 parsed[key] = parseFields(value.mapValue.fields || {});
@@ -197,12 +185,9 @@ const parseFirestoreResponse = (doc: any, isCollection = false) => {
 };
 
 const fetchFirestoreDoc = cache(async (path: string) => {
-    const token = await getAccessToken();
-    const res = await fetch(`${API_BASE_URL}/${path}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const res = await fetch(`${API_BASE_URL}/${path}?key=${API_KEY}`);
     if (!res.ok) {
-      if (res.status === 404) return null; // Handle not found gracefully
+      if (res.status === 404) return null; 
       throw new Error(`Failed to fetch ${path}: ${res.statusText}`);
     }
     const json = await res.json();
@@ -210,10 +195,7 @@ const fetchFirestoreDoc = cache(async (path: string) => {
 });
 
 const fetchFirestoreCollection = cache(async (path: string) => {
-    const token = await getAccessToken();
-    const res = await fetch(`${API_BASE_URL}/${path}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const res = await fetch(`${API_BASE_URL}/${path}?key=${API_KEY}`);
     if (!res.ok) {
       throw new Error(`Failed to fetch collection ${path}: ${res.statusText}`);
     }
