@@ -2,10 +2,11 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, UserSquare, Briefcase, ServerCog, Mail, HelpCircle } from 'lucide-react';
+import { Home, UserSquare, Briefcase, ServerCog, Mail, HelpCircle, LogOut } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
+import { useAuth } from '@/context/auth-provider';
 
 interface SidebarProps {
     isExpanded: boolean;
@@ -13,6 +14,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isExpanded, toggleSidebar }: SidebarProps) {
+  const { signOutUser } = useAuth();
   return (
     <aside
       className={cn(
@@ -154,6 +156,22 @@ export function Sidebar({ isExpanded, toggleSidebar }: SidebarProps) {
                         </Link>
                     </TooltipTrigger>
                     {!isExpanded && <TooltipContent side="right">View Live Site</TooltipContent>}
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                         <Button
+                            variant="ghost"
+                            onClick={signOutUser}
+                            className={cn("flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
+                             isExpanded && "w-full justify-start pl-2"
+                            )}
+                        >
+                            <LogOut className="h-5 w-5" />
+                            {isExpanded && <span className="ml-4">Sign Out</span>}
+                            <span className="sr-only">Sign Out</span>
+                        </Button>
+                    </TooltipTrigger>
+                    {!isExpanded && <TooltipContent side="right">Sign Out</TooltipContent>}
                 </Tooltip>
             </nav>
         </TooltipProvider>
