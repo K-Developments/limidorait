@@ -1,3 +1,4 @@
+
 import { cache } from 'react';
 
 // Interfaces remain the same
@@ -138,6 +139,7 @@ export interface ContactSubmission {
 const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 
+
 if (!PROJECT_ID || !API_KEY) {
   throw new Error("Firebase Project ID or API Key is not configured in environment variables.");
 }
@@ -199,76 +201,36 @@ const parseFirestoreResponse = (doc: any, isCollection = false) => {
 };
 
 const fetchFirestoreDoc = cache(async (path: string) => {
-    console.log(`🔍 Fetching Firestore doc: ${path}`);
-    console.log(`🌐 Full URL: ${API_BASE_URL}/${path}?key=${API_KEY?.substring(0, 10)}...`);
-    
     const url = `${API_BASE_URL}/${path}?key=${API_KEY}`;
     
-    try {
-        const res = await fetch(url, { next: { revalidate: false } });
-        console.log(`📡 Response status for ${path}: ${res.status}`);
-        
-        if (!res.ok) {
-            if (res.status === 404) {
-                console.log(`⚠️ Document not found: ${path} - will use defaults`);
-                return null;
-            }
-            
-            // Log the full error response for debugging
-            const errorText = await res.text();
-            console.error(`❌ API Error for ${path}:`, {
-                status: res.status,
-                statusText: res.statusText,
-                body: errorText
-            });
-            throw new Error(`Failed to fetch doc '${path}': ${res.status} ${res.statusText}`);
+    const res = await fetch(url, { next: { revalidate: false } }); // No revalidation for static build
+    
+    if (!res.ok) {
+        if (res.status === 404) {
+            console.log(`[BUILD INFO] Document not found: ${path}. This is expected if the document is optional.`);
+            return null; // Return null for optional documents
         }
-        
-        const json = await res.json();
-        console.log(`📄 Raw Firestore response for ${path}:`, JSON.stringify(json, null, 2));
-        
-        const parsed = parseFirestoreResponse(json);
-        console.log(`✅ Successfully parsed ${path}:`, JSON.stringify(parsed, null, 2));
-        return parsed;
-    } catch (error) {
-        console.error(`💥 Network/Parse error for ${path}:`, error);
-        // Always return null during build to continue with defaults
-        console.log(`🔄 Continuing with defaults for ${path}`);
-        return null;
+        // For other errors, throw to fail the build
+        const errorText = await res.text();
+        throw new Error(`Failed to fetch doc '${path}': ${res.status} ${res.statusText}. Response: ${errorText}`);
     }
+    
+    const json = await res.json();
+    return parseFirestoreResponse(json);
 });
 
 const fetchFirestoreCollection = cache(async (path: string) => {
-    console.log(`🔍 Fetching Firestore collection: ${path}`);
-    console.log(`🌐 Full URL: ${API_BASE_URL}/${path}?key=${API_KEY?.substring(0, 10)}...`);
-    
     const url = `${API_BASE_URL}/${path}?key=${API_KEY}`;
     
-    try {
-        const res = await fetch(url, { next: { revalidate: false } });
-        console.log(`📡 Response status for collection ${path}: ${res.status}`);
-        
-        if (!res.ok) {
-            const errorText = await res.text();
-            console.error(`❌ Failed to fetch collection '${path}':`, {
-                status: res.status,
-                statusText: res.statusText,
-                body: errorText
-            });
-            throw new Error(`Failed to fetch collection '${path}': ${res.status} ${res.statusText}`);
-        }
-        
-        const json = await res.json();
-        console.log(`📄 Raw collection response for ${path}:`, JSON.stringify(json, null, 2));
-        
-        const parsed = parseFirestoreResponse(json, true);
-        console.log(`✅ Collection ${path} parsed:`, Array.isArray(parsed) ? `${parsed.length} items` : 'No items');
-        return parsed;
-    } catch (error) {
-        console.error(`💥 Error fetching collection ${path}:`, error);
-        console.log(`🔄 Continuing with empty array for ${path}`);
-        return [];
+    const res = await fetch(url, { next: { revalidate: false } }); // No revalidation
+    
+    if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Failed to fetch collection '${path}': ${res.status} ${res.statusText}. Response: ${errorText}`);
     }
+    
+    const json = await res.json();
+    return parseFirestoreResponse(json, true);
 });
 
 // --- Data Default Values ---
@@ -374,6 +336,7 @@ const defaultContactContent: ContactContent = {
     ] 
 };
 
+
 const isObject = (item: any): item is Record<string, any> => (item && typeof item === 'object' && !Array.isArray(item));
 
 const deepMerge = <T extends Record<string, any>>(target: T, source: Partial<T>): T => {
@@ -391,6 +354,7 @@ const deepMerge = <T extends Record<string, any>>(target: T, source: Partial<T>)
     return output;
 };
 
+
 // --- Build-Time Data Fetching Functions ---
 
 const CONTENT_COLLECTION_ID = 'homepage';
@@ -398,122 +362,59 @@ const PORTFOLIO_COLLECTION_ID = 'portfolio';
 const SERVICES_COLLECTION_ID = 'services';
 
 export const getHeroContent = cache(async (): Promise<HeroContent> => {
-    console.log('🚀 Starting getHeroContent...');
-    console.log('🔧 Environment:', {
-        NODE_ENV: process.env.NODE_ENV,
-        PROJECT_ID: !!PROJECT_ID,
-        API_KEY: !!API_KEY,
-        API_BASE_URL
-    });
+    const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/heroContent`);
+    const contentData = fetchedData ? deepMerge(defaultHeroContent, fetchedData) : defaultHeroContent;
     
-    try {
-        const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/heroContent`);
-        
-        // FIXED: Don't throw if no data, just use defaults
-        const contentData = fetchedData 
-            ? deepMerge(defaultHeroContent, fetchedData)
-            : defaultHeroContent;
-        
-        console.log('📊 Hero content result:', {
-            source: fetchedData ? 'Firestore + defaults' : 'defaults only',
-            title: contentData.title,
-            slidesCount: contentData.slides?.length,
-            worksCount: contentData.works?.length
-        });
-        
-        contentData.works = contentData.works.map((work: HomepageWork) => ({ 
-            ...work, 
-            link: work.link || `/portfolio/${work.title.toLowerCase().replace(/\s+/g, '-')}` 
-        }));
+    contentData.works = contentData.works.map((work: HomepageWork) => ({ 
+        ...work, 
+        link: work.link || `/portfolio/${work.title.toLowerCase().replace(/\s+/g, '-')}` 
+    }));
 
-        let services: Service[] = [];
-        if (contentData.featuredServices && contentData.featuredServices.length > 0) {
-            try {
-                const allServices = await getServices();
-                services = allServices.filter(service => contentData.featuredServices.includes(service.id));
-            } catch (error) {
-                console.warn('⚠️ Failed to fetch services, continuing without them');
-                services = [];
-            }
-        }
-        
-        return { ...contentData, services };
-    } catch (error) {
-        console.error('💥 Critical error in getHeroContent:', error);
-        console.log('🔄 Falling back to complete defaults');
-        return { ...defaultHeroContent, services: [] };
+    let services: Service[] = [];
+    if (contentData.featuredServices && contentData.featuredServices.length > 0) {
+        const allServices = await getServices();
+        services = allServices.filter(service => contentData.featuredServices.includes(service.id));
     }
+    
+    return { ...contentData, services };
 });
 
 export const getAboutContent = cache(async (): Promise<AboutContent> => {
-    try {
-        const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/aboutContent`);
-        return fetchedData ? deepMerge(defaultAboutContent, fetchedData) : defaultAboutContent;
-    } catch (error) {
-        console.error('💥 Error in getAboutContent:', error);
-        return defaultAboutContent;
-    }
+    const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/aboutContent`);
+    return fetchedData ? deepMerge(defaultAboutContent, fetchedData) : defaultAboutContent;
 });
 
 export const getPortfolioContent = cache(async (): Promise<PortfolioContent> => {
-    try {
-        const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/portfolioContent`);
-        return fetchedData ? deepMerge(defaultPortfolioContent, fetchedData) : defaultPortfolioContent;
-    } catch (error) {
-        console.error('💥 Error in getPortfolioContent:', error);
-        return defaultPortfolioContent;
-    }
+    const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/portfolioContent`);
+    return fetchedData ? deepMerge(defaultPortfolioContent, fetchedData) : defaultPortfolioContent;
 });
 
 export const getFaqContent = cache(async (): Promise<FaqContent> => {
-    try {
-        const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/faqContent`);
-        return fetchedData ? deepMerge(defaultFaqContent, fetchedData) : defaultFaqContent;
-    } catch (error) {
-        console.error('💥 Error in getFaqContent:', error);
-        return defaultFaqContent;
-    }
+    const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/faqContent`);
+    return fetchedData ? deepMerge(defaultFaqContent, fetchedData) : defaultFaqContent;
 });
 
 export const getContactContent = cache(async (): Promise<ContactContent> => {
-    try {
-        const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/contactContent`);
-        return fetchedData ? deepMerge(defaultContactContent, fetchedData) : defaultContactContent;
-    } catch (error) {
-        console.error('💥 Error in getContactContent:', error);
-        return defaultContactContent;
-    }
+    const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/contactContent`);
+    return fetchedData ? deepMerge(defaultContactContent, fetchedData) : defaultContactContent;
 });
 
 export const getServices = cache(async (): Promise<Service[]> => {
-    try {
-        return (await fetchFirestoreCollection(SERVICES_COLLECTION_ID) as Service[]) || [];
-    } catch (error) {
-        console.error('💥 Error in getServices:', error);
-        return [];
-    }
+    return (await fetchFirestoreCollection(SERVICES_COLLECTION_ID) as Service[]) || [];
 });
 
 export const getProjects = cache(async (): Promise<(Project & { link: string })[]> => {
-    try {
-        const projects = (await fetchFirestoreCollection(PORTFOLIO_COLLECTION_ID) as Project[]) || [];
-        return projects.map(p => {
-            const slug = p.slug || p.title.toLowerCase().replace(/\s+/g, '-');
-            return { ...p, slug, link: `/portfolio/${slug}`};
-        });
-    } catch (error) {
-        console.error('💥 Error in getProjects:', error);
-        return [];
-    }
+    const projects = (await fetchFirestoreCollection(PORTFOLIO_COLLECTION_ID) as Project[]) || [];
+    return projects.map(p => {
+        const slug = p.slug || p.title.toLowerCase().replace(/\s+/g, '-');
+        return { ...p, slug, link: `/portfolio/${slug}`};
+    });
 });
 
 export const getProjectBySlug = cache(async (slug: string): Promise<(Project & { link: string }) | null> => {
-    try {
-        const allProjects = await getProjects();
-        const project = allProjects.find(p => p.slug === slug);
-        return project || null;
-    } catch (error) {
-        console.error('💥 Error in getProjectBySlug:', error);
-        return null;
-    }
+    const allProjects = await getProjects();
+    const project = allProjects.find(p => p.slug === slug);
+    return project || null;
 });
+
+    
