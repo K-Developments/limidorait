@@ -13,7 +13,6 @@ export function Footer({ content }: FooterProps) {
 
   const companyLinks = [
     { name: 'About', href: '/about' },
-    { name: 'Blog', href: '/blog' },
     { name: 'Contact', href: '/contact' }
   ];
 
