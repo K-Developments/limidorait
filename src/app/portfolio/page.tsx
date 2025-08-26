@@ -7,8 +7,6 @@ import { getProjects, Project, getPortfolioContent, PortfolioContent } from "@/s
 import type { Metadata } from 'next';
 import { PublicLayout } from "../public-layout";
 
-export const dynamic = "force-dynamic";
-
 export const metadata: Metadata = {
   title: 'Portfolio | Limidora Digital',
   description: 'Explore our portfolio of web development, UI/UX design, and mobile app projects. See how we help businesses achieve their goals with creative solutions.',

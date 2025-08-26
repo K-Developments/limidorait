@@ -9,8 +9,6 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import { InteractivePanels } from "@/components/sections/interactive-panels";
 import { PublicLayout } from "../public-layout";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata(
   {},
   parent: ResolvingMetadata

@@ -9,13 +9,11 @@ import { getProjectBySlug, getProjects } from '@/services/firestore';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { HomepageCta } from '@/components/sections/homepage-cta';
 import { getHeroContent } from '@/services/firestore';
-import { PublicLayout } from '../public-layout';
+import { PublicLayout } from '../../public-layout';
 
 type Props = {
   params: { slug: string }
 }
-
-export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
   const projects = await getProjects();
