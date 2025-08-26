@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -7,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getAboutContent, updateAboutContent, AboutContent, uploadImageAndGetURL } from '@/services/firestore';
+import { updateAboutContent, AboutContent, uploadImageAndGetURL, getClientAboutContent } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import { Sidebar } from '@/components/layout/admin-sidebar';
@@ -22,7 +23,7 @@ function AdminDashboard() {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const content = await getAboutContent();
+        const content = await getClientAboutContent();
         setAboutContent(content);
       } catch (error) {
         console.error("Failed to fetch about content:", error);

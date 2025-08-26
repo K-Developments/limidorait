@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -7,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getHeroContent, updateHeroContent, HeroContent, Service, HomepageWork, HomepageTestimonial, HomepageAboutSection, HomepageCtaSection, getServices, SocialLink, SocialPlatform, uploadImageAndGetURL } from '@/services/firestore';
+import { updateHeroContent, HeroContent, Service, HomepageWork, HomepageTestimonial, HomepageAboutSection, HomepageCtaSection, getClientServices, SocialLink, SocialPlatform, uploadImageAndGetURL, getClientHeroContent } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { PlusCircle, Trash2 } from 'lucide-react';
@@ -27,8 +28,8 @@ function AdminDashboard() {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const content = await getHeroContent();
-        const services = await getServices();
+        const content = await getClientHeroContent();
+        const services = await getClientServices();
         setHeroContent(content);
         setAllServices(services);
       } catch (error) {

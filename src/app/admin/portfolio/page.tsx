@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -7,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getPortfolioContent, updatePortfolioContent, PortfolioContent, getProjects, Project, updateProject, addProject, deleteProject, uploadImageAndGetURL, ClientLogo } from '@/services/firestore';
+import { getClientPortfolioContent, updatePortfolioContent, PortfolioContent, getClientProjects, Project, updateProject, addProject, deleteProject, uploadImageAndGetURL, ClientLogo } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import Image from 'next/image';
@@ -32,14 +33,15 @@ function AdminDashboard() {
    const fetchContent = async () => {
     setIsLoading(true);
     try {
-      const content = await getPortfolioContent();
-      const projectData = await getProjects();
+      const content = await getClientPortfolioContent();
+      const projectData = await getClientProjects();
       setPortfolioContent(content);
       setProjects(projectData.map(p => ({
           ...p,
           features: p.features?.join(', ') || '',
           highlights: p.highlights?.join(', ') || '',
           services: p.services?.join(', ') || '',
+          link: `/portfolio/${p.slug}`,
       })));
     } catch (error) {
       console.error("Failed to fetch portfolio content:", error);
@@ -418,4 +420,3 @@ export default function AdminPortfolioPage() {
     </div>
   );
 }
-

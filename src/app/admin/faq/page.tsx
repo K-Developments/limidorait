@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -7,18 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getFaqContent, updateFaqContent, FaqContent, FaqItem, uploadImageAndGetURL, getSubmittedQuestions, SubmittedQuestion, deleteSubmittedQuestion } from '@/services/firestore';
+import { getClientFaqContent, updateFaqContent, FaqContent, FaqItem, getSubmittedQuestions, SubmittedQuestion, deleteSubmittedQuestion } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { X, PlusCircle, Trash2 } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogClose,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Sidebar } from '@/components/layout/admin-sidebar';
 import { cn } from '@/lib/utils';
 
@@ -33,7 +25,7 @@ function AdminDashboard() {
   const fetchContent = async () => {
     setIsLoading(true);
     try {
-      const content = await getFaqContent();
+      const content = await getClientFaqContent();
       const questions = await getSubmittedQuestions();
       setFaqContent(content);
       setSubmittedQuestions(questions);

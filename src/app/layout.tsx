@@ -1,10 +1,10 @@
 
 import type { Metadata } from 'next';
-import { Montserrat } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
-const fontBody = Montserrat({
+const fontBody = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
   variable: '--font-body',

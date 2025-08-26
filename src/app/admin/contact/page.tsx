@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -7,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getContactContent, updateContactContent, ContactContent, getContactSubmissions, ContactSubmission, deleteContactSubmission } from '@/services/firestore';
+import { getClientContactContent, updateContactContent, ContactContent, getContactSubmissions, ContactSubmission, deleteContactSubmission } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { format } from 'date-fns';
 import { Trash2, PlusCircle, X } from 'lucide-react';
@@ -24,7 +25,7 @@ function AdminDashboard() {
     setIsLoading(true);
     try {
       const [content, submissionsData] = await Promise.all([
-        getContactContent(),
+        getClientContactContent(),
         getContactSubmissions(),
       ]);
       setContactContent(content);
