@@ -22,7 +22,6 @@ export async function PublicLayout({
     { name: 'Services' },
     { name: 'FAQs', href: '/faq' },
     { name: 'Blog & News', href: '/blog' },
-    { name: 'Careers', href: '/careers' },
   ];
 
   return (
