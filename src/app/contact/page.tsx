@@ -1,3 +1,4 @@
+
 import { Contact } from "@/components/sections/contact";
 import { getContactContent } from "@/services/firestore";
 import type { Metadata } from 'next';
