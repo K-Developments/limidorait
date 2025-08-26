@@ -115,7 +115,7 @@ html{
       position: absolute;
       width: 12px;
       height: 12px;
-      border-color: transparent;
+      border-color: hsl(var(--foreground));
       transition: all 0.3s ease-in-out;
     }
     .btn-corners::before {
@@ -132,9 +132,7 @@ html{
     }
     .btn-corners:hover::before,
     .btn-corners:hover::after {
-      border-color: hsl(var(--foreground));
-      width: calc(100% + 2px);
-      height: calc(100% + 2px);
+      border-color: hsl(var(--accent));
     }
 }
 
