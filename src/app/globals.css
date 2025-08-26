@@ -112,7 +112,6 @@ html{
     /* Cinematic Button Border Effect */
     .btn-cinematic {
         overflow: hidden;
-        border: 1px solid transparent;
         transition: color 0.4s ease-out, background-color 0.4s ease-out;
         transition-delay: 0.3s;
     }
@@ -256,6 +255,21 @@ html{
 
     .animate-scroll-horizontal {
       animation: scroll-horizontal 40s linear infinite;
+    }
+
+    .scrollbar-accent::-webkit-scrollbar {
+        height: 8px;
+    }
+    .scrollbar-accent::-webkit-scrollbar-track {
+        background: hsl(var(--muted));
+        border-radius: 4px;
+    }
+    .scrollbar-accent::-webkit-scrollbar-thumb {
+        background: hsl(var(--accent));
+        border-radius: 4px;
+    }
+    .scrollbar-accent::-webkit-scrollbar-thumb:hover {
+        background: hsl(var(--accent) / 0.8);
     }
 }
 

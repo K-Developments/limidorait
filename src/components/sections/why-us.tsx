@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Lightbulb, Users, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 interface WhyUsCardProps {
   icon: ReactNode;
@@ -20,6 +21,7 @@ const WhyUsCard = ({ icon, title, description, delay }: WhyUsCardProps) => (
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay }}
     viewport={{ once: true }}
+    className="w-72 md:w-auto flex-shrink-0"
   >
     <Card className="h-full text-center bg-transparent border-none shadow-none p-4">
       <CardHeader>
@@ -72,7 +74,7 @@ export function WhyUs() {
             We are defined by our commitment to excellence, innovation, and our clients' success.
           </p>
         </motion.div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="md:grid md:grid-cols-3 md:gap-8 flex gap-4 overflow-x-auto pb-4 scrollbar-accent">
           {features.map((feature, index) => (
             <WhyUsCard 
               key={index}
