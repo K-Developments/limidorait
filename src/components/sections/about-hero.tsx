@@ -97,7 +97,7 @@ export function AboutHero({ content }: { content: AboutContent | null }) {
               <h1 id="about-hero-title" className="text-4xl md:text-5xl lg:text-6xl font-medium uppercase mb-4 font-headline text-center" style={{lineHeight:1.2}}>
                 {content?.heroTitle}
               </h1>
-              <p className="text-lg md:text-xl max-w-3xl text-primary-foreground/80 text-center">
+              <p className="text-lg md:text-xl max-w-3xl text-white/80 text-center">
                 {content?.heroSubtitle}
               </p>
             </>

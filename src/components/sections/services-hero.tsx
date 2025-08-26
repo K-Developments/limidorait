@@ -89,7 +89,7 @@ export function ServicesHero() {
             <h1 id="services-hero-title" className="text-4xl md:text-5xl lg:text-6xl font-medium uppercase mb-4 font-headline" style={{lineHeight:1.2}}>
                 Our Services
             </h1>
-            <p className="text-lg md:text-xl max-w-3xl text-primary-foreground/80">
+            <p className="text-lg md:text-xl max-w-3xl text-white/80">
                 Crafting Digital Excellence, One Solution at a Time.
             </p>
         </div>
