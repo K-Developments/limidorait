@@ -1,6 +1,6 @@
 
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Header } from '@/components/layout/header';
@@ -8,7 +8,7 @@ import { Footer } from '@/components/layout/footer';
 import { getHeroContent, getServices } from '@/services/firestore';
 import { LayoutClient } from '@/components/layout/layout-client';
 
-const fontBody = Inter({
+const fontBody = Montserrat({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
   variable: '--font-body',
