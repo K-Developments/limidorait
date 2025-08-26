@@ -8,12 +8,41 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getClientServices, updateService, addService, deleteService, Service, uploadImageAndGetURL } from '@/services/firestore';
+import { Service } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { Sidebar } from '@/components/layout/admin-sidebar';
 import { cn } from '@/lib/utils';
+import { db, storage } from '@/lib/firebase';
+import { doc, getDocs, collection, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+const getClientServices = async (): Promise<Service[]> => {
+    const snapshot = await getDocs(collection(db, 'services'));
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Service));
+};
+
+const addService = async (data: Omit<Service, 'id'>): Promise<Service> => {
+    const docRef = await addDoc(collection(db, 'services'), data);
+    return { id: docRef.id, ...data };
+};
+
+const updateService = async (id: string, data: Partial<Omit<Service, 'id'>>): Promise<void> => {
+    await updateDoc(doc(db, 'services', id), data);
+};
+
+const deleteService = async (id: string): Promise<void> => {
+    await deleteDoc(doc(db, 'services', id));
+};
+
+const uploadImageAndGetURL = async (imageFile: File): Promise<{ url: string; path: string; }> => {
+  const storageRef = ref(storage, `site-assets/${Date.now()}_${imageFile.name}`);
+  const snapshot = await uploadBytes(storageRef, imageFile);
+  const downloadURL = await getDownloadURL(snapshot.ref);
+  return { url: downloadURL, path: snapshot.ref.fullPath };
+};
+
 
 function AdminDashboard() {
   const { toast } = useToast();

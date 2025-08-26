@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { FaqContent, submitQuestion } from "@/services/firestore";
+import { FaqContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +19,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
@@ -28,6 +27,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 
 const QuestionFormSchema = z.object({
@@ -36,6 +37,11 @@ const QuestionFormSchema = z.object({
 });
 
 type QuestionFormValues = z.infer<typeof QuestionFormSchema>;
+
+const submitQuestion = async (data: { email: string; question: string }): Promise<void> => {
+    await addDoc(collection(db, 'submittedQuestions'), { ...data, submittedAt: serverTimestamp(), status: 'new' });
+};
+
 
 export function Faq({ content }: { content: FaqContent | null }) {
   const { toast } = useToast();

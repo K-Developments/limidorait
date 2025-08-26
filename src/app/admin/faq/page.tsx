@@ -8,11 +8,37 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getClientFaqContent, updateFaqContent, FaqContent, FaqItem, getSubmittedQuestions, SubmittedQuestion, deleteSubmittedQuestion } from '@/services/firestore';
+import { FaqContent, FaqItem, SubmittedQuestion } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { X, PlusCircle, Trash2 } from 'lucide-react';
 import { Sidebar } from '@/components/layout/admin-sidebar';
 import { cn } from '@/lib/utils';
+import { db } from '@/lib/firebase';
+import { doc, getDoc, setDoc, getDocs, collection, query, orderBy, deleteDoc, serverTimestamp, addDoc } from 'firebase/firestore';
+
+
+const defaultFaqContent: FaqContent = { heroTitle: "Help Center", heroSubtitle: "Your questions, answered. Find the information you need about our services.", title: "Frequently Asked Questions", description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", faqs: [ { question: "What services do you offer?", answer: "We offer a wide range of services including custom web development, UI/UX design, brand strategy, and mobile application development. Our goal is to provide comprehensive digital solutions tailored to your business needs." }, { question: "How long does a typical project take?", answer: "The timeline for a project varies depending on its scope and complexity. A simple website might take 4-6 weeks, while a complex web application could take several months. We provide a detailed project timeline after our initial discovery phase." }, { question: "What is your development process?", answer: "Our process is collaborative and transparent. We start with a discovery phase to understand your goals, followed by strategy, design, development, testing, and deployment. We maintain open communication throughout the project to ensure we're aligned with your vision." }, { question: "How much does a project cost?", answer: "Project costs are based on the specific requirements and complexity of the work. We provide a detailed proposal and quote after discussing your needs. We offer flexible pricing models to accommodate various budgets." }, { question: "Do you provide support after the project is launched?", answer: "Yes, we offer ongoing support and maintenance packages to ensure your website or application remains secure, up-to-date, and performs optimally. We're here to be your long-term technology partner." } ] };
+const isObject = (item: any) => (item && typeof item === 'object' && !Array.isArray(item));
+const deepMerge = (target: any, source: any) => { const output = { ...target }; if (isObject(target) && isObject(source)) { Object.keys(source).forEach(key => { if (isObject(source[key])) { if (!(key in target)) Object.assign(output, { [key]: source[key] }); else output[key] = deepMerge(target[key], source[key]); } else { Object.assign(output, { [key]: source[key] }); } }); } return output; }
+
+const getClientFaqContent = async (): Promise<FaqContent> => {
+    const docSnap = await getDoc(doc(db, 'homepage', 'faqContent'));
+    return docSnap.exists() ? deepMerge(defaultFaqContent, docSnap.data()) : defaultFaqContent;
+};
+
+const updateFaqContent = async (content: Partial<FaqContent>): Promise<void> => {
+  const docRef = doc(db, 'homepage', 'faqContent');
+  await setDoc(docRef, content, { merge: true });
+};
+
+const getSubmittedQuestions = async (): Promise<SubmittedQuestion[]> => {
+    const snapshot = await getDocs(query(collection(db, 'submittedQuestions'), orderBy("submittedAt", "desc")));
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), submittedAt: doc.data().submittedAt?.toDate() } as SubmittedQuestion));
+};
+
+const deleteSubmittedQuestion = async (id: string): Promise<void> => {
+    await deleteDoc(doc(db, 'submittedQuestions', id));
+};
 
 
 function AdminDashboard() {

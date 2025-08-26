@@ -8,12 +8,39 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getClientContactContent, updateContactContent, ContactContent, getContactSubmissions, ContactSubmission, deleteContactSubmission } from '@/services/firestore';
+import { ContactContent, ContactSubmission } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { format } from 'date-fns';
 import { Trash2, PlusCircle, X } from 'lucide-react';
 import { Sidebar } from '@/components/layout/admin-sidebar';
 import { cn } from '@/lib/utils';
+import { db } from '@/lib/firebase';
+import { doc, getDoc, setDoc, getDocs, collection, query, orderBy, deleteDoc, serverTimestamp, addDoc } from 'firebase/firestore';
+
+
+const defaultContactContent: ContactContent = { title: "Let's Build Something Great", description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas.", serviceOptions: [ "Web Development", "UI/UX Design", "Mobile App Development", "General Inquiry" ] };
+const isObject = (item: any) => (item && typeof item === 'object' && !Array.isArray(item));
+const deepMerge = (target: any, source: any) => { const output = { ...target }; if (isObject(target) && isObject(source)) { Object.keys(source).forEach(key => { if (isObject(source[key])) { if (!(key in target)) Object.assign(output, { [key]: source[key] }); else output[key] = deepMerge(target[key], source[key]); } else { Object.assign(output, { [key]: source[key] }); } }); } return output; }
+
+
+const getClientContactContent = async (): Promise<ContactContent> => {
+    const docSnap = await getDoc(doc(db, 'homepage', 'contactContent'));
+    return docSnap.exists() ? deepMerge(defaultContactContent, docSnap.data()) : defaultContactContent;
+};
+
+const updateContactContent = async (content: Partial<ContactContent>): Promise<void> => {
+    await setDoc(doc(db, 'homepage', 'contactContent'), content, { merge: true });
+};
+
+const getContactSubmissions = async (): Promise<ContactSubmission[]> => {
+    const snapshot = await getDocs(query(collection(db, 'contactSubmissions'), orderBy("submittedAt", "desc")));
+    return snapshot.docs.map(d => ({ id: d.id, ...d.data(), submittedAt: d.data().submittedAt?.toDate() } as ContactSubmission));
+};
+
+const deleteContactSubmission = async (id: string): Promise<void> => {
+    await deleteDoc(doc(db, 'contactSubmissions', id));
+};
+
 
 function AdminDashboard() {
   const { toast } = useToast();

@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { updateHeroContent, HeroContent, Service, HomepageWork, HomepageTestimonial, HomepageAboutSection, HomepageCtaSection, getClientServices, SocialLink, SocialPlatform, uploadImageAndGetURL, getClientHeroContent } from '@/services/firestore';
+import { HeroContent, Service, HomepageWork, HomepageTestimonial, HomepageAboutSection, HomepageCtaSection, SocialLink, SocialPlatform } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { PlusCircle, Trash2 } from 'lucide-react';
@@ -16,6 +16,31 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Sidebar } from '@/components/layout/admin-sidebar';
 import { cn } from '@/lib/utils';
+import { db, storage } from '@/lib/firebase';
+import { doc, getDoc, setDoc, getDocs, collection } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+const defaultHeroContent: Omit<HeroContent, 'services'> = { title: "Creative Agency", logoText: "Limidora", logoUrl: "", slides: [ { type: 'video', url: 'https://cdn.pixabay.com/video/2024/05/27/211904_large.mp4' }, { type: 'image', url: 'https://placehold.co/1920x1080/eeece9/6e3d23', alt: 'Placeholder image 1' }, { type: 'image', url: 'https://placehold.co/1920x1080/6e3d23/eeece9', alt: 'Placeholder image 2' }, ], buttonText: "View Our Work", buttonLink: "/portfolio", socialLinks: [ { platform: 'Facebook', url: '#' }, { platform: 'Instagram', url: '#' }, { platform: 'WhatsApp', url: '#' }, ], featuredServices: [], works: [ { title: "E-commerce Platform", category: "Web Development", imageUrl: "https://placehold.co/800x600.png", aiHint: "website mockup", link: "/portfolio/ecommerce-platform" }, { title: "Mobile Banking App", category: "UI/UX Design", imageUrl: "https://placehold.co/600x400.png", aiHint: "app interface", link: "/portfolio/mobile-banking" }, { title: "SaaS Dashboard", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "dashboard analytics", link: "/portfolio/saas-dashboard" } ], testimonials: [ { quote: "Limidora transformed our online presence. Their team is professional, creative, and delivered beyond our expectations. We've seen a significant increase in engagement since the launch.", author: "Jane Doe", company: "Tech Solutions Inc.", avatarUrl: "https://placehold.co/100x100.png" }, { quote: "The best web development agency we've worked with. Their attention to detail and commitment to quality is unparalleled. Highly recommended for any business looking to grow.", author: "John Smith", company: "Innovate Co.", avatarUrl: "https://placehold.co/100x100.png" }, { quote: "From start to finish, the process was seamless. The team at Limidora was always available to answer our questions and provided valuable insights that helped shape our project.", author: "Emily White", company: "Creative Minds", avatarUrl: "https://placehold.co/100x100.png" }, { quote: "An absolutely stellar experience. The final product was not only beautiful but also highly functional and user-friendly. We couldn't be happier with the results.", author: "Michael Brown", company: "Future Enterprises", avatarUrl: "https://placehold.co/100x100.png" } ], ctaSection: { title: "Let's Build Something Great", description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas.", buttonText: "Get in Touch", buttonLink: "/contact" }, aboutSection: { badge: "Who We Are", title: "About Limidora", description: "We are a creative agency that blends design, technology, and strategy to build exceptional digital experiences. Our passion is to help businesses thrive in the digital world.", buttonText: "More About Limidora", buttonLink: "/about", imageUrl: "https://placehold.co/800x600.png", aiHint: "office team collaboration" } };
+const isObject = (item: any) => (item && typeof item === 'object' && !Array.isArray(item));
+const deepMerge = (target: any, source: any) => { const output = { ...target }; if (isObject(target) && isObject(source)) { Object.keys(source).forEach(key => { if (isObject(source[key])) { if (!(key in target)) Object.assign(output, { [key]: source[key] }); else output[key] = deepMerge(target[key], source[key]); } else { Object.assign(output, { [key]: source[key] }); } }); } return output; }
+
+
+const getClientHeroContent = async (): Promise<HeroContent> => {
+    const docSnap = await getDoc(doc(db, 'homepage', 'heroContent'));
+    return docSnap.exists() ? deepMerge(defaultHeroContent, docSnap.data()) : defaultHeroContent;
+};
+
+const getClientServices = async (): Promise<Service[]> => {
+    const snapshot = await getDocs(collection(db, 'services'));
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Service));
+};
+
+const updateHeroContent = async (content: Partial<HeroContent>): Promise<void> => {
+  const docRef = doc(db, 'homepage', 'heroContent');
+  const { services, ...restOfContent } = content;
+  await setDoc(docRef, restOfContent, { merge: true });
+};
+
 
 const socialPlatforms: SocialPlatform[] = ['Facebook', 'Instagram', 'WhatsApp', 'Twitter', 'LinkedIn', 'Github'];
 

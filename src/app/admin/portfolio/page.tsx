@@ -8,12 +8,69 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getClientPortfolioContent, updatePortfolioContent, PortfolioContent, getClientProjects, Project, updateProject, addProject, deleteProject, uploadImageAndGetURL, ClientLogo } from '@/services/firestore';
+import { PortfolioContent, Project, ClientLogo } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { Sidebar } from '@/components/layout/admin-sidebar';
 import { cn } from '@/lib/utils';
+import { db, storage } from '@/lib/firebase';
+import { doc, getDoc, setDoc, getDocs, collection, query, orderBy, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+
+const defaultPortfolioContent: PortfolioContent = { heroTitle: "Our Works", heroSubtitle: "A glimpse into our creative world and the impact we deliver.", clientsSection: { title: "Trusted by Industry Leaders", subtitle: "We partner with ambitious brands and people. We'd love to build something great with you.", logos: [ { name: 'Generic Circle Co', logoUrl: 'https://placehold.co/144x80.png?text=Circle' }, { name: 'Square Blocks Inc', logoUrl: 'https://placehold.co/144x80.png?text=Square' }, { name: 'Star Industries', logoUrl: 'https://placehold.co/144x80.png?text=Star' }, { name: 'Check Marks LLC', logoUrl: 'https://placehold.co/144x80.png?text=Check' }, { name: 'House Builders', logoUrl: 'https://placehold.co/144x80.png?text=House' }, { name: 'Mail Services', logoUrl: 'https://placehold.co/144x80.png?text=Mail' }, { name: 'Chainlink Co', logoUrl: 'https://placehold.co/144x80.png?text=Chain' }, ] } };
+const isObject = (item: any) => (item && typeof item === 'object' && !Array.isArray(item));
+const deepMerge = (target: any, source: any) => { const output = { ...target }; if (isObject(target) && isObject(source)) { Object.keys(source).forEach(key => { if (isObject(source[key])) { if (!(key in target)) Object.assign(output, { [key]: source[key] }); else output[key] = deepMerge(target[key], source[key]); } else { Object.assign(output, { [key]: source[key] }); } }); } return output; }
+
+const getClientPortfolioContent = async (): Promise<PortfolioContent> => {
+    const docSnap = await getDoc(doc(db, 'homepage', 'portfolioContent'));
+    return docSnap.exists() ? deepMerge(defaultPortfolioContent, docSnap.data()) : defaultPortfolioContent;
+};
+
+const getClientProjects = async (): Promise<Project[]> => {
+    const snapshot = await getDocs(query(collection(db, 'portfolio'), orderBy("title")));
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
+};
+
+const updatePortfolioContent = async (content: Partial<PortfolioContent>): Promise<void> => {
+  const docRef = doc(db, 'homepage', 'portfolioContent');
+  await setDoc(docRef, content, { merge: true });
+};
+
+const addProject = async (data: Omit<Project, 'id'>): Promise<Project & {link: string}> => {
+    const slug = data.slug || data.title.toLowerCase().replace(/\s+/g, '-');
+    const newProjectData = {
+      ...data, slug,
+      heroImageUrl: data.heroImageUrl || "https://placehold.co/1600x1200.png",
+      about: data.about || "Enter project description here.",
+      features: data.features || [], highlights: data.highlights || [],
+      services: data.services || ["Web Development", "UI/UX Design"],
+      date: data.date || new Date().toLocaleString('default', { month: 'long', year: 'numeric' }),
+    };
+    const docRef = await addDoc(collection(db, 'portfolio'), newProjectData);
+    return { id: docRef.id, ...newProjectData, link: `/portfolio/${slug}` };
+};
+
+const updateProject = async (id: string, data: Partial<Omit<Project, 'id'>>): Promise<void> => {
+    const projectDoc = doc(db, 'portfolio', id);
+    const slug = data.title ? data.title.toLowerCase().replace(/\s+/g, '-') : undefined;
+    const updateData: Partial<Project> = { ...data };
+    if (slug) updateData.slug = slug;
+    await updateDoc(projectDoc, updateData);
+};
+
+const deleteProject = async (id: string): Promise<void> => {
+    await deleteDoc(doc(db, 'portfolio', id));
+};
+
+const uploadImageAndGetURL = async (imageFile: File): Promise<{ url: string; path: string; }> => {
+  const storageRef = ref(storage, `site-assets/${Date.now()}_${imageFile.name}`);
+  const snapshot = await uploadBytes(storageRef, imageFile);
+  const downloadURL = await getDownloadURL(snapshot.ref);
+  return { url: downloadURL, path: snapshot.ref.fullPath };
+};
+
 
 type EditableProject = Omit<Project, 'features' | 'highlights' | 'services'> & {
     features: string;

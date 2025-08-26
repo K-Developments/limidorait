@@ -3,20 +3,20 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Twitter, Linkedin, Github } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { ContactContent, submitContactForm } from "@/services/firestore";
+import { ContactContent } from "@/services/firestore";
 import { Skeleton } from "../ui/skeleton";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 const ContactFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -27,6 +27,10 @@ const ContactFormSchema = z.object({
 });
 
 type ContactFormValues = z.infer<typeof ContactFormSchema>;
+
+const submitContactForm = async (data: Omit<ContactFormValues, 'id' | 'submittedAt'>): Promise<void> => {
+    await addDoc(collection(db, 'contactSubmissions'), { ...data, submittedAt: serverTimestamp() });
+};
 
 
 export function Contact({ content }: { content: ContactContent | null }) {
