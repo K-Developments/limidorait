@@ -2,6 +2,7 @@
 import { About } from "@/components/sections/about";
 import { AboutHero } from "@/components/sections/about-hero";
 import { WhyUs } from "@/components/sections/why-us";
+import { WorkProcess } from "@/components/sections/work-process";
 import { Testimonials } from "@/components/sections/homepage-testimonials";
 import { HomepageCta } from "@/components/sections/homepage-cta";
 import { getHeroContent, getAboutContent, AboutContent } from "@/services/firestore";
@@ -34,6 +35,7 @@ export default async function AboutPage() {
             <AboutHero content={aboutContent} />
             <About content={aboutContent} />
             <WhyUs />
+            <WorkProcess />
             {heroContent && <Testimonials testimonials={heroContent.testimonials} />}
             {heroContent && <HomepageCta ctaSection={heroContent.ctaSection} />}
         </PublicLayout>
