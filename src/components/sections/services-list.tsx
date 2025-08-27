@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Service } from "@/services/firestore";
@@ -24,7 +23,7 @@ export function ServicesList({ services }: { services: Service[] }) {
             className="text-center mb-16"
         >
             <Badge variant="outline" className="mb-4">Our Expertise</Badge>
-            <h1 id="faq-heading" className="text-4xl md:text-5xl font-medium text-foreground mb-4 font-body uppercase">
+            <h1 id="faq-heading" className="text-3xl md:text-4xl font-medium text-foreground mb-4 font-body uppercase">
               Services We Offer
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
