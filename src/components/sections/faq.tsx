@@ -21,15 +21,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Separator } from "../ui/separator";
 
 
 const QuestionFormSchema = z.object({
@@ -47,8 +44,6 @@ const submitQuestion = async (data: { email: string; question: string }): Promis
 export function Faq({ content }: { content: FaqContent | null }) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const searchParams = useSearchParams();
-  const cameFromAbout = searchParams.get('from') === 'about';
   const isLoading = !content;
   
   const form = useForm<QuestionFormValues>({
@@ -103,20 +98,6 @@ export function Faq({ content }: { content: FaqContent | null }) {
   return (
     <section id="faq" aria-labelledby="faq-heading" className="w-full bg-background pt-12 pb-12 md:pb-24 lg:pb-32">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="mb-8">
-            <nav aria-label="Breadcrumb" className="flex items-center text-xs text-muted-foreground">
-                <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-                {cameFromAbout && (
-                  <>
-                    <ChevronRight className="h-4 w-4 mx-1" />
-                    <Link href="/about" className="hover:text-primary transition-colors">About</Link>
-                  </>
-                )}
-                <ChevronRight className="h-4 w-4 mx-1" />
-                <span className="font-medium text-foreground">FAQs</span>
-            </nav>
-            <Separator className="mt-4" />
-        </div>
         <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
