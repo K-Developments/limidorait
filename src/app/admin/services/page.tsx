@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -54,14 +54,142 @@ type EditableService = Omit<Service, 'whatYouGet'> & {
     whatYouGet: string;
 };
 
+function ServiceCard({ service, faqs, onDelete, onUpdate }: { service: EditableService, faqs: FaqItem[], onDelete: (id: string) => void, onUpdate: (id: string, data: Service) => void }) {
+    const { toast } = useToast();
+    const [editableService, setEditableService] = useState(service);
+    const [isUploading, setIsUploading] = useState(false);
+
+    const handleServiceChange = (field: keyof EditableService, value: string | string[]) => {
+        setEditableService(prev => ({ ...prev, [field]: value }));
+    };
+  
+    const handleFaqSelectionChange = (faqId: string, checked: boolean) => {
+        setEditableService(prevService => {
+            const currentFaqIds = prevService.faqIds || [];
+            let newFaqIds;
+            if (checked) {
+                newFaqIds = [...currentFaqIds, faqId];
+            } else {
+                newFaqIds = currentFaqIds.filter(id => id !== faqId);
+            }
+            return { ...prevService, faqIds: newFaqIds };
+        });
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setIsUploading(true);
+            try {
+                const { url } = await uploadImageAndGetURL(file);
+                handleServiceChange('imageUrl', url);
+                toast({ title: "Success!", description: "Image uploaded successfully. Save changes to apply." });
+            } catch (error) {
+                toast({ title: "Upload Error", description: "Failed to upload image. Please try again.", variant: "destructive" });
+            } finally {
+                setIsUploading(false);
+            }
+        }
+    };
+
+    const handleSaveChanges = async () => {
+        const { id, whatYouGet, ...dataToUpdate } = editableService;
+        const finalData = {
+            ...dataToUpdate,
+            whatYouGet: whatYouGet.split('\n').filter(Boolean),
+        };
+        try {
+            await updateService(id, finalData);
+            onUpdate(id, {id, ...finalData});
+            toast({ title: "Success!", description: `Service "${editableService.title}" has been updated.` });
+        } catch (error) {
+            toast({ title: "Error!", description: "Failed to update service. Please try again.", variant: "destructive" });
+        }
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>{editableService.title}</CardTitle>
+                <CardDescription>Manage the content for this service.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor={`title-${editableService.id}`}>Title</Label>
+                        <Input id={`title-${editableService.id}`} value={editableService.title} onChange={(e) => handleServiceChange('title', e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor={`slug-${editableService.id}`}>Slug</Label>
+                        <Input id={`slug-${editableService.id}`} value={editableService.slug} onChange={(e) => handleServiceChange('slug', e.target.value)} />
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor={`description-${editableService.id}`}>Short Description</Label>
+                    <Textarea id={`description-${editableService.id}`} value={editableService.description} onChange={(e) => handleServiceChange('description', e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor={`longDescription-${editableService.id}`}>Detailed Description</Label>
+                    <Textarea id={`longDescription-${editableService.id}`} value={editableService.longDescription} onChange={(e) => handleServiceChange('longDescription', e.target.value)} className="min-h-[120px]" />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor={`whatYouGet-${editableService.id}`}>What You Get (one item per line)</Label>
+                    <Textarea id={`whatYouGet-${editableService.id}`} value={editableService.whatYouGet} onChange={(e) => handleServiceChange('whatYouGet', e.target.value)} className="min-h-[120px]" />
+                </div>
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-lg">Associated FAQs</CardTitle>
+                        <CardDescription>Select FAQs to display on this service's page.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2 max-h-60 overflow-y-auto">
+                        {faqs.map(faq => (
+                            <div key={faq.id} className="flex items-center space-x-2">
+                                <Checkbox
+                                    id={`faq-${editableService.id}-${faq.id}`}
+                                    checked={editableService.faqIds?.includes(faq.id)}
+                                    onCheckedChange={(checked) => handleFaqSelectionChange(faq.id, checked as boolean)}
+                                />
+                                <label htmlFor={`faq-${editableService.id}-${faq.id}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    {faq.question}
+                                </label>
+                            </div>
+                        ))}
+                    </CardContent>
+                </Card>
+                <div className="space-y-2">
+                    <Label>Current Image</Label>
+                    <div className="relative group w-full aspect-video max-w-md">
+                        <Image src={editableService.imageUrl} alt={editableService.title} layout="fill" className="object-cover rounded-md"/>
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor={`imageUrl-${editableService.id}`}>Image URL</Label>
+                    <Input id={`imageUrl-${editableService.id}`} value={editableService.imageUrl} onChange={(e) => handleServiceChange('imageUrl', e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor={`image-upload-${editableService.id}`}>Or Upload New Image</Label>
+                    <Input id={`image-upload-${editableService.id}`} type="file" onChange={handleImageUpload} accept="image/*" disabled={isUploading} />
+                    {isUploading && <p>Uploading...</p>}
+                </div>
+                <div className="flex justify-end gap-2">
+                    <Button onClick={handleSaveChanges}>Save Changes</Button>
+                    <Button variant="destructive" size="icon" onClick={() => onDelete(editableService.id)}>
+                        <Trash2 className="h-4 w-4" />
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
+    );
+}
+
+
 function AdminDashboard() {
   const { toast } = useToast();
   const [services, setServices] = useState<EditableService[]>([]);
   const [faqs, setFaqs] = useState<FaqItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isUploading, setIsUploading] = useState<Record<string, boolean>>({});
 
-  const fetchContent = async () => {
+  const fetchContent = useCallback(async () => {
     setIsLoading(true);
     try {
       const [servicesData, faqsData] = await Promise.all([
@@ -80,54 +208,11 @@ function AdminDashboard() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     fetchContent();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleServiceChange = (id: string, field: keyof EditableService, value: string | string[]) => {
-    setServices(services.map(s => s.id === id ? { ...s, [field]: value } : s));
-  };
-  
-  const handleFaqSelectionChange = (serviceId: string, faqId: string, checked: boolean) => {
-    setServices(prevServices => prevServices.map(s => {
-        if (s.id === serviceId) {
-            const currentFaqIds = s.faqIds || [];
-            let newFaqIds;
-            if (checked) {
-                newFaqIds = [...currentFaqIds, faqId];
-            } else {
-                newFaqIds = currentFaqIds.filter(id => id !== faqId);
-            }
-            return { ...s, faqIds: newFaqIds };
-        }
-        return s;
-    }));
-  };
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, serviceId: string) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setIsUploading(prev => ({...prev, [serviceId]: true}));
-      try {
-        const { url } = await uploadImageAndGetURL(file);
-        handleServiceChange(serviceId, 'imageUrl', url);
-        toast({
-          title: "Success!",
-          description: "Image uploaded successfully. Save changes to apply.",
-        });
-      } catch (error) {
-        toast({
-          title: "Upload Error",
-          description: "Failed to upload image. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsUploading(prev => ({...prev, [serviceId]: false}));
-      }
-    }
-  };
+  }, [fetchContent]);
 
   const handleAddNewService = async () => {
     try {
@@ -142,7 +227,7 @@ function AdminDashboard() {
         faqIds: [],
       };
       const newService = await addService(newServiceData);
-      setServices([...services, {...newService, whatYouGet: newService.whatYouGet.join('\n') }]);
+      setServices(prev => [...prev, {...newService, whatYouGet: newService.whatYouGet.join('\n') }]);
       toast({ title: "Success", description: "New service added. You can now edit its details." });
     } catch (error) {
       toast({ title: "Error", description: "Could not add new service.", variant: "destructive" });
@@ -155,36 +240,15 @@ function AdminDashboard() {
     }
     try {
       await deleteService(id);
-      setServices(services.filter(s => s.id !== id));
+      setServices(prev => prev.filter(s => s.id !== id));
       toast({ title: "Success", description: "Service has been deleted." });
     } catch (error) {
       toast({ title: "Error", description: "Could not delete service.", variant: "destructive" });
     }
   };
-
-  const handleSaveChanges = async (serviceId: string) => {
-    const serviceToUpdate = services.find(s => s.id === serviceId);
-    if (!serviceToUpdate) return;
-    
-    const { id, whatYouGet, ...dataToUpdate } = serviceToUpdate;
-    const finalData = {
-        ...dataToUpdate,
-        whatYouGet: whatYouGet.split('\n').filter(Boolean),
-    };
-
-    try {
-      await updateService(serviceId, finalData);
-      toast({
-        title: "Success!",
-        description: `Service "${serviceToUpdate.title}" has been updated.`,
-      });
-    } catch (error) {
-      toast({
-        title: "Error!",
-        description: "Failed to update service. Please try again.",
-        variant: "destructive",
-      });
-    }
+  
+  const handleUpdateService = (id: string, updatedData: Service) => {
+      setServices(prev => prev.map(s => s.id === id ? {...s, ...updatedData, whatYouGet: updatedData.whatYouGet.join('\n')} : s));
   };
 
   if (isLoading) {
@@ -208,80 +272,13 @@ function AdminDashboard() {
 
       <div className="space-y-6">
         {services.map((service) => (
-          <Card key={service.id}>
-            <CardHeader>
-              <CardTitle>{service.title}</CardTitle>
-              <CardDescription>Manage the content for this service.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor={`title-${service.id}`}>Title</Label>
-                  <Input id={`title-${service.id}`} value={service.title} onChange={(e) => handleServiceChange(service.id, 'title', e.target.value)} />
-                </div>
-                 <div className="space-y-2">
-                  <Label htmlFor={`slug-${service.id}`}>Slug</Label>
-                  <Input id={`slug-${service.id}`} value={service.slug} onChange={(e) => handleServiceChange(service.id, 'slug', e.target.value)} />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor={`description-${service.id}`}>Short Description</Label>
-                <Textarea id={`description-${service.id}`} value={service.description} onChange={(e) => handleServiceChange(service.id, 'description', e.target.value)} />
-              </div>
-               <div className="space-y-2">
-                <Label htmlFor={`longDescription-${service.id}`}>Detailed Description</Label>
-                <Textarea id={`longDescription-${service.id}`} value={service.longDescription} onChange={(e) => handleServiceChange(service.id, 'longDescription', e.target.value)} className="min-h-[120px]" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor={`whatYouGet-${service.id}`}>What You Get (one item per line)</Label>
-                <Textarea id={`whatYouGet-${service.id}`} value={service.whatYouGet} onChange={(e) => handleServiceChange(service.id, 'whatYouGet', e.target.value)} className="min-h-[120px]" />
-              </div>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Associated FAQs</CardTitle>
-                  <CardDescription>Select FAQs to display on this service's page.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2 max-h-60 overflow-y-auto">
-                  {faqs.map(faq => (
-                    <div key={faq.id} className="flex items-center space-x-2">
-                        <Checkbox
-                            id={`faq-${service.id}-${faq.id}`}
-                            checked={service.faqIds?.includes(faq.id)}
-                            onCheckedChange={(checked) => handleFaqSelectionChange(service.id, faq.id, checked as boolean)}
-                        />
-                        <label htmlFor={`faq-${service.id}-${faq.id}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            {faq.question}
-                        </label>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-
-
-              <div className="space-y-2">
-                  <Label>Current Image</Label>
-                  <div className="relative group w-full aspect-video max-w-md">
-                      <Image src={service.imageUrl} alt={service.title} layout="fill" className="object-cover rounded-md"/>
-                  </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor={`imageUrl-${service.id}`}>Image URL</Label>
-                <Input id={`imageUrl-${service.id}`} value={service.imageUrl} onChange={(e) => handleServiceChange(service.id, 'imageUrl', e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor={`image-upload-${service.id}`}>Or Upload New Image</Label>
-                <Input id={`image-upload-${service.id}`} type="file" onChange={(e) => handleImageUpload(e, service.id)} accept="image/*" disabled={isUploading[service.id]} />
-                {isUploading[service.id] && <p>Uploading...</p>}
-              </div>
-              <div className="flex justify-end gap-2">
-                <Button onClick={() => handleSaveChanges(service.id)}>Save Changes</Button>
-                <Button variant="destructive" size="icon" onClick={() => handleDeleteService(service.id)}>
-                    <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <ServiceCard 
+            key={service.id} 
+            service={service} 
+            faqs={faqs}
+            onDelete={handleDeleteService}
+            onUpdate={handleUpdateService}
+          />
         ))}
       </div>
     </div>
