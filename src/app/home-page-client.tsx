@@ -10,14 +10,14 @@ import { Autoplay, EffectFade } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import Image from "next/image";
-import { HeroContent } from "@/services/firestore";
+import { getHeroContent, HeroContent } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { HomepageServices } from "@/components/sections/homepage-services";
 import { HomepageWorks } from "@/components/sections/homepage-works";
 import { Testimonials } from "@/components/sections/homepage-testimonials";
 import { HomepageAbout } from "@/components/sections/homepage-about";
 import { HomepageCta } from "@/components/sections/homepage-cta";
-import { ArrowRight } from "lucide-react";
+import ParticlesWrapper from "@/components/ParticlesWrapper";
 
 const HeroSection = ({ content }: { content: HeroContent | null }) => {
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
@@ -27,7 +27,7 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
     const activeSlide = swiperInstance.slides[swiperInstance.activeIndex];
     const video = activeSlide.querySelector('video');
 
-    if (video) { 
+    if (video) {
       swiperInstance.autoplay.stop();
       video.currentTime = 0;
       video.play().catch(error => {
@@ -35,7 +35,7 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
       });
     } else {
       if (!swiperInstance.autoplay.running) {
-         swiperInstance.autoplay.start();
+        swiperInstance.autoplay.start();
       }
     }
   };
@@ -53,10 +53,11 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
   }
 
   return (
-    <section 
+    <section
       aria-labelledby="hero-title"
       className="relative flex md:flex-row flex-col items-end justify-start w-full h-[80vh] bg-neutral-900 text-white overflow-hidden hero-section"
     >
+      <ParticlesWrapper />
       <Swiper
         modules={[Autoplay, EffectFade]}
         effect="fade"
@@ -96,221 +97,69 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
       </Swiper>
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
-      
-      <motion.div 
+
+      <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-        className="relative z-10 p-8 md:p-12 md:basis-2/3 flex items-end w-[100%] h-[100%]"
+        className="relative z-10 p-8 md:p-12 md:basis-2/3 flex items-end w-full h-full"
       >
-        {/* Enhanced Ambient Glow Effects */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none">
-          {/* Corner Ambient Glows */}
+        {/* Decorative Background Effects in Content Area */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          {/* Vertical Lines */}
+          {[1 / 4, 2 / 4, 3 / 4].map((left, i) => (
+            <div
+              key={i}
+              className="absolute top-0 h-full w-[1px] bg-gradient-to-b from-transparent via-[#F0F0F0]/10 to-transparent overflow-hidden"
+              style={{ left: `${left * 100}%` }}
+            >
+              <motion.div
+                className="absolute top-0 w-full h-20 bg-gradient-to-b from-[#F0F0F0]/40 via-[#F0F0F0]/20 to-transparent"
+                animate={{ y: ["-100%", "100%"], opacity: [0, 0.5, 0] }}
+                transition={{ duration: 6 + i, repeat: Infinity, repeatDelay: 8 + i, delay: i, ease: "easeInOut" }}
+              />
+            </div>
+          ))}
+
+          {/* Horizontal Lines */}
+          {[1 / 3, 2 / 3].map((top, i) => (
+            <div
+              key={i}
+              className="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-[#F0F0F0]/10 to-transparent overflow-hidden"
+              style={{ top: `${top * 100}%` }}
+            >
+              <motion.div
+                className="absolute w-32 h-full bg-gradient-to-r from-[#F0F0F0]/40 via-[#F0F0F0]/20 to-transparent"
+                animate={{ x: ["100%", "-100%"], opacity: [0, 0.4, 0] }}
+                transition={{ duration: 6 + i, repeat: Infinity, repeatDelay: 9 + i, delay: i, ease: "easeInOut" }}
+              />
+            </div>
+          ))}
+
+          {/* Ambient Glows */}
           <motion.div
-            className="absolute top-0 left-0 w-96 h-96 rounded-full blur-6xl"
-            style={{ 
-              background: 'radial-gradient(circle, #F0F0F0, rgba(240, 240, 240, 0.4), transparent)',
-              filter: 'blur(100px)'
-            }}
-            animate={{ 
-              x: [-60, 50, -50], 
-              y: [-50, 100, -50],
-              scale: [0.8, 1.2, 0.8],
-              opacity: [0.15, 0.35, 0.15] 
-            }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/4 left-1/3 w-32 h-32 bg-[#F0F0F0]/5 rounded-full blur-2xl"
+            animate={{ scale: [0.9, 1.1, 0.9], opacity: [0.2, 0.35, 0.2] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           />
-
           <motion.div
-            className="absolute top-0 right-0 w-80 h-80 rounded-full blur-6xl"
-            style={{ 
-              background: 'radial-gradient(circle, #F0F0F0, rgba(240, 240, 240, 0.3), transparent)',
-              filter: 'blur(100px)'
-            }}
-            animate={{ 
-              x: [50, -50, 50], 
-              y: [-30, 80, -30],
-              scale: [0.9, 1.1, 0.9],
-              opacity: [0.12, 0.28, 0.12] 
-            }}
-            transition={{ duration: 6, repeat: Infinity, delay: 1, ease: "easeInOut" }}
-          />
-
-          <motion.div
-            className="absolute bottom-0 left-0 w-72 h-72 rounded-full blur-3xl"
-            style={{ 
-              background: 'radial-gradient(circle, #F0F0F0, rgba(240, 240, 240, 0.35), transparent)',
-              filter: 'blur(60px)'
-            }}
-            animate={{ 
-              x: [-40, 60, -40], 
-              y: [40, -60, 40],
-              scale: [0.7, 1, 0.7],
-              opacity: [0.18, 0.32, 0.18] 
-            }}
-            transition={{ duration: 10, repeat: Infinity, delay: 2, ease: "easeInOut" }}
-          />
-
-          <motion.div
-            className="absolute bottom-0 right-0 w-88 h-88 rounded-full blur-3xl"
-            style={{ 
-              background: 'radial-gradient(circle, #F0F0F0, rgba(240, 240, 240, 0.25), transparent)',
-              filter: 'blur(100px)'
-            }}
-            animate={{ 
-              x: [30, -70, 30], 
-              y: [50, -80, 50],
-              scale: [1, 0.8, 1],
-              opacity: [0.2, 0.3, 0.2] 
-            }}
-            transition={{ duration: 7, repeat: Infinity, delay: 3, ease: "easeInOut" }}
-          />
-
-          {/* Floating Ambient Particles */}
-          <motion.div
-            className="absolute top-1/4 left-1/5 w-20 h-20 rounded-full blur-2xl"
-            style={{ 
-              background: 'radial-gradient(circle, #F0F0F0, rgba(240, 240, 240, 0.4), transparent)',
-              filter: 'blur(20px)'
-            }}
-            animate={{ 
-              x: [0, 150, -100, 0], 
-              y: [0, -80, 120, 0],
-              scale: [0.6, 1, 0.8, 0.6],
-              opacity: [0.1, 0.4, 0.2, 0.1] 
-            }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          />
-
-          <motion.div
-            className="absolute top-2/3 right-1/4 w-16 h-16 rounded-full blur-2xl"
-            style={{ 
-              background: 'radial-gradient(circle, #F0F0F0, rgba(240, 240, 240, 0.35), transparent)',
-              filter: 'blur(25px)'
-            }}
-            animate={{ 
-              x: [0, -120, 80, 0], 
-              y: [0, 100, -60, 0],
-              scale: [0.5, 0.9, 1.1, 0.5],
-              opacity: [0.15, 0.25, 0.35, 0.15] 
-            }}
-            transition={{ duration: 9, repeat: Infinity, delay: 4, ease: "easeInOut" }}
-          />
-
-          {/* Vertical Lines with Enhanced Glow */}
-          <div className="absolute top-0 left-1/4 h-full w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent overflow-hidden">
-            <motion.div
-              className="absolute top-0 left-0 w-full h-20"
-              style={{ 
-                background: 'linear-gradient(to bottom, rgba(240, 240, 240, 0.6), rgba(240, 240, 240, 0.3), transparent)',
-                filter: 'blur(2px)'
-              }}
-              animate={{ y: ["-100%", "100%"], opacity: [0, 0.7, 0] }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2, ease: "easeInOut" }}
-            />
-          </div>
-
-          <div className="absolute top-0 left-2/4 h-full w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent overflow-hidden">
-            <motion.div
-              className="absolute top-0 left-0 w-full h-20"
-              style={{ 
-                background: 'linear-gradient(to bottom, rgba(240, 240, 240, 0.6), rgba(240, 240, 240, 0.3), transparent)',
-                filter: 'blur(2px)'
-              }}
-              animate={{ y: ["-100%", "100%"], opacity: [0, 0.7, 0] }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2, delay: 1, ease: "easeInOut" }}
-            />
-          </div>
-
-          <div className="absolute top-0 left-3/4 h-full w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent overflow-hidden">
-            <motion.div
-              className="absolute top-0 left-0 w-full h-20"
-              style={{ 
-                background: 'linear-gradient(to bottom, rgba(240, 240, 240, 0.6), rgba(240, 240, 240, 0.3), transparent)',
-                filter: 'blur(2px)'
-              }}
-              animate={{ y: ["-100%", "100%"], opacity: [0, 0.7, 0] }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2, delay: 2, ease: "easeInOut" }}
-            />
-          </div>
-
-          {/* Horizontal Lines with Enhanced Glow */}
-          <div className="absolute right-0 top-1/3 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden">
-            <motion.div
-              className="absolute top-0 right-0 w-32 h-full"
-              style={{ 
-                background: 'linear-gradient(to left, rgba(240, 240, 240, 0.6), rgba(240, 240, 240, 0.3), transparent)',
-                filter: 'blur(3px)'
-              }}
-              animate={{ x: ["100%", "-100%"], opacity: [0, 0.6, 0] }}
-              transition={{ duration: 6, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
-            />
-          </div>
-
-          <div className="absolute right-0 top-2/3 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden">
-            <motion.div
-              className="absolute top-0 right-0 w-32 h-full"
-              style={{ 
-                background: 'linear-gradient(to left, rgba(240, 240, 240, 0.6), rgba(240, 240, 240, 0.3), transparent)',
-                filter: 'blur(3px)'
-              }}
-              animate={{ x: ["100%", "-100%"], opacity: [0, 0.6, 0] }}
-              transition={{ duration: 4, repeat: Infinity, repeatDelay: 2, delay: 2, ease: "easeInOut" }}
-            />
-          </div>
-
-          {/* Central Content Glow */}
-          <motion.div
-            className="absolute top-1/2 left-1/2 w-96 h-96 rounded-full"
-            style={{ 
-              background: 'radial-gradient(circle, rgba(240, 240, 240, 0.08), rgba(240, 240, 240, 0.04), transparent)',
-              filter: 'blur(60px)',
-              transform: 'translate(-50%, -50%)'
-            }}
-            animate={{ 
-              scale: [0.8, 1.3, 0.8],
-              opacity: [0.1, 0.25, 0.1] 
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          />
-
-          {/* Subtle Edge Highlights */}
-          <motion.div
-            className="absolute top-0 left-0 w-32 h-1"
-            style={{ 
-              background: 'linear-gradient(to right, rgba(240, 240, 240, 0.4), transparent)',
-              filter: 'blur(1px)'
-            }}
-            animate={{ 
-              scaleX: [0, 1, 0],
-              opacity: [0, 0.6, 0] 
-            }}
-            transition={{ duration: 4, repeat: Infinity, delay: 1, ease: "easeInOut" }}
-          />
-
-          <motion.div
-            className="absolute top-0 left-0 w-1 h-32"
-            style={{ 
-              background: 'linear-gradient(to bottom, rgba(240, 240, 240, 0.4), transparent)',
-              filter: 'blur(1px)'
-            }}
-            animate={{ 
-              scaleY: [0, 1, 0],
-              opacity: [0, 0.6, 0] 
-            }}
-            transition={{ duration: 4, repeat: Infinity, delay: 2, ease: "easeInOut" }}
+            className="absolute bottom-1/4 right-1/3 w-24 h-24 bg-[#F0F0F0]/5 rounded-full blur-2xl"
+            animate={{ scale: [1, 0.85, 1], opacity: [0.15, 0.3, 0.15] }}
+            transition={{ duration: 9, repeat: Infinity, delay: 2, ease: "easeInOut" }}
           />
         </div>
-        
-        <div className="relative">
-          <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-medium uppercase mb-4 font-headline" style={{lineHeight:1.2}}>
+
+        {/* Foreground Text Content */}
+        <div className="relative z-10">
+          <h1
+            id="hero-title"
+            className="text-4xl md:text-5xl lg:text-6xl font-medium uppercase mb-4 font-headline text-[#F0F0F0]"
+            style={{ lineHeight: 1.2 }}
+          >
             {content.title}
           </h1>
-          <Button asChild size="lg" className="animate-arrow-on-hover">
-            <Link href={content.buttonLink || '#'}>
-                {content.buttonText}
-                <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
+          <Button asChild size="lg">
+            <Link href={content.buttonLink || "#"}>{content.buttonText}</Link>
           </Button>
         </div>
       </motion.div>
@@ -318,20 +167,28 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
   );
 };
 
+export default function HomePage() {
+  const [content, setContent] = useState<HeroContent | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-export default function HomePageClient({ content }: { content: HeroContent | null }) {
-  if (!content) {
-      return (
-          <div>
-              <HeroSection content={null} />
-          </div>
-      )
-  }
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const heroContent = await getHeroContent();
+        setContent(heroContent);
+      } catch (error) {
+        console.error("Failed to fetch hero content:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchContent();
+  }, []);
 
   return (
     <div>
       <HeroSection content={content} />
-      {content && content.services && <HomepageServices services={content.services} />}
+      {content?.services && <HomepageServices services={content.services} />}
       {content && <HomepageWorks works={content.works} />}
       {content && <Testimonials testimonials={content.testimonials} />}
       {content && <HomepageAbout aboutSection={content.aboutSection} />}

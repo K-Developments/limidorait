@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 const ParticlesWrapper = () => {
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
-  const [primaryColor, setPrimaryColor] = useState('#85c7c7'); // Default color
+  const [primaryColor, setPrimaryColor] = useState('#70A4A4'); // Default color matches accent
 
   const hslToHex = (h: number, s: number, l: number): string => {
     l /= 100;
@@ -24,9 +24,10 @@ const ParticlesWrapper = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const style = getComputedStyle(document.documentElement);
-      const primaryVar = style.getPropertyValue('--primary').trim();
-      if (primaryVar) {
-        const [h, s, l] = primaryVar.split(' ').map(val => parseFloat(val.replace('%', '')));
+      // Use --accent color for particles
+      const accentVar = style.getPropertyValue('--accent').trim(); 
+      if (accentVar) {
+        const [h, s, l] = accentVar.split(' ').map(val => parseFloat(val.replace('%', '')));
         if (!isNaN(h) && !isNaN(s) && !isNaN(l)) {
           setPrimaryColor(hslToHex(h, s, l));
         }
@@ -39,7 +40,7 @@ const ParticlesWrapper = () => {
       (window as any).particlesJS('particles-js', {
         particles: {
           number: {
-            value: 200,
+            value: 80, // Reduced number
             density: {
               enable: true,
               value_area: 800,
@@ -52,17 +53,17 @@ const ParticlesWrapper = () => {
             type: 'circle',
           },
           opacity: {
-            value: 0.5,
+            value: 0.6, // Slightly more visible
             random: true,
             anim: {
               enable: true,
-              speed: 0.5,
+              speed: 0.8,
               opacity_min: 0.1,
               sync: false
             },
           },
           size: {
-            value: 3,
+            value: 2.5, // Slightly smaller
             random: true,
             anim: {
               enable: false,
@@ -70,14 +71,14 @@ const ParticlesWrapper = () => {
           },
           line_linked: {
             enable: true,
-            distance: 150,
+            distance: 120, // Reduced distance
             color: primaryColor,
-            opacity: 0.3,
+            opacity: 0.2, // More subtle
             width: 1,
           },
           move: {
             enable: true,
-            speed: 1,
+            speed: 1.5, // Slightly faster
             direction: 'none',
             random: true,
             straight: false,
@@ -99,7 +100,7 @@ const ParticlesWrapper = () => {
           },
           modes: {
             repulse: {
-              distance: 80,
+              distance: 100, // smaller repulse distance
               duration: 0.4,
             },
           },

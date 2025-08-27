@@ -35,14 +35,6 @@ const nextConfig: NextConfig = {
       }
     ],
   },
-   async rewrites() {
-    return [
-      {
-        source: '/scripts/particles.js',
-        destination: '/src/lib/particles.js',
-      },
-    ]
-  },
 };
 
 export default nextConfig;
