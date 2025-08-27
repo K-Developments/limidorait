@@ -57,13 +57,13 @@ export function Faq({ content }: { content: FaqContent | null }) {
   });
 
   const categories = useMemo(() => {
-    if (!content) return [];
+    if (!content || !content.faqs || content.faqs.length === 0) return [];
     const cats = new Set(content.faqs.map(faq => faq.category));
     return ["All", ...Array.from(cats)];
   }, [content]);
 
   const filteredFaqs = useMemo(() => {
-    if (!content) return [];
+    if (!content || !content.faqs) return [];
     if (activeCategory === "All") return content.faqs;
     return content.faqs.filter(faq => faq.category === activeCategory);
   }, [content, activeCategory]);
@@ -128,23 +128,25 @@ export function Faq({ content }: { content: FaqContent | null }) {
             </p>
         </motion.div>
 
-        <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="flex justify-center flex-wrap gap-2 mb-12"
-        >
-          {categories.map(category => (
-            <Button
-              key={category}
-              variant={activeCategory === category ? "default" : "outline"}
-              onClick={() => setActiveCategory(category)}
-            >
-              {category}
-            </Button>
-          ))}
-        </motion.div>
+        {categories.length > 0 && (
+          <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="flex justify-center flex-wrap gap-2 mb-12"
+          >
+            {categories.map(category => (
+              <Button
+                key={category}
+                variant={activeCategory === category ? "default" : "outline"}
+                onClick={() => setActiveCategory(category)}
+              >
+                {category}
+              </Button>
+            ))}
+          </motion.div>
+        )}
 
         <motion.div 
             initial={{ opacity: 0, y: 50 }}
@@ -153,9 +155,10 @@ export function Faq({ content }: { content: FaqContent | null }) {
             viewport={{ once: true }}
             className="max-w-3xl mx-auto"
         >
+          {filteredFaqs && filteredFaqs.length > 0 ? (
             <Accordion type="single" collapsible className="w-full">
             {filteredFaqs.map((item, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
+                <AccordionItem key={item.id} value={`item-${index}`}>
                 <AccordionTrigger className="text-lg font-medium text-left">{item.question}</AccordionTrigger>
                 <AccordionContent className="text-base text-muted-foreground">
                     {item.answer}
@@ -163,6 +166,12 @@ export function Faq({ content }: { content: FaqContent | null }) {
                 </AccordionItem>
             ))}
             </Accordion>
+          ) : (
+             <div className="text-center text-muted-foreground py-16">
+                <p className="text-lg">No frequently asked questions have been added yet.</p>
+                <p>Check back soon!</p>
+            </div>
+          )}
         </motion.div>
         <div className="text-center mt-12">
            <Dialog onOpenChange={(open) => !open && form.reset()}>
@@ -220,3 +229,5 @@ export function Faq({ content }: { content: FaqContent | null }) {
     </section>
   );
 }
+
+    

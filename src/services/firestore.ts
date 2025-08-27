@@ -311,13 +311,7 @@ const defaultFaqContent: FaqContent = {
     heroSubtitle: "Your questions, answered. Find the information you need about our services.", 
     title: "Frequently Asked Questions", 
     description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", 
-    faqs: [ 
-        { id: '1', category: "General", question: "What services do you offer?", answer: "We offer a wide range of services including custom web development, UI/UX design, brand strategy, and mobile application development. Our goal is to provide comprehensive digital solutions tailored to your business needs." }, 
-        { id: '2', category: "Technical", question: "How long does a typical project take?", answer: "The timeline for a project varies depending on its scope and complexity. A simple website might take 4-6 weeks, while a complex web application could take several months. We provide a detailed project timeline after our initial discovery phase." }, 
-        { id: '3', category: "General", question: "What is your development process?", answer: "Our process is collaborative and transparent. We start with a discovery phase to understand your goals, followed by strategy, design, development, testing, and deployment. We maintain open communication throughout the project to ensure we're aligned with your vision." }, 
-        { id: '4', category: "Billing", question: "How much does a project cost?", answer: "Project costs are based on the specific requirements and complexity of the work. We provide a detailed proposal and quote after discussing your needs. We offer flexible pricing models to accommodate various budgets." }, 
-        { id: '5', category: "Technical", question: "Do you provide support after the project is launched?", answer: "Yes, we offer ongoing support and maintenance packages to ensure your website or application remains secure, up-to-date, and performs optimally. We're here to be your long-term technology partner." } 
-    ] 
+    faqs: []
 };
 
 const defaultContactContent: ContactContent = { 
@@ -388,7 +382,7 @@ export const getFaqContent = cache(async (): Promise<FaqContent> => {
     const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/faqContent`);
     const merged = fetchedData ? deepMerge(defaultFaqContent, fetchedData) : defaultFaqContent;
     // Ensure all FAQs have an ID
-    merged.faqs = merged.faqs.map((faq, index) => ({...faq, id: faq.id || `faq-${index}`}));
+    merged.faqs = (merged.faqs || []).map((faq, index) => ({...faq, id: faq.id || `faq-${index}`}));
     return merged;
 });
 
@@ -425,3 +419,5 @@ export const getProjectBySlug = cache(async (slug: string): Promise<(Project & {
     const project = allProjects.find(p => p.slug === slug);
     return project || null;
 });
+
+    
