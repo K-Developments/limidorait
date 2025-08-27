@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -21,6 +22,94 @@ import { HomepageCta } from "@/components/sections/homepage-cta";
 
 interface HomePageClientProps {
   content: HeroContent | null;
+}
+/* ------------------------------
+    Seeded Random Generator
+--------------------------------*/
+function mulberry32(seed: number) {
+  return function () {
+    let t = (seed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* ------------------------------
+    Generate deterministic cells
+--------------------------------*/
+function generateCells(count: number, seed = 42) {
+  const rand = mulberry32(seed);
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    x: rand() * 100,
+    y: rand() * 100,
+    size: rand() * 500 + 20,
+    delay: rand() * 2,
+    duration: 3 + rand() * 2,
+  }));
+}
+
+// Animated Cells Background Component
+function AnimatedCells() {
+  const [cells] = React.useState(() => generateCells(12, 2025));
+  const [particles] = React.useState(() => generateCells(20, 99));
+
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {/* 🔹 Large animated glowing gradient cells */}
+      {cells.map((cell) => (
+        <motion.div
+          key={cell.id}
+          className="absolute rounded-full"
+          style={{
+            left: `${cell.x}%`,
+            top: `${cell.y}%`,
+            width: `${cell.size}px`,
+            height: `${cell.size}px`,
+            background: `radial-gradient(circle, hsl(0 0% 94.1% / 0.25) 0%, hsl(0 0% 94.1% / 0.08) 60%, transparent 100%)`,
+            filter: "blur(20px)",
+          }}
+          animate={{
+            x: [0, 40, -30, 0],
+            y: [0, -30, 40, 0],
+            scale: [1, 1.15, 0.95, 1],
+            opacity: [0.2, 0.6, 0.3, 0.5],
+          }}
+          transition={{
+            duration: cell.duration,
+            delay: cell.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* 🔹 Futuristic floating particles */}
+      {particles.map((p) => (
+        <motion.div
+          key={`particle-${p.id}`}
+          className="absolute w-1 h-1 rounded-full"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            backgroundColor: "hsl(0 0% 94.1% / 0.5)",
+            filter: "blur(2px)",
+          }}
+          animate={{
+            y: [0, -120, 0],
+            opacity: [0, 1, 0],
+          }}
+          transition={{
+            duration: 4 + p.delay,
+            delay: p.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
 }
 
 const HeroSection = ({ content }: { content: HeroContent | null }) => {
@@ -98,9 +187,13 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
           </SwiperSlide>
         ))}
       </Swiper>
-
+  {/* 🔹 Animated Cells Background */}
+  <AnimatedCells />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
-      
+     
+
+{/* 🔹 Overlay gradient shimmer */}
+<div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/10 animate-pulse" />
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

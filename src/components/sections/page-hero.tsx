@@ -136,7 +136,7 @@ export function PageHero({ title, subtitle }: PageHeroProps) {
           <div className="absolute right-0 top-2/3 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-300 to-transparent animate-pulse" />
         </div>
 
-        {/* 🔹 Glassmorphic content box */}
+     
         <div className="relative text-center">
           {isLoading ? (
             <div className="space-y-4">
