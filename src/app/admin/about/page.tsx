@@ -10,14 +10,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { AboutContent } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
-import Image from 'next/image';
 import { Sidebar } from '@/components/layout/admin-sidebar';
 import { cn } from '@/lib/utils';
-import { db, storage } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-const defaultAboutContent: AboutContent = { heroTitle: "Building Brands With Purpose", heroSubtitle: "We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences that drive success and inspire change.", heroImageUrl: "https://placehold.co/1600x640.png", aboutTitle: "Our Vision", aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients." };
+const defaultAboutContent: AboutContent = { heroTitle: "Building Brands With Purpose", heroSubtitle: "We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences that drive success and inspire change.", aboutTitle: "Our Vision", aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients." };
 const isObject = (item: any) => (item && typeof item === 'object' && !Array.isArray(item));
 const deepMerge = (target: any, source: any) => { const output = { ...target }; if (isObject(target) && isObject(source)) { Object.keys(source).forEach(key => { if (isObject(source[key])) { if (!(key in target)) Object.assign(output, { [key]: source[key] }); else output[key] = deepMerge(target[key], source[key]); } else { Object.assign(output, { [key]: source[key] }); } }); } return output; }
 
@@ -32,19 +30,10 @@ const updateAboutContent = async (content: Partial<AboutContent>): Promise<void>
   await setDoc(docRef, content, { merge: true });
 };
 
-const uploadImageAndGetURL = async (imageFile: File): Promise<{ url: string; path: string; }> => {
-  const storageRef = ref(storage, `site-assets/${Date.now()}_${imageFile.name}`);
-  const snapshot = await uploadBytes(storageRef, imageFile);
-  const downloadURL = await getDownloadURL(snapshot.ref);
-  return { url: downloadURL, path: snapshot.ref.fullPath };
-};
-
-
 function AdminDashboard() {
   const { toast } = useToast();
   const [aboutContent, setAboutContent] = useState<AboutContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -72,29 +61,6 @@ function AdminDashboard() {
     }
   };
   
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0] && aboutContent) {
-        const file = e.target.files[0];
-        setIsUploading(true);
-        try {
-            const { url } = await uploadImageAndGetURL(file);
-            setAboutContent({ ...aboutContent, heroImageUrl: url });
-            toast({
-                title: "Success!",
-                description: "Image uploaded successfully. Click 'Save All Changes' to apply.",
-            });
-        } catch (error) {
-            toast({
-                title: "Upload Error",
-                description: `Failed to upload image. Please try again.`,
-                variant: "destructive",
-            });
-        } finally {
-            setIsUploading(false);
-        }
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!aboutContent) return;
@@ -142,7 +108,7 @@ function AdminDashboard() {
         <Card>
           <CardHeader>
             <CardTitle>About Page Hero Section</CardTitle>
-            <CardDescription>Update the title, subtitle, and background image for the About page hero.</CardDescription>
+            <CardDescription>Update the title and subtitle for the About page hero.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
@@ -163,27 +129,6 @@ function AdminDashboard() {
                 onChange={handleInputChange}
                 className="min-h-[100px]"
               />
-            </div>
-            <div className="space-y-2">
-                <Label>Current Hero Image</Label>
-                <div className="relative group w-full aspect-video">
-                  <Image src={aboutContent?.heroImageUrl || 'https://placehold.co/1600x640.png'} alt={aboutContent?.heroTitle || 'About hero image'} layout="fill" className="object-cover rounded-md"/>
-                </div>
-            </div>
-            <div className="space-y-2">
-                <Label htmlFor="heroImageUrl">Image URL</Label>
-                <Input
-                    id="heroImageUrl"
-                    name="heroImageUrl"
-                    value={aboutContent?.heroImageUrl || ''}
-                    onChange={handleInputChange}
-                    placeholder="https://example.com/image.png"
-                />
-            </div>
-             <div className="space-y-2">
-                <Label htmlFor="hero-image-upload">Or Upload a New Hero Image</Label>
-                <Input id="hero-image-upload" type="file" onChange={handleImageUpload} accept="image/*" disabled={isUploading}/>
-                {isUploading && <p>Uploading...</p>}
             </div>
           </CardContent>
         </Card>

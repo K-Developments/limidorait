@@ -25,7 +25,7 @@ export async function generateMetadata(
     title: aboutContent.heroTitle ? `${aboutContent.heroTitle} | Limidora` : 'About Limidora | Our Vision & Process',
     description: aboutContent.heroSubtitle || 'Learn about the vision, team, and creative process at Limidora. We are a digital agency dedicated to building exceptional IT solutions and web experiences.',
     openGraph: {
-      images: [aboutContent.heroImageUrl, ...previousImages],
+      images: [...previousImages],
     },
   }
 }

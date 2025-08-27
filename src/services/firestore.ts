@@ -22,7 +22,6 @@ export interface Service {
   imageUrl: string;
   link: string;
   faqIds?: string[];
-  aiHint?: string;
 }
 export interface HomepageWork {
   title: string;
@@ -72,7 +71,6 @@ export interface HeroContent {
 export interface AboutContent {
   heroTitle: string;
   heroSubtitle: string;
-  heroImageUrl: string;
   aboutTitle: string;
   aboutDescription: string;
 }
@@ -286,7 +284,6 @@ const defaultHeroContent: Omit<HeroContent, 'services'> = {
 const defaultAboutContent: AboutContent = { 
     heroTitle: "Building Brands With Purpose", 
     heroSubtitle: "We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences that drive success and inspire change.", 
-    heroImageUrl: "https://placehold.co/1600x640.png", 
     aboutTitle: "Our Vision", 
     aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.", 
 };
