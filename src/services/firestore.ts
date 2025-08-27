@@ -22,12 +22,14 @@ export interface Service {
   imageUrl: string;
   link: string;
   faqIds?: string[];
+  aiHint?: string;
 }
 export interface HomepageWork {
   title: string;
   category: string;
   imageUrl: string;
   link: string;
+  id?: string;
 }
 export interface HomepageTestimonial {
   quote: string;
@@ -63,6 +65,9 @@ export interface HeroContent {
   services?: Service[];
   logoUrl?: string;
   logoText?: string;
+  footerLogoUrl?: string;
+  contactEmail?: string;
+  contactPhone?: string;
 }
 export interface AboutContent {
   heroTitle: string;
@@ -235,6 +240,9 @@ const defaultHeroContent: Omit<HeroContent, 'services'> = {
     title: "Creative Agency", 
     logoText: "Limidora", 
     logoUrl: "", 
+    footerLogoUrl: "",
+    contactEmail: "contact@limidora.com",
+    contactPhone: "+1 (555) 123-4567",
     slides: [ 
         { type: 'video', url: 'https://cdn.pixabay.com/video/2024/05/27/211904_large.mp4' }, 
         { type: 'image', url: 'https://placehold.co/1920x1080/eeece9/6e3d23', alt: 'Placeholder image 1' }, 
@@ -420,5 +428,3 @@ export const getProjectBySlug = cache(async (slug: string): Promise<(Project & {
     const project = allProjects.find(p => p.slug === slug);
     return project || null;
 });
-
-    

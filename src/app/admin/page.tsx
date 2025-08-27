@@ -199,12 +199,12 @@ function AdminDashboard() {
       <form onSubmit={handleSubmit} className="space-y-8">
         <Card>
           <CardHeader>
-            <CardTitle>Site Logo</CardTitle>
-            <CardDescription>Update your company logo. This will appear in the header and footer.</CardDescription>
+            <CardTitle>Site Header Logo</CardTitle>
+            <CardDescription>Update your company logo for the main header.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label>Current Logo</Label>
+              <Label>Current Header Logo</Label>
               <div className="relative h-16 w-48 bg-muted rounded-md flex items-center justify-center overflow-hidden">
                 {heroContent?.logoUrl ? (
                   <img src={heroContent.logoUrl} alt="Current Logo" className="h-full w-full object-contain p-2" onError={(e) => { const target = e.target as HTMLImageElement; target.style.display = 'none'; const parent = target.parentElement; if (parent) { parent.innerHTML = `<p class="text-sm text-muted-foreground">${heroContent?.logoText || 'Limidora'}</p>`; } }} />
@@ -214,12 +214,44 @@ function AdminDashboard() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="logoUrl">Logo URL</Label>
+              <Label htmlFor="logoUrl">Header Logo URL</Label>
               <Input id="logoUrl" name="logoUrl" value={heroContent?.logoUrl || ''} onChange={(e) => handleInputChange('logoUrl', e.target.value)} placeholder="https://example.com/logo.png" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="logoText">Logo Text Fallback</Label>
+              <Label htmlFor="logoText">Header Logo Text Fallback</Label>
               <Input id="logoText" name="logoText" value={heroContent?.logoText || ''} onChange={(e) => handleInputChange('logoText', e.target.value)} placeholder="Limidora" />
+            </div>
+          </CardContent>
+        </Card>
+         <Card>
+          <CardHeader>
+            <CardTitle>Footer Settings</CardTitle>
+            <CardDescription>Manage the logo and contact information for the site footer.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+             <div className="space-y-2">
+              <Label>Current Footer Logo</Label>
+              <div className="relative h-16 w-48 bg-muted rounded-md flex items-center justify-center overflow-hidden">
+                {heroContent?.footerLogoUrl ? (
+                  <img src={heroContent.footerLogoUrl} alt="Current Footer Logo" className="h-full w-full object-contain p-2" onError={(e) => { const target = e.target as HTMLImageElement; target.style.display = 'none'; const parent = target.parentElement; if (parent) { parent.innerHTML = `<p class="text-sm text-muted-foreground">${heroContent?.logoText || 'Limidora'}</p>`; } }} />
+                ) : (
+                  <p className="text-sm text-muted-foreground">{heroContent?.logoText || 'Limidora'}</p>
+                )}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="footerLogoUrl">Footer Logo URL</Label>
+              <Input id="footerLogoUrl" name="footerLogoUrl" value={heroContent?.footerLogoUrl || ''} onChange={(e) => handleInputChange('footerLogoUrl', e.target.value)} placeholder="https://example.com/footer-logo.png" />
+            </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div className="space-y-2">
+                    <Label htmlFor="contactEmail">Contact Email</Label>
+                    <Input id="contactEmail" name="contactEmail" value={heroContent?.contactEmail || ''} onChange={(e) => handleInputChange('contactEmail', e.target.value)} placeholder="contact@example.com" />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="contactPhone">Contact Phone</Label>
+                    <Input id="contactPhone" name="contactPhone" value={heroContent?.contactPhone || ''} onChange={(e) => handleInputChange('contactPhone', e.target.value)} placeholder="+1 234 567 890" />
+                </div>
             </div>
           </CardContent>
         </Card>
@@ -468,5 +500,3 @@ export default function AdminHomePage() {
     </div>
   );
 }
-
-    
