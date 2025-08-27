@@ -92,13 +92,14 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
           <div className="relative z-10 container mx-auto px-4 md:px-6 -mt-40 md:-mt-48">
               <div className="bg-background shadow-xl max-w-4xl mx-auto p-6 md:p-12">
               {/* Breadcrumbs */}
-              <nav aria-label="Breadcrumb" className="flex items-center text-sm text-muted-foreground mb-8">
+              <nav aria-label="Breadcrumb" className="flex items-center text-xs text-muted-foreground mb-8">
                   <Link href="/" className="hover:text-primary transition-colors">Home</Link>
                   <ChevronRight className="h-4 w-4 mx-1" />
                   <Link href="/portfolio" className="hover:text-primary transition-colors">Portfolio</Link>
                   <ChevronRight className="h-4 w-4 mx-1" />
                   <span className="font-medium text-foreground capitalize">{project.title}</span>
               </nav>
+              <Separator className="mb-8" />
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                   {/* Left Column - Meta Info */}

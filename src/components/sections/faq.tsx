@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -105,13 +106,13 @@ export function Faq({ content }: { content: FaqContent | null }) {
         <div className="mb-8">
             <nav aria-label="Breadcrumb" className="flex items-center text-xs text-muted-foreground">
                 <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-                <ChevronRight className="h-4 w-4 mx-1" />
                 {cameFromAbout && (
                   <>
-                    <Link href="/about" className="hover:text-primary transition-colors">About</Link>
                     <ChevronRight className="h-4 w-4 mx-1" />
+                    <Link href="/about" className="hover:text-primary transition-colors">About</Link>
                   </>
                 )}
+                <ChevronRight className="h-4 w-4 mx-1" />
                 <span className="font-medium text-foreground">FAQs</span>
             </nav>
             <Separator className="mt-4" />
