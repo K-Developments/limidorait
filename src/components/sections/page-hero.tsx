@@ -9,15 +9,20 @@ interface PageHeroProps {
 
 // Animated Cells Background Component
 function AnimatedCells() {
-  // This function can't be memoized easily with Math.random, but for this use case it's fine.
-  const cells = Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 1000 + 40,
-    delay: Math.random() * 2,
-    duration: 3 + Math.random() * 2,
-  }));
+  const [cells, setCells] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    // This function can't be memoized easily with Math.random, but for this use case it's fine.
+    const generatedCells = Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 1000 + 40,
+      delay: Math.random() * 2,
+      duration: 3 + Math.random() * 2,
+    }));
+    setCells(generatedCells);
+  }, []);
 
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -121,7 +126,7 @@ export function PageHero({ title, subtitle }: PageHeroProps) {
             <>
               <motion.h1 
                 id="page-hero-title" 
-                className="text-4xl md:text-5xl lg:text-6xl font-medium uppercase mb-4 font-headline text-gray-800"
+                className="text-4xl md:text-5xl lg:text-6xl font-medium uppercase mb-4 font-headline bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70"
                 style={{lineHeight: 1.2}}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
