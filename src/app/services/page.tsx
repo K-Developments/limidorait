@@ -8,8 +8,14 @@ import { PublicLayout } from "../public-layout";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { Metadata } from "next";
 
 export const dynamic = 'force-static';
+
+export const metadata: Metadata = {
+    title: 'Our Services | Limidora Digital',
+    description: 'Explore the range of digital services offered by Limidora, including web development, UI/UX design, mobile apps, and more. Crafting digital excellence for your brand.',
+};
 
 export default async function ServicesPage() {
     const heroContent = await getHeroContent();

@@ -8,19 +8,25 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Service } from '@/services/firestore';
+import { Service, FaqContent } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { Sidebar } from '@/components/layout/admin-sidebar';
 import { cn } from '@/lib/utils';
 import { db, storage } from '@/lib/firebase';
-import { doc, getDocs, collection, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { doc, getDocs, collection, addDoc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const getClientServices = async (): Promise<Service[]> => {
     const snapshot = await getDocs(collection(db, 'services'));
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Service));
+};
+
+const getClientFaqs = async (): Promise<FaqContent> => {
+    const docSnap = await getDoc(doc(db, 'homepage', 'faqContent'));
+    return docSnap.exists() ? docSnap.data() as FaqContent : { faqs: [] };
 };
 
 const addService = async (data: Omit<Service, 'id'>): Promise<Service> => {
@@ -44,22 +50,31 @@ const uploadImageAndGetURL = async (imageFile: File): Promise<{ url: string; pat
 };
 
 
+type EditableService = Omit<Service, 'whatYouGet'> & {
+    whatYouGet: string;
+};
+
 function AdminDashboard() {
   const { toast } = useToast();
-  const [services, setServices] = useState<Service[]>([]);
+  const [services, setServices] = useState<EditableService[]>([]);
+  const [faqs, setFaqs] = useState<FaqContent['faqs']>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState<Record<string, boolean>>({});
 
-  const fetchServices = async () => {
+  const fetchContent = async () => {
     setIsLoading(true);
     try {
-      const servicesData = await getClientServices();
-      setServices(servicesData);
+      const [servicesData, faqsData] = await Promise.all([
+        getClientServices(),
+        getClientFaqs(),
+      ]);
+      setServices(servicesData.map(s => ({...s, whatYouGet: s.whatYouGet?.join('\n') || ''})));
+      setFaqs(faqsData.faqs || []);
     } catch (error) {
       console.error("Failed to fetch services:", error);
       toast({
         title: "Error",
-        description: "Failed to load services from the database.",
+        description: "Failed to load data from the database.",
         variant: "destructive",
       });
     } finally {
@@ -68,11 +83,25 @@ function AdminDashboard() {
   };
 
   useEffect(() => {
-    fetchServices();
+    fetchContent();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleServiceChange = (id: string, field: keyof Omit<Service, 'id'>, value: string) => {
+  const handleServiceChange = (id: string, field: keyof EditableService, value: string | string[]) => {
     setServices(services.map(s => s.id === id ? { ...s, [field]: value } : s));
+  };
+  
+  const handleFaqSelectionChange = (serviceId: string, faqId: string, checked: boolean) => {
+    setServices(services.map(s => {
+        if (s.id === serviceId) {
+            const currentFaqIds = s.faqIds || [];
+            if (checked) {
+                return { ...s, faqIds: [...currentFaqIds, faqId] };
+            } else {
+                return { ...s, faqIds: currentFaqIds.filter(id => id !== faqId) };
+            }
+        }
+        return s;
+    }));
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, serviceId: string) => {
@@ -102,13 +131,17 @@ function AdminDashboard() {
     try {
       const newServiceData = {
         title: "New Service",
+        slug: "new-service",
         description: "A brief description of this new service.",
+        longDescription: "A more detailed explanation of what this service entails.",
+        whatYouGet: ["Feature 1", "Feature 2", "Feature 3"],
         imageUrl: "https://placehold.co/600x400.png",
         aiHint: "new service",
-        link: "/services"
+        link: "/services",
+        faqIds: [],
       };
       const newService = await addService(newServiceData);
-      setServices([...services, newService]);
+      setServices([...services, {...newService, whatYouGet: newService.whatYouGet.join('\n') }]);
       toast({ title: "Success", description: "New service added. You can now edit its details." });
     } catch (error) {
       toast({ title: "Error", description: "Could not add new service.", variant: "destructive" });
@@ -132,11 +165,14 @@ function AdminDashboard() {
     const serviceToUpdate = services.find(s => s.id === serviceId);
     if (!serviceToUpdate) return;
     
-    // Omitting the 'id' field before sending to the update function
-    const { id, ...dataToUpdate } = serviceToUpdate;
+    const { id, whatYouGet, ...dataToUpdate } = serviceToUpdate;
+    const finalData = {
+        ...dataToUpdate,
+        whatYouGet: whatYouGet.split('\n').filter(Boolean),
+    };
 
     try {
-      await updateService(serviceId, dataToUpdate);
+      await updateService(serviceId, finalData);
       toast({
         title: "Success!",
         description: `Service "${serviceToUpdate.title}" has been updated.`,
@@ -182,15 +218,46 @@ function AdminDashboard() {
                   <Label htmlFor={`title-${service.id}`}>Title</Label>
                   <Input id={`title-${service.id}`} value={service.title} onChange={(e) => handleServiceChange(service.id, 'title', e.target.value)} />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor={`link-${service.id}`}>Link</Label>
-                  <Input id={`link-${service.id}`} value={service.link} onChange={(e) => handleServiceChange(service.id, 'link', e.target.value)} />
+                 <div className="space-y-2">
+                  <Label htmlFor={`slug-${service.id}`}>Slug</Label>
+                  <Input id={`slug-${service.id}`} value={service.slug} onChange={(e) => handleServiceChange(service.id, 'slug', e.target.value)} />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor={`description-${service.id}`}>Description</Label>
+                <Label htmlFor={`description-${service.id}`}>Short Description</Label>
                 <Textarea id={`description-${service.id}`} value={service.description} onChange={(e) => handleServiceChange(service.id, 'description', e.target.value)} />
               </div>
+               <div className="space-y-2">
+                <Label htmlFor={`longDescription-${service.id}`}>Detailed Description</Label>
+                <Textarea id={`longDescription-${service.id}`} value={service.longDescription} onChange={(e) => handleServiceChange(service.id, 'longDescription', e.target.value)} className="min-h-[120px]" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor={`whatYouGet-${service.id}`}>What You Get (one item per line)</Label>
+                <Textarea id={`whatYouGet-${service.id}`} value={service.whatYouGet} onChange={(e) => handleServiceChange(service.id, 'whatYouGet', e.target.value)} className="min-h-[120px]" />
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Associated FAQs</CardTitle>
+                  <CardDescription>Select FAQs to display on this service's page.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2 max-h-60 overflow-y-auto">
+                  {faqs.map(faq => (
+                    <div key={faq.id} className="flex items-center space-x-2">
+                        <Checkbox
+                            id={`faq-${service.id}-${faq.id}`}
+                            checked={service.faqIds?.includes(faq.id)}
+                            onCheckedChange={(checked) => handleFaqSelectionChange(service.id, faq.id, checked as boolean)}
+                        />
+                        <label htmlFor={`faq-${service.id}-${faq.id}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            {faq.question}
+                        </label>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+
               <div className="space-y-2">
                   <Label>Current Image</Label>
                   <div className="relative group w-full aspect-video max-w-md">

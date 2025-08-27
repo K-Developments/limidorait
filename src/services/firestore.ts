@@ -15,10 +15,14 @@ export interface SocialLink {
 export interface Service {
   id: string;
   title: string;
+  slug: string;
   description: string;
+  longDescription: string;
+  whatYouGet: string[];
   imageUrl: string;
   aiHint: string;
   link: string;
+  faqIds?: string[];
 }
 export interface HomepageWork {
   title: string;
@@ -98,6 +102,7 @@ export interface Project {
     date: string;
 }
 export interface FaqItem {
+  id: string;
   question: string;
   answer: string;
   category: string;
@@ -307,11 +312,11 @@ const defaultFaqContent: FaqContent = {
     title: "Frequently Asked Questions", 
     description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", 
     faqs: [ 
-        { category: "General", question: "What services do you offer?", answer: "We offer a wide range of services including custom web development, UI/UX design, brand strategy, and mobile application development. Our goal is to provide comprehensive digital solutions tailored to your business needs." }, 
-        { category: "Technical", question: "How long does a typical project take?", answer: "The timeline for a project varies depending on its scope and complexity. A simple website might take 4-6 weeks, while a complex web application could take several months. We provide a detailed project timeline after our initial discovery phase." }, 
-        { category: "General", question: "What is your development process?", answer: "Our process is collaborative and transparent. We start with a discovery phase to understand your goals, followed by strategy, design, development, testing, and deployment. We maintain open communication throughout the project to ensure we're aligned with your vision." }, 
-        { category: "Billing", question: "How much does a project cost?", answer: "Project costs are based on the specific requirements and complexity of the work. We provide a detailed proposal and quote after discussing your needs. We offer flexible pricing models to accommodate various budgets." }, 
-        { category: "Technical", question: "Do you provide support after the project is launched?", answer: "Yes, we offer ongoing support and maintenance packages to ensure your website or application remains secure, up-to-date, and performs optimally. We're here to be your long-term technology partner." } 
+        { id: '1', category: "General", question: "What services do you offer?", answer: "We offer a wide range of services including custom web development, UI/UX design, brand strategy, and mobile application development. Our goal is to provide comprehensive digital solutions tailored to your business needs." }, 
+        { id: '2', category: "Technical", question: "How long does a typical project take?", answer: "The timeline for a project varies depending on its scope and complexity. A simple website might take 4-6 weeks, while a complex web application could take several months. We provide a detailed project timeline after our initial discovery phase." }, 
+        { id: '3', category: "General", question: "What is your development process?", answer: "Our process is collaborative and transparent. We start with a discovery phase to understand your goals, followed by strategy, design, development, testing, and deployment. We maintain open communication throughout the project to ensure we're aligned with your vision." }, 
+        { id: '4', category: "Billing", question: "How much does a project cost?", answer: "Project costs are based on the specific requirements and complexity of the work. We provide a detailed proposal and quote after discussing your needs. We offer flexible pricing models to accommodate various budgets." }, 
+        { id: '5', category: "Technical", question: "Do you provide support after the project is launched?", answer: "Yes, we offer ongoing support and maintenance packages to ensure your website or application remains secure, up-to-date, and performs optimally. We're here to be your long-term technology partner." } 
     ] 
 };
 
@@ -381,7 +386,10 @@ export const getPortfolioContent = cache(async (): Promise<PortfolioContent> => 
 
 export const getFaqContent = cache(async (): Promise<FaqContent> => {
     const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/faqContent`);
-    return fetchedData ? deepMerge(defaultFaqContent, fetchedData) : defaultFaqContent;
+    const merged = fetchedData ? deepMerge(defaultFaqContent, fetchedData) : defaultFaqContent;
+    // Ensure all FAQs have an ID
+    merged.faqs = merged.faqs.map((faq, index) => ({...faq, id: faq.id || `faq-${index}`}));
+    return merged;
 });
 
 export const getContactContent = cache(async (): Promise<ContactContent> => {
@@ -390,8 +398,19 @@ export const getContactContent = cache(async (): Promise<ContactContent> => {
 });
 
 export const getServices = cache(async (): Promise<Service[]> => {
-    return (await fetchFirestoreCollection(SERVICES_COLLECTION_ID) as Service[]) || [];
+    const services = (await fetchFirestoreCollection(SERVICES_COLLECTION_ID) as Service[]) || [];
+    return services.map(s => {
+      const slug = s.slug || s.title.toLowerCase().replace(/\s+/g, '-');
+      return { ...s, slug, link: `/services/${slug}` };
+    });
 });
+
+export const getServiceBySlug = cache(async (slug: string): Promise<Service | null> => {
+    const allServices = await getServices();
+    const service = allServices.find(s => s.slug === slug);
+    return service || null;
+});
+
 
 export const getProjects = cache(async (): Promise<(Project & { link: string })[]> => {
     const projects = (await fetchFirestoreCollection(PORTFOLIO_COLLECTION_ID) as Project[]) || [];
