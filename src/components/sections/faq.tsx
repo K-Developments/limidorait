@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -103,7 +102,7 @@ export function Faq({ content }: { content: FaqContent | null }) {
     <section id="faq" aria-labelledby="faq-heading" className="w-full bg-background pt-12 pb-12 md:pb-24 lg:pb-32">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-8">
-            <nav aria-label="Breadcrumb" className="flex items-center text-sm text-muted-foreground">
+            <nav aria-label="Breadcrumb" className="flex items-center text-xs text-muted-foreground">
                 <Link href="/" className="hover:text-primary transition-colors">Home</Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
                 {cameFromAbout && (
