@@ -178,7 +178,6 @@ const WorkCard = ({ work, className }: { work: HomepageWork, className?: string 
                         alt={work.title}
                         fill
                         className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300 ease-in-out"
-                        data-ai-hint={work.aiHint}
                     />
                     {/* Desktop & Tablet Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent hidden sm:block" />
@@ -206,3 +205,5 @@ const WorkCard = ({ work, className }: { work: HomepageWork, className?: string 
         </div>
     )
 }
+
+    

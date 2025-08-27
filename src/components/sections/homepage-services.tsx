@@ -51,7 +51,6 @@ export function HomepageServices({ services }: HomepageServicesProps) {
                           alt={service.title}
                           fill
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          data-ai-hint={service.aiHint}
                           />
                       </div>
                       <CardContent className="p-6 flex flex-col flex-grow">
@@ -77,3 +76,5 @@ export function HomepageServices({ services }: HomepageServicesProps) {
     </section>
   );
 }
+
+    

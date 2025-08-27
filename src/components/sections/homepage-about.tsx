@@ -54,7 +54,6 @@ export function HomepageAbout({ aboutSection }: HomepageAboutProps) {
               alt={aboutSection.title}
               fill
               className="object-cover"
-              data-ai-hint={aboutSection.aiHint}
             />
           </motion.div>
         </div>
@@ -62,3 +61,5 @@ export function HomepageAbout({ aboutSection }: HomepageAboutProps) {
     </section>
   );
 }
+
+    

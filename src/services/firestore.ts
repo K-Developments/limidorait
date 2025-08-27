@@ -20,7 +20,6 @@ export interface Service {
   longDescription: string;
   whatYouGet: string[];
   imageUrl: string;
-  aiHint: string;
   link: string;
   faqIds?: string[];
 }
@@ -28,7 +27,6 @@ export interface HomepageWork {
   title: string;
   category: string;
   imageUrl: string;
-  aiHint: string;
   link: string;
 }
 export interface HomepageTestimonial {
@@ -50,7 +48,6 @@ export interface HomepageAboutSection {
     buttonText: string;
     buttonLink: string;
     imageUrl: string;
-    aiHint: string;
 }
 export interface HeroContent {
   title: string;
@@ -93,7 +90,6 @@ export interface Project {
     slug: string;
     category: string;
     imageUrl: string;
-    aiHint: string;
     heroImageUrl: string;
     about: string;
     features: string[];
@@ -253,9 +249,9 @@ const defaultHeroContent: Omit<HeroContent, 'services'> = {
     ], 
     featuredServices: [], 
     works: [ 
-        { title: "E-commerce Platform", category: "Web Development", imageUrl: "https://placehold.co/800x600.png", aiHint: "website mockup", link: "/portfolio/ecommerce-platform" }, 
-        { title: "Mobile Banking App", category: "UI/UX Design", imageUrl: "https://placehold.co/600x400.png", aiHint: "app interface", link: "/portfolio/mobile-banking" }, 
-        { title: "SaaS Dashboard", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", aiHint: "dashboard analytics", link: "/portfolio/saas-dashboard" } 
+        { title: "E-commerce Platform", category: "Web Development", imageUrl: "https://placehold.co/800x600.png", link: "/portfolio/ecommerce-platform" }, 
+        { title: "Mobile Banking App", category: "UI/UX Design", imageUrl: "https://placehold.co/600x400.png", link: "/portfolio/mobile-banking" }, 
+        { title: "SaaS Dashboard", category: "Web Development", imageUrl: "https://placehold.co/600x400.png", link: "/portfolio/saas-dashboard" } 
     ], 
     testimonials: [ 
         { quote: "Limidora transformed our online presence. Their team is professional, creative, and delivered beyond our expectations. We've seen a significant increase in engagement since the launch.", author: "Jane Doe", company: "Tech Solutions Inc.", avatarUrl: "https://placehold.co/100x100.png" }, 
@@ -275,8 +271,7 @@ const defaultHeroContent: Omit<HeroContent, 'services'> = {
         description: "We are a creative agency that blends design, technology, and strategy to build exceptional digital experiences. Our passion is to help businesses thrive in the digital world.", 
         buttonText: "More About Limidora", 
         buttonLink: "/about", 
-        imageUrl: "https://placehold.co/800x600.png", 
-        aiHint: "office team collaboration" 
+        imageUrl: "https://placehold.co/800x600.png",
     } 
 };
 
@@ -425,3 +420,5 @@ export const getProjectBySlug = cache(async (slug: string): Promise<(Project & {
     const project = allProjects.find(p => p.slug === slug);
     return project || null;
 });
+
+    

@@ -209,7 +209,6 @@ function AdminDashboard() {
             slug: "new-project",
             category: "Category",
             imageUrl: "https://placehold.co/600x400.png",
-            aiHint: "new project",
         };
         const newProject = await addProject(newProjectData as any);
         setProjects([...projects, {
@@ -395,10 +394,6 @@ function AdminDashboard() {
                                     <Input id={`image-upload-${project.id}`} type="file" onChange={(e) => handleImageUpload(e, project.id, 'imageUrl')} accept="image/*" disabled={isUploading[`${project.id}-imageUrl`]} />
                                     {isUploading[`${project.id}-imageUrl`] && <p>Uploading...</p>}
                                 </div>
-                                 <div className="space-y-2">
-                                    <Label htmlFor={`aiHint-${project.id}`}>AI Hint (for image search)</Label>
-                                    <Input id={`aiHint-${project.id}`} value={project.aiHint} onChange={(e) => handleProjectChange(project.id, 'aiHint', e.target.value)} />
-                                </div>
                             </CardContent>
                         </Card>
                          <Card>
@@ -477,3 +472,5 @@ export default function AdminPortfolioPage() {
     </div>
   );
 }
+
+    

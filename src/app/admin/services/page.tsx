@@ -136,7 +136,6 @@ function AdminDashboard() {
         longDescription: "A more detailed explanation of what this service entails.",
         whatYouGet: ["Feature 1", "Feature 2", "Feature 3"],
         imageUrl: "https://placehold.co/600x400.png",
-        aiHint: "new service",
         link: "/services",
         faqIds: [],
       };
@@ -273,10 +272,6 @@ function AdminDashboard() {
                 <Input id={`image-upload-${service.id}`} type="file" onChange={(e) => handleImageUpload(e, service.id)} accept="image/*" disabled={isUploading[service.id]} />
                 {isUploading[service.id] && <p>Uploading...</p>}
               </div>
-              <div className="space-y-2">
-                <Label htmlFor={`aiHint-${service.id}`}>AI Hint</Label>
-                <Input id={`aiHint-${service.id}`} value={service.aiHint} onChange={(e) => handleServiceChange(service.id, 'aiHint', e.target.value)} />
-              </div>
               <div className="flex justify-end gap-2">
                 <Button onClick={() => handleSaveChanges(service.id)}>Save Changes</Button>
                 <Button variant="destructive" size="icon" onClick={() => handleDeleteService(service.id)}>
@@ -314,3 +309,5 @@ export default function AdminServicesPage() {
     </div>
   );
 }
+
+    

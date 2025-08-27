@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Service } from "@/services/firestore";
@@ -60,7 +61,6 @@ export function ServicesList({ services }: { services: Service[] }) {
                     alt={service.title}
                     fill
                     className="object-cover"
-                    data-ai-hint={service.aiHint}
                   />
                 </div>
                 <div className="bg-neutral-900 text-white p-8 md:p-16 h-full flex flex-col justify-center md:order-2">
@@ -85,3 +85,5 @@ export function ServicesList({ services }: { services: Service[] }) {
     </section>
   );
 }
+
+    
