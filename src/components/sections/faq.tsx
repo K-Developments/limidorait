@@ -58,7 +58,7 @@ export function Faq({ content }: { content: FaqContent | null }) {
 
   const categories = useMemo(() => {
     if (!content || !content.faqs || content.faqs.length === 0) return [];
-    const cats = new Set(content.faqs.map(faq => faq.category));
+    const cats = new Set(content.faqs.map(faq => faq.category).filter(Boolean));
     return ["All", ...Array.from(cats)];
   }, [content]);
 
@@ -128,7 +128,7 @@ export function Faq({ content }: { content: FaqContent | null }) {
             </p>
         </motion.div>
 
-        {categories.length > 0 && (
+        {categories.length > 1 && (
           <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -230,4 +230,3 @@ export function Faq({ content }: { content: FaqContent | null }) {
   );
 }
 
-    
