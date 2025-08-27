@@ -3,8 +3,7 @@ import type { Metadata } from 'next';
 import HomePageClient from "./home-page-client";
 import { PublicLayout } from "./public-layout";
 
-// Temporarily remove this to allow more debugging
-// export const dynamic = 'force-static';
+export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
   title: {
