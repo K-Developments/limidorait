@@ -17,7 +17,7 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc, setDoc, getDocs, collection, query, orderBy, deleteDoc, serverTimestamp, addDoc } from 'firebase/firestore';
 
 
-const defaultFaqContent: FaqContent = { heroTitle: "Help Center", heroSubtitle: "Your questions, answered. Find the information you need about our services.", title: "Frequently Asked Questions", description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", faqs: [ { question: "What services do you offer?", answer: "We offer a wide range of services including custom web development, UI/UX design, brand strategy, and mobile application development. Our goal is to provide comprehensive digital solutions tailored to your business needs." }, { question: "How long does a typical project take?", answer: "The timeline for a project varies depending on its scope and complexity. A simple website might take 4-6 weeks, while a complex web application could take several months. We provide a detailed project timeline after our initial discovery phase." }, { question: "What is your development process?", answer: "Our process is collaborative and transparent. We start with a discovery phase to understand your goals, followed by strategy, design, development, testing, and deployment. We maintain open communication throughout the project to ensure we're aligned with your vision." }, { question: "How much does a project cost?", answer: "Project costs are based on the specific requirements and complexity of the work. We provide a detailed proposal and quote after discussing your needs. We offer flexible pricing models to accommodate various budgets." }, { question: "Do you provide support after the project is launched?", answer: "Yes, we offer ongoing support and maintenance packages to ensure your website or application remains secure, up-to-date, and performs optimally. We're here to be your long-term technology partner." } ] };
+const defaultFaqContent: FaqContent = { heroTitle: "Help Center", heroSubtitle: "Your questions, answered. Find the information you need about our services.", title: "Frequently Asked Questions", description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", faqs: [ { category: "General", question: "What services do you offer?", answer: "We offer a wide range of services including custom web development, UI/UX design, brand strategy, and mobile application development. Our goal is to provide comprehensive digital solutions tailored to your business needs." }, { category: "Technical", question: "How long does a typical project take?", answer: "The timeline for a project varies depending on its scope and complexity. A simple website might take 4-6 weeks, while a complex web application could take several months. We provide a detailed project timeline after our initial discovery phase." }, { category: "General", question: "What is your development process?", answer: "Our process is collaborative and transparent. We start with a discovery phase to understand your goals, followed by strategy, design, development, testing, and deployment. We maintain open communication throughout the project to ensure we're aligned with your vision." }, { category: "Billing", question: "How much does a project cost?", answer: "Project costs are based on the specific requirements and complexity of the work. We provide a detailed proposal and quote after discussing your needs. We offer flexible pricing models to accommodate various budgets." }, { category: "Technical", question: "Do you provide support after the project is launched?", answer: "Yes, we offer ongoing support and maintenance packages to ensure your website or application remains secure, up-to-date, and performs optimally. We're here to be your long-term technology partner." } ] };
 const isObject = (item: any) => (item && typeof item === 'object' && !Array.isArray(item));
 const deepMerge = (target: any, source: any) => { const output = { ...target }; if (isObject(target) && isObject(source)) { Object.keys(source).forEach(key => { if (isObject(source[key])) { if (!(key in target)) Object.assign(output, { [key]: source[key] }); else output[key] = deepMerge(target[key], source[key]); } else { Object.assign(output, { [key]: source[key] }); } }); } return output; }
 
@@ -88,7 +88,7 @@ function AdminDashboard() {
 
   const addFaqItem = () => {
     if (faqContent) {
-      const newFaqs = [...faqContent.faqs, { question: "New Question", answer: "New Answer" }];
+      const newFaqs = [...faqContent.faqs, { question: "New Question", answer: "New Answer", category: "General" }];
       setFaqContent({ ...faqContent, faqs: newFaqs });
     }
   };
@@ -106,7 +106,7 @@ function AdminDashboard() {
         toast({ title: "Error", description: "Please provide an answer before adding.", variant: "destructive" });
         return;
     }
-    const newFaqItem: FaqItem = { question: question.question, answer };
+    const newFaqItem: FaqItem = { question: question.question, answer, category: "General" };
     const updatedFaqs = [...faqContent.faqs, newFaqItem];
     
     try {
@@ -245,6 +245,10 @@ function AdminDashboard() {
                 <div className="space-y-2">
                   <Label htmlFor={`question-${index}`}>Question</Label>
                   <Input id={`question-${index}`} value={faq.question} onChange={(e) => handleFaqChange(index, 'question', e.target.value)} />
+                </div>
+                 <div className="space-y-2 mt-2">
+                  <Label htmlFor={`category-${index}`}>Category</Label>
+                  <Input id={`category-${index}`} value={faq.category} onChange={(e) => handleFaqChange(index, 'category', e.target.value)} />
                 </div>
                 <div className="space-y-2 mt-2">
                   <Label htmlFor={`answer-${index}`}>Answer</Label>

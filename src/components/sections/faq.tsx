@@ -4,9 +4,9 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { FaqContent } from "@/services/firestore";
+import { FaqContent, FaqItem } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +27,7 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { cn } from "@/lib/utils";
 
 
 const QuestionFormSchema = z.object({
@@ -44,6 +45,7 @@ const submitQuestion = async (data: { email: string; question: string }): Promis
 export function Faq({ content }: { content: FaqContent | null }) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("All");
   const isLoading = !content;
   
   const form = useForm<QuestionFormValues>({
@@ -53,6 +55,18 @@ export function Faq({ content }: { content: FaqContent | null }) {
       question: "",
     },
   });
+
+  const categories = useMemo(() => {
+    if (!content) return [];
+    const cats = new Set(content.faqs.map(faq => faq.category));
+    return ["All", ...Array.from(cats)];
+  }, [content]);
+
+  const filteredFaqs = useMemo(() => {
+    if (!content) return [];
+    if (activeCategory === "All") return content.faqs;
+    return content.faqs.filter(faq => faq.category === activeCategory);
+  }, [content, activeCategory]);
 
   const handleQuestionSubmit = async (data: QuestionFormValues) => {
     setIsSubmitting(true);
@@ -103,7 +117,7 @@ export function Faq({ content }: { content: FaqContent | null }) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12"
         >
             <Badge variant="outline" className="mb-4">FAQs</Badge>
             <h1 id="faq-heading" className="text-3xl md:text-4xl font-medium text-foreground mb-4 font-body uppercase">
@@ -113,6 +127,25 @@ export function Faq({ content }: { content: FaqContent | null }) {
               {content?.description}
             </p>
         </motion.div>
+
+        <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+            className="flex justify-center flex-wrap gap-2 mb-12"
+        >
+          {categories.map(category => (
+            <Button
+              key={category}
+              variant={activeCategory === category ? "default" : "outline"}
+              onClick={() => setActiveCategory(category)}
+            >
+              {category}
+            </Button>
+          ))}
+        </motion.div>
+
         <motion.div 
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -121,7 +154,7 @@ export function Faq({ content }: { content: FaqContent | null }) {
             className="max-w-3xl mx-auto"
         >
             <Accordion type="single" collapsible className="w-full">
-            {content?.faqs.map((item, index) => (
+            {filteredFaqs.map((item, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-lg font-medium text-left">{item.question}</AccordionTrigger>
                 <AccordionContent className="text-base text-muted-foreground">
