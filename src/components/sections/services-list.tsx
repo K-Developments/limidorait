@@ -63,11 +63,11 @@ export function ServicesList({ services }: { services: Service[] }) {
                     data-ai-hint={service.aiHint}
                   />
                 </div>
-                <div className="bg-neutral-900 text-primary-foreground p-8 md:p-16 h-full flex flex-col justify-center md:order-2">
+                <div className="bg-neutral-900 text-white p-8 md:p-16 h-full flex flex-col justify-center md:order-2">
                   <h3 className="text-3xl md:text-4xl font-medium mb-4 font-body uppercase">
                     {service.title}
                   </h3>
-                  <p className="text-lg mb-8 text-primary-foreground/80">
+                  <p className="text-lg mb-8 text-white/80">
                     {service.description}
                   </p>
                   <Button asChild size="lg" className="self-start animate-arrow-on-hover">
