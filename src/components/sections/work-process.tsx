@@ -322,8 +322,8 @@ const MobileStep = ({ step, index }: { step: any; index: number }) => {
 const StoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
   const overlayOpacity = useTransform(
     scrollYProgress,
-    [0.15, 0.25, 0.85, 0.95],
-    [0, 1, 1, 0]
+    [0.15, 0.25, 0.85, 0.95, 1 ],
+    [0, 1, 1, 1, 0 ]
   );
 
   return (
@@ -331,7 +331,7 @@ const StoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
       style={{ opacity: overlayOpacity }}
       className="fixed inset-0 pointer-events-none z-20 flex items-center justify-center"
     >
-      <div className="text-center max-w-2xl mx-auto px-4">
+      <div className="text-center max-w-2xl mx-auto px-4 md:px-[6rem]">
         {processSteps.map((step, index) => {
           const isLastStep = index === processSteps.length - 1;
 
@@ -421,23 +421,7 @@ const ProgressIndicator = ({ scrollYProgress }: { scrollYProgress: any }) => {
 const ScrollIndicator = ({ scrollYProgress }: { scrollYProgress: any }) => {
   const indicatorOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
 
-  return (
-    <motion.div
-      style={{ opacity: indicatorOpacity }}
-      className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20 text-center"
-    >
-      <motion.div
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        className="flex flex-col items-center gap-2"
-      > 
-        <p className="text-sm text-muted-foreground hidden sm:block">
-          Scroll to begin the journey
-        </p>
-        <ArrowDown className="h-5 w-5 text-foreground" />
-      </motion.div>
-    </motion.div>
-  );
+
 };
 
 const Circle = ({ scrollYProgress }: { scrollYProgress: any }) => {
@@ -603,7 +587,7 @@ export const WorkProcess = () => {
       ref={containerRef}
       id="work-process"
       className={cn(
-        "relative py-12 sm:py-16 md:py-20 lg:py-28 bg-background overflow-x-hidden",
+        "relative py-12 sm:py-16 md:py-20 lg:py-28 bg-background overflow-x-hidden overflow-hidden",
         isMobile ? "min-h-[350vh]" : "min-h-[400vh]"
       )}
     >
@@ -621,7 +605,7 @@ export const WorkProcess = () => {
         <>
           <ProgressIndicator scrollYProgress={scrollYProgress} />
           <StoryOverlay scrollYProgress={scrollYProgress} />
-          <ScrollIndicator scrollYProgress={scrollYProgress} />
+         
         </>
       )}
 

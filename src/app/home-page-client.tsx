@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -104,69 +103,201 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
         transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
         className="relative z-10 p-8 md:p-12 md:basis-2/3 flex items-end w-[100%] h-[100%]"
       >
-        {/* Gentle Decorative Lines */}
+        {/* Enhanced Ambient Glow Effects */}
         <div className="absolute inset-0 w-full h-full pointer-events-none">
-     {/* Vertical Lines */}
-<div className="absolute top-0 left-1/4 h-full w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent overflow-hidden">
-  {/* Gentle moving highlight */}
-  <motion.div
-    className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white/40 via-white/20 to-transparent"
-    animate={{ y: ["-100%", "100%"], opacity: [0, 0.5, 0] }}
-    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, ease: "easeInOut" }}
-  />
-</div>
+          {/* Corner Ambient Glows */}
+          <motion.div
+            className="absolute top-0 left-0 w-96 h-96 rounded-full blur-6xl"
+            style={{ 
+              background: 'radial-gradient(circle, #F0F0F0, rgba(240, 240, 240, 0.4), transparent)',
+              filter: 'blur(100px)'
+            }}
+            animate={{ 
+              x: [-60, 50, -50], 
+              y: [-50, 100, -50],
+              scale: [0.8, 1.2, 0.8],
+              opacity: [0.15, 0.35, 0.15] 
+            }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          />
 
-<div className="absolute top-0 left-2/4 h-full w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent overflow-hidden">
-  <motion.div
-    className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white/40 via-white/20 to-transparent"
-    animate={{ y: ["-100%", "100%"], opacity: [0, 0.5, 0] }}
-    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, delay: 0, ease: "easeInOut" }}
-  />
-</div>
+          <motion.div
+            className="absolute top-0 right-0 w-80 h-80 rounded-full blur-6xl"
+            style={{ 
+              background: 'radial-gradient(circle, #F0F0F0, rgba(240, 240, 240, 0.3), transparent)',
+              filter: 'blur(100px)'
+            }}
+            animate={{ 
+              x: [50, -50, 50], 
+              y: [-30, 80, -30],
+              scale: [0.9, 1.1, 0.9],
+              opacity: [0.12, 0.28, 0.12] 
+            }}
+            transition={{ duration: 6, repeat: Infinity, delay: 1, ease: "easeInOut" }}
+          />
 
-<div className="absolute top-0 left-3/4 h-full w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent overflow-hidden">
-  <motion.div
-    className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white/40 via-white/20 to-transparent"
-    animate={{ y: ["-100%", "100%"], opacity: [0, 0.5, 0] }}
-    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, delay: 0, ease: "easeInOut" }}
-  />
-</div>
+          <motion.div
+            className="absolute bottom-0 left-0 w-72 h-72 rounded-full blur-3xl"
+            style={{ 
+              background: 'radial-gradient(circle, #F0F0F0, rgba(240, 240, 240, 0.35), transparent)',
+              filter: 'blur(60px)'
+            }}
+            animate={{ 
+              x: [-40, 60, -40], 
+              y: [40, -60, 40],
+              scale: [0.7, 1, 0.7],
+              opacity: [0.18, 0.32, 0.18] 
+            }}
+            transition={{ duration: 10, repeat: Infinity, delay: 2, ease: "easeInOut" }}
+          />
 
-{/* Horizontal Lines */}
-<div className="absolute right-0 top-1/3 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden">
-  <motion.div
-    className="absolute top-0 right-0 w-32 h-full bg-gradient-to-r from-white/40 via-white/20 to-transparent"
-    animate={{ x: ["100%", "-100%"], opacity: [0, 0.4, 0] }}
-    transition={{ duration: 6, repeat: Infinity, repeatDelay: 9, ease: "easeInOut" }}
-  />
-</div>
+          <motion.div
+            className="absolute bottom-0 right-0 w-88 h-88 rounded-full blur-3xl"
+            style={{ 
+              background: 'radial-gradient(circle, #F0F0F0, rgba(240, 240, 240, 0.25), transparent)',
+              filter: 'blur(100px)'
+            }}
+            animate={{ 
+              x: [30, -70, 30], 
+              y: [50, -80, 50],
+              scale: [1, 0.8, 1],
+              opacity: [0.2, 0.3, 0.2] 
+            }}
+            transition={{ duration: 7, repeat: Infinity, delay: 3, ease: "easeInOut" }}
+          />
 
-<div className="absolute right-0 top-2/3 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden">
-  <motion.div
-    className="absolute top-0 right-0 w-32 h-full bg-gradient-to-r from-white/40 via-white/20 to-transparent"
-    animate={{ x: ["100%", "-100%"], opacity: [0, 0.4, 0] }}
-    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, delay: 0, ease: "easeInOut" }}
-  />
-</div>
+          {/* Floating Ambient Particles */}
+          <motion.div
+            className="absolute top-1/4 left-1/5 w-20 h-20 rounded-full blur-2xl"
+            style={{ 
+              background: 'radial-gradient(circle, #F0F0F0, rgba(240, 240, 240, 0.4), transparent)',
+              filter: 'blur(20px)'
+            }}
+            animate={{ 
+              x: [0, 150, -100, 0], 
+              y: [0, -80, 120, 0],
+              scale: [0.6, 1, 0.8, 0.6],
+              opacity: [0.1, 0.4, 0.2, 0.1] 
+            }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          />
 
+          <motion.div
+            className="absolute top-2/3 right-1/4 w-16 h-16 rounded-full blur-2xl"
+            style={{ 
+              background: 'radial-gradient(circle, #F0F0F0, rgba(240, 240, 240, 0.35), transparent)',
+              filter: 'blur(25px)'
+            }}
+            animate={{ 
+              x: [0, -120, 80, 0], 
+              y: [0, 100, -60, 0],
+              scale: [0.5, 0.9, 1.1, 0.5],
+              opacity: [0.15, 0.25, 0.35, 0.15] 
+            }}
+            transition={{ duration: 9, repeat: Infinity, delay: 4, ease: "easeInOut" }}
+          />
 
-          <div className="absolute right-0 top-2/3 w-full h-[1px] overflow-hidden">
+          {/* Vertical Lines with Enhanced Glow */}
+          <div className="absolute top-0 left-1/4 h-full w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent overflow-hidden">
             <motion.div
-              className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-white/30 via-white/10 to-transparent"
-              animate={{ x: ["100%", "-100%"], opacity: [0, 0.4, 0] }}
-              transition={{ duration: 4, repeat: Infinity, repeatDelay: 1, delay: 0, ease: "easeInOut" }}
+              className="absolute top-0 left-0 w-full h-20"
+              style={{ 
+                background: 'linear-gradient(to bottom, rgba(240, 240, 240, 0.6), rgba(240, 240, 240, 0.3), transparent)',
+                filter: 'blur(2px)'
+              }}
+              animate={{ y: ["-100%", "100%"], opacity: [0, 0.7, 0] }}
+              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2, ease: "easeInOut" }}
             />
           </div>
 
-          {/* Ambient Glow */}
+          <div className="absolute top-0 left-2/4 h-full w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent overflow-hidden">
+            <motion.div
+              className="absolute top-0 left-0 w-full h-20"
+              style={{ 
+                background: 'linear-gradient(to bottom, rgba(240, 240, 240, 0.6), rgba(240, 240, 240, 0.3), transparent)',
+                filter: 'blur(2px)'
+              }}
+              animate={{ y: ["-100%", "100%"], opacity: [0, 0.7, 0] }}
+              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2, delay: 1, ease: "easeInOut" }}
+            />
+          </div>
+
+          <div className="absolute top-0 left-3/4 h-full w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent overflow-hidden">
+            <motion.div
+              className="absolute top-0 left-0 w-full h-20"
+              style={{ 
+                background: 'linear-gradient(to bottom, rgba(240, 240, 240, 0.6), rgba(240, 240, 240, 0.3), transparent)',
+                filter: 'blur(2px)'
+              }}
+              animate={{ y: ["-100%", "100%"], opacity: [0, 0.7, 0] }}
+              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2, delay: 2, ease: "easeInOut" }}
+            />
+          </div>
+
+          {/* Horizontal Lines with Enhanced Glow */}
+          <div className="absolute right-0 top-1/3 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden">
+            <motion.div
+              className="absolute top-0 right-0 w-32 h-full"
+              style={{ 
+                background: 'linear-gradient(to left, rgba(240, 240, 240, 0.6), rgba(240, 240, 240, 0.3), transparent)',
+                filter: 'blur(3px)'
+              }}
+              animate={{ x: ["100%", "-100%"], opacity: [0, 0.6, 0] }}
+              transition={{ duration: 6, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
+            />
+          </div>
+
+          <div className="absolute right-0 top-2/3 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden">
+            <motion.div
+              className="absolute top-0 right-0 w-32 h-full"
+              style={{ 
+                background: 'linear-gradient(to left, rgba(240, 240, 240, 0.6), rgba(240, 240, 240, 0.3), transparent)',
+                filter: 'blur(3px)'
+              }}
+              animate={{ x: ["100%", "-100%"], opacity: [0, 0.6, 0] }}
+              transition={{ duration: 4, repeat: Infinity, repeatDelay: 2, delay: 2, ease: "easeInOut" }}
+            />
+          </div>
+
+          {/* Central Content Glow */}
           <motion.div
-            className="absolute top-1/4 left-1/3 w-32 h-32 bg-white/5 rounded-full blur-2xl"
-            animate={{ scale: [0.9, 1.1, 0.9], opacity: [0.2, 0.35, 0.2] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/2 left-1/2 w-96 h-96 rounded-full"
+            style={{ 
+              background: 'radial-gradient(circle, rgba(240, 240, 240, 0.08), rgba(240, 240, 240, 0.04), transparent)',
+              filter: 'blur(60px)',
+              transform: 'translate(-50%, -50%)'
+            }}
+            animate={{ 
+              scale: [0.8, 1.3, 0.8],
+              opacity: [0.1, 0.25, 0.1] 
+            }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           />
+
+          {/* Subtle Edge Highlights */}
           <motion.div
-            className="absolute bottom-1/4 right-1/3 w-24 h-24 bg-white/5 rounded-full blur-2xl"
-            animate={{ scale: [1, 0.85, 1], opacity: [0.15, 0.3, 0.15] }}
+            className="absolute top-0 left-0 w-32 h-1"
+            style={{ 
+              background: 'linear-gradient(to right, rgba(240, 240, 240, 0.4), transparent)',
+              filter: 'blur(1px)'
+            }}
+            animate={{ 
+              scaleX: [0, 1, 0],
+              opacity: [0, 0.6, 0] 
+            }}
+            transition={{ duration: 4, repeat: Infinity, delay: 1, ease: "easeInOut" }}
+          />
+
+          <motion.div
+            className="absolute top-0 left-0 w-1 h-32"
+            style={{ 
+              background: 'linear-gradient(to bottom, rgba(240, 240, 240, 0.4), transparent)',
+              filter: 'blur(1px)'
+            }}
+            animate={{ 
+              scaleY: [0, 1, 0],
+              opacity: [0, 0.6, 0] 
+            }}
             transition={{ duration: 4, repeat: Infinity, delay: 2, ease: "easeInOut" }}
           />
         </div>

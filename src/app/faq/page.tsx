@@ -1,7 +1,7 @@
 
 import { Faq } from "@/components/sections/faq";
 import { MotionWrapper } from "@/components/motion-wrapper";
-import { FaqHero } from "@/components/sections/faq-hero";
+import { PageHero } from "@/components/sections/page-hero";
 import type { Metadata, ResolvingMetadata } from 'next';
 import { HomepageCta } from "@/components/sections/homepage-cta";
 import { getHeroContent, getFaqContent } from "@/services/firestore";
@@ -27,7 +27,7 @@ export default async function FaqPage() {
     return (
         <PublicLayout>
             <MotionWrapper>
-                <FaqHero content={faqContent} />
+                <PageHero title={faqContent.heroTitle} subtitle={faqContent.heroSubtitle} />
                 <Faq content={faqContent} />
                 {heroContent && <HomepageCta ctaSection={heroContent.ctaSection} />}
             </MotionWrapper>

@@ -1,7 +1,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { PortfolioCard } from "@/components/PortfolioCard";
-import { PortfolioHero } from "@/components/sections/portfolio-hero";
+import { PageHero } from "@/components/sections/page-hero";
 import { ClientsCarousel } from "@/components/sections/clients-carousel";
 import { getProjects, Project, getPortfolioContent, PortfolioContent } from "@/services/firestore";
 import type { Metadata } from 'next';
@@ -22,7 +22,7 @@ export default async function PortfolioPage() {
 
     return (
       <PublicLayout>
-        <PortfolioHero content={portfolioContent} />
+        <PageHero title={portfolioContent.heroTitle} subtitle={portfolioContent.heroSubtitle} />
         <section id="portfolio" className="py-20 md:py-28 bg-background">
           <div className="container">
             <div 

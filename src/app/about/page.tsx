@@ -1,6 +1,6 @@
 
 import { About } from "@/components/sections/about";
-import { AboutHero } from "@/components/sections/about-hero";
+import { PageHero } from "@/components/sections/page-hero";
 import { WhyUs } from "@/components/sections/why-us";
 import { WorkProcess } from "@/components/sections/work-process";
 import { Testimonials } from "@/components/sections/homepage-testimonials";
@@ -32,7 +32,7 @@ export default async function AboutPage() {
     const aboutContent = await getAboutContent();
     return (
         <PublicLayout>
-            <AboutHero content={aboutContent} />
+            <PageHero title={aboutContent.heroTitle} subtitle={aboutContent.heroSubtitle} />
             <About content={aboutContent} />
             <WhyUs />
             <WorkProcess />
