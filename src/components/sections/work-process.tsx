@@ -86,20 +86,20 @@ const MobileStoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
           const stepOpacity = useTransform(
             scrollYProgress,
             isLastStep
-              ? [0.1 + index * 0.2, 0.2 + index * 0.2, 1]
+              ? [0.1 + index * 0.2, 0.2 + index * 0.2, 0.95, 1]
               : [
                   0.1 + index * 0.2,
                   0.2 + index * 0.2,
                   0.3 + index * 0.2,
                   0.4 + index * 0.2,
                 ],
-            isLastStep ? [0, 1, 1] : [0, 1, 1, 0]
+            isLastStep ? [0, 1, 1, 1] : [0, 1, 1, 0]
           );
 
           const stepY = useTransform(
             scrollYProgress,
             isLastStep
-              ? [0.1 + index * 0.2, 0.2 + index * 0.2, 1]
+              ? [0.1 + index * 0.2, 0.2 + index * 0.2, 0.95, 1]
               : [
                   0.1 + index * 0.2,
                   0.2 + index * 0.2,
@@ -107,7 +107,7 @@ const MobileStoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
                   0.4 + index * 0.2,
                 ],
             isLastStep
-              ? ["20px", "0px", "0px"]
+              ? ["20px", "0px", "0px", "0px"]
               : ["20px", "0px", "0px", "-20px"]
           );
 
@@ -265,14 +265,27 @@ const MobileCircle = ({ scrollYProgress }: { scrollYProgress: any }) => {
 
 const MobileStep = ({ step, index }: { step: any; index: number }) => {
   const ref = useRef(null);
+  const isLastStep = index === processSteps.length - 1;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start 0.9", "end 0.1"],
   });
 
-  const opacity = useTransform(scrollYProgress, [0.1, 0.4, 0.6, 0.9], [0, 1, 1, 0]);
-  const y = useTransform(scrollYProgress, [0.1, 0.4, 0.6, 0.9], ["30px", "0px", "0px", "-30px"]);
-  const scale = useTransform(scrollYProgress, [0.1, 0.4, 0.6, 0.9], [0.9, 1, 1, 0.95]);
+  const opacity = useTransform(
+    scrollYProgress,
+    isLastStep ? [0.1, 0.4, 1] : [0.1, 0.4, 0.6, 0.9],
+    isLastStep ? [0, 1, 1] : [0, 1, 1, 0]
+  );
+  const y = useTransform(
+    scrollYProgress,
+    isLastStep ? [0.1, 0.4, 1] : [0.1, 0.4, 0.6, 0.9],
+    isLastStep ? ["30px", "0px", "0px"] : ["30px", "0px", "0px", "-30px"]
+  );
+  const scale = useTransform(
+    scrollYProgress,
+    isLastStep ? [0.1, 0.4, 1] : [0.1, 0.4, 0.6, 0.9],
+    isLastStep ? [0.9, 1, 1] : [0.9, 1, 1, 0.95]
+  );
 
   return (
     <motion.div
@@ -324,20 +337,20 @@ const StoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
           const stepOpacity = useTransform(
             scrollYProgress,
             isLastStep
-              ? [0.15 + index * 0.15, 0.25 + index * 0.15, 1]
+              ? [0.15 + index * 0.15, 0.25 + index * 0.15, 0.95, 1]
               : [
                   0.15 + index * 0.15,
                   0.25 + index * 0.15,
                   0.35 + index * 0.15,
                   0.45 + index * 0.15,
                 ],
-            isLastStep ? [0, 1, 1] : [0, 1, 1, 0]
+            isLastStep ? [0, 1, 1, 1] : [0, 1, 1, 0]
           );
 
           const stepY = useTransform(
             scrollYProgress,
             isLastStep
-              ? [0.15 + index * 0.15, 0.25 + index * 0.15, 1]
+              ? [0.15 + index * 0.15, 0.25 + index * 0.15, 0.95, 1]
               : [
                   0.15 + index * 0.15,
                   0.25 + index * 0.15,
@@ -345,7 +358,7 @@ const StoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
                   0.45 + index * 0.15,
                 ],
             isLastStep
-              ? ["30px", "0px", "0px"]
+              ? ["30px", "0px", "0px", "0px"]
               : ["30px", "0px", "0px", "-30px"]
           );
 
