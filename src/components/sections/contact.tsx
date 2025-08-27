@@ -5,11 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Twitter, Linkedin, Github } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { ContactContent } from "@/services/firestore";
+import { ContactContent, SocialLink } from "@/services/firestore";
 import { Skeleton } from "../ui/skeleton";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +16,8 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import Link from "next/link";
+import { SocialIcon } from "../layout/SocialIcon";
 
 const ContactFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -32,8 +33,13 @@ const submitContactForm = async (data: Omit<ContactFormValues, 'id' | 'submitted
     await addDoc(collection(db, 'contactSubmissions'), { ...data, submittedAt: serverTimestamp() });
 };
 
+interface ContactProps {
+    content: ContactContent | null;
+    socialLinks: SocialLink[];
+}
 
-export function Contact({ content }: { content: ContactContent | null }) {
+
+export function Contact({ content, socialLinks }: ContactProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isLoading = !content;
@@ -164,17 +170,15 @@ export function Contact({ content }: { content: ContactContent | null }) {
           <p className="max-w-[600px] text-white/70 md:text-xl/relaxed">
             {content?.description}
           </p>
-          <div className="flex space-x-4 pt-4">
-            <a href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
-              <Twitter className="h-6 w-6 text-white/60 hover:text-white transition-colors" />
-            </a>
-            <a href="#" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
-              <Linkedin className="h-6 w-6 text-white/60 hover:text-white transition-colors" />
-            </a>
-            <a href="#" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
-              <Github className="h-6 w-6 text-white/60 hover:text-white transition-colors" />
-            </a>
-          </div>
+          {socialLinks && socialLinks.length > 0 && (
+            <div className="flex space-x-4 pt-4">
+              {socialLinks.map((link) => (
+                <Link key={link.platform} href={link.url} aria-label={link.platform} target="_blank" rel="noopener noreferrer">
+                  <SocialIcon platform={link.platform} className="h-6 w-6 text-white/60 hover:text-white transition-colors" />
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </motion.div>
       <motion.div 

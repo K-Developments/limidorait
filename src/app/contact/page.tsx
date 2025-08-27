@@ -1,6 +1,6 @@
 
 import { Contact } from "@/components/sections/contact";
-import { getContactContent } from "@/services/firestore";
+import { getContactContent, getHeroContent } from "@/services/firestore";
 import type { Metadata } from 'next';
 import { PublicLayout } from "../public-layout";
 
@@ -13,9 +13,10 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
     const contactContent = await getContactContent();
+    const heroContent = await getHeroContent();
     return (
         <PublicLayout>
-            <Contact content={contactContent} />
+            <Contact content={contactContent} socialLinks={heroContent?.socialLinks || []} />
         </PublicLayout>
     );
 }
