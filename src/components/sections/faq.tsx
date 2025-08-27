@@ -28,6 +28,7 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { Separator } from "../ui/separator";
 
 
 const QuestionFormSchema = z.object({
@@ -113,6 +114,7 @@ export function Faq({ content }: { content: FaqContent | null }) {
                 )}
                 <span className="font-medium text-foreground">FAQs</span>
             </nav>
+            <Separator className="mt-4" />
         </div>
         <motion.div
             initial={{ opacity: 0, y: 30 }}
