@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, UserSquare, Briefcase, ServerCog, Mail, HelpCircle, LogOut, Shield } from 'lucide-react';
+import { Home, UserSquare, Briefcase, ServerCog, Mail, HelpCircle, LogOut, Shield, FileText } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
@@ -152,6 +152,21 @@ export function Sidebar({ isExpanded, toggleSidebar }: SidebarProps) {
                         </Link>
                     </TooltipTrigger>
                     {!isExpanded && <TooltipContent side="right">Privacy Policy</TooltipContent>}
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Link
+                            href="/admin/terms-of-service"
+                            className={cn("flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
+                            isExpanded && "w-full justify-start pl-2"
+                            )}
+                        >
+                            <FileText className="h-5 w-5" />
+                            {isExpanded && <span className="ml-4">Terms of Service</span>}
+                            <span className="sr-only">Terms of Service</span>
+                        </Link>
+                    </TooltipTrigger>
+                    {!isExpanded && <TooltipContent side="right">Terms of Service</TooltipContent>}
                 </Tooltip>
             </nav>
             <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">

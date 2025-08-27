@@ -22,6 +22,7 @@ export interface Service {
   imageUrl: string;
   link: string;
   faqIds?: string[];
+  aiHint?: string;
 }
 export interface HomepageWork {
   title: string;
@@ -141,6 +142,15 @@ export interface PolicySection {
 export interface PrivacyPolicyContent {
     pageTitle: string;
     sections: PolicySection[];
+}
+export interface TermSection {
+    id: string;
+    title: string;
+    content: string;
+}
+export interface TermsOfServiceContent {
+    pageTitle: string;
+    sections: TermSection[];
 }
 
 
@@ -339,10 +349,14 @@ const defaultPrivacyPolicyContent: PrivacyPolicyContent = {
     pageTitle: "Privacy Policy",
     sections: [
         { id: "1", title: "Introduction", content: "Welcome to Limidora Digital. We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website. Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site." },
-        { id: "2", title: "Collection of Your Information", content: "We may collect information about you in a variety of ways. The information we may collect on the Site includes personally identifiable information, such as your name, shipping address, email address, and telephone number, and demographic information, such as your age, gender, hometown, and interests, that you voluntarily give to us when you register with the Site or when you choose to participate in various activities related to the Site, such as online chat and message boards." },
-        { id: "3", title: "Use of Your Information", content: "Having accurate information about you permits us to provide you with a smooth, efficient, and customized experience. Specifically, we may use information collected about you via the Site to: create and manage your account, email you regarding your account or order, fulfill and manage purchases, orders, payments, and other transactions related to the Site, and increase the efficiency and operation of the Site." },
-        { id: "4", title: "Security of Your Information", content: "We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse." },
-        { id: "5", title: "Contact Us", content: "If you have questions or comments about this Privacy Policy, please contact us through the contact form on our website or by emailing us at our designated contact address." }
+    ]
+};
+
+const defaultTermsOfServiceContent: TermsOfServiceContent = {
+    pageTitle: "Terms of Service",
+    sections: [
+        { id: "1", title: "Agreement to Terms", content: "By using our Services, you agree to be bound by these Terms. If you don’t agree to be bound by these Terms, do not use the Services." },
+        { id: "2", title: "Changes to Terms or Services", content: "We may update the Terms at any time, in our sole discretion. If we do so, we’ll let you know by posting the updated Terms on the Site. It’s important that you review the Terms whenever we update them or you use the Services." },
     ]
 };
 
@@ -416,6 +430,13 @@ export const getPrivacyPolicyContent = cache(async (): Promise<PrivacyPolicyCont
     const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/privacyPolicyContent`);
     const merged = fetchedData ? deepMerge(defaultPrivacyPolicyContent, fetchedData) : defaultPrivacyPolicyContent;
     merged.sections = (merged.sections || []).map((section, index) => ({...section, id: section.id || `section-${index}`}));
+    return merged;
+});
+
+export const getTermsOfServiceContent = cache(async (): Promise<TermsOfServiceContent> => {
+    const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/termsOfServiceContent`);
+    const merged = fetchedData ? deepMerge(defaultTermsOfServiceContent, fetchedData) : defaultTermsOfServiceContent;
+    merged.sections = (merged.sections || []).map((section, index) => ({...section, id: section.id || `term-${index}`}));
     return merged;
 });
 
