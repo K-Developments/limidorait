@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Service, FaqContent } from '@/services/firestore';
+import { Service, FaqContent, FaqItem } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import Image from 'next/image';
@@ -57,7 +57,7 @@ type EditableService = Omit<Service, 'whatYouGet'> & {
 function AdminDashboard() {
   const { toast } = useToast();
   const [services, setServices] = useState<EditableService[]>([]);
-  const [faqs, setFaqs] = useState<FaqContent['faqs']>([]);
+  const [faqs, setFaqs] = useState<FaqItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState<Record<string, boolean>>({});
 
@@ -91,14 +91,16 @@ function AdminDashboard() {
   };
   
   const handleFaqSelectionChange = (serviceId: string, faqId: string, checked: boolean) => {
-    setServices(services.map(s => {
+    setServices(prevServices => prevServices.map(s => {
         if (s.id === serviceId) {
             const currentFaqIds = s.faqIds || [];
+            let newFaqIds;
             if (checked) {
-                return { ...s, faqIds: [...currentFaqIds, faqId] };
+                newFaqIds = [...currentFaqIds, faqId];
             } else {
-                return { ...s, faqIds: currentFaqIds.filter(id => id !== faqId) };
+                newFaqIds = currentFaqIds.filter(id => id !== faqId);
             }
+            return { ...s, faqIds: newFaqIds };
         }
         return s;
     }));
