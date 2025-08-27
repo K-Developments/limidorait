@@ -2,7 +2,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
@@ -36,7 +36,7 @@ export function HomepageServices({ services }: HomepageServicesProps) {
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
             {(services || []).map((service, index) => (
-                <motion.div
+                <motion.article
                     key={service.title}
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -45,18 +45,15 @@ export function HomepageServices({ services }: HomepageServicesProps) {
                 >
                     <Card className="group overflow-hidden relative h-full transition-shadow duration-300 flex flex-col border-0">
                       <Link href={service.link} className="absolute inset-0 z-10" aria-label={service.title}></Link>
-                      <CardHeader className="p-0">
-                      <div className="aspect-video overflow-hidden">
+                      <div className="aspect-video overflow-hidden relative">
                           <Image
                           src={service.imageUrl}
                           alt={service.title}
-                          width={600}
-                          height={400}
+                          fill
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           data-ai-hint={service.aiHint}
                           />
                       </div>
-                      </CardHeader>
                       <CardContent className="p-6 flex flex-col flex-grow">
                           <div className="flex-grow">
                               <h3 className="text-2xl font-medium mb-2 font-body uppercase text-foreground">{service.title}</h3>
@@ -73,7 +70,7 @@ export function HomepageServices({ services }: HomepageServicesProps) {
                           </div>
                       </CardContent>
                     </Card>
-                </motion.div>
+                </motion.article>
             ))}
         </div>
       </div>

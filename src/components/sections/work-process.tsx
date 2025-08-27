@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useRef, useState, useEffect } from "react";
@@ -83,23 +82,25 @@ const MobileStoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
         {processSteps.map((step, index) => {
           const isLastStep = index === processSteps.length - 1;
 
+          // Modified opacity for last step - stays visible after appearing
           const stepOpacity = useTransform(
             scrollYProgress,
             isLastStep
-              ? [0.1 + index * 0.2, 0.2 + index * 0.2, 0.95, 1]
+              ? [0.1 + index * 0.2, 0.2 + index * 0.2] // Remove fade out points
               : [
                   0.1 + index * 0.2,
                   0.2 + index * 0.2,
                   0.3 + index * 0.2,
                   0.4 + index * 0.2,
                 ],
-            isLastStep ? [0, 1, 1, 1] : [0, 1, 1, 0]
+            isLastStep ? [0, 1] : [0, 1, 1, 0] // Keep at opacity 1 for last step
           );
 
+          // Modified Y position for last step - stays in place after appearing
           const stepY = useTransform(
             scrollYProgress,
             isLastStep
-              ? [0.1 + index * 0.2, 0.2 + index * 0.2, 0.95, 1]
+              ? [0.1 + index * 0.2, 0.2 + index * 0.2] // Remove movement points
               : [
                   0.1 + index * 0.2,
                   0.2 + index * 0.2,
@@ -107,7 +108,7 @@ const MobileStoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
                   0.4 + index * 0.2,
                 ],
             isLastStep
-              ? ["20px", "0px", "0px", "0px"]
+              ? ["20px", "0px"] // Stay at 0px after appearing
               : ["20px", "0px", "0px", "-20px"]
           );
 
@@ -334,23 +335,25 @@ const StoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
         {processSteps.map((step, index) => {
           const isLastStep = index === processSteps.length - 1;
 
+          // Modified opacity for last step - stays visible after appearing
           const stepOpacity = useTransform(
             scrollYProgress,
             isLastStep
-              ? [0.15 + index * 0.15, 0.25 + index * 0.15, 0.95, 1]
+              ? [0.15 + index * 0.15, 0.25 + index * 0.15] // Remove fade out points
               : [
                   0.15 + index * 0.15,
                   0.25 + index * 0.15,
                   0.35 + index * 0.15,
                   0.45 + index * 0.15,
                 ],
-            isLastStep ? [0, 1, 1, 1] : [0, 1, 1, 0]
+            isLastStep ? [0, 1] : [0, 1, 1, 0] // Keep at opacity 1 for last step
           );
 
+          // Modified Y position for last step - stays in place after appearing
           const stepY = useTransform(
             scrollYProgress,
             isLastStep
-              ? [0.15 + index * 0.15, 0.25 + index * 0.15, 0.95, 1]
+              ? [0.15 + index * 0.15, 0.25 + index * 0.15] // Remove movement points
               : [
                   0.15 + index * 0.15,
                   0.25 + index * 0.15,
@@ -358,7 +361,7 @@ const StoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
                   0.45 + index * 0.15,
                 ],
             isLastStep
-              ? ["30px", "0px", "0px", "0px"]
+              ? ["30px", "0px"] // Stay at 0px after appearing
               : ["30px", "0px", "0px", "-30px"]
           );
 
