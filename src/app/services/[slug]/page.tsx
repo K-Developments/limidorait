@@ -118,7 +118,6 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
 
                 <div>
                   <h2 className="text-2xl md:text-3xl font-medium text-foreground flex items-center gap-3">
-                      <CheckCircle className="h-7 w-7 text-primary" />
                       What You Get
                   </h2>
                   <ul className="mt-6 space-y-3 text-muted-foreground list-none pl-2">
