@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { ChevronRight, CheckCircle, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { getServiceBySlug, getServices, getFaqContent, Service, FaqItem } from '@/services/firestore';
+import { getServiceBySlug, getServices, getFaqContent } from '@/services/firestore';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { PublicLayout } from '../../public-layout';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -55,6 +55,14 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
   return (
     <PublicLayout>
       <main>
+         {/* Mobile-only Sticky Header */}
+        <div className="md:hidden sticky top-20 z-30 flex items-center justify-between p-3 bg-background border-b">
+            <h1 className="text-lg font-medium truncate pr-2">{service.title}</h1>
+            <Button asChild size="sm">
+                <Link href="/contact">Get Service</Link>
+            </Button>
+        </div>
+
         <div className="container mx-auto px-4 md:px-6 pt-8">
             <nav aria-label="Breadcrumb" className="flex items-center text-xs text-muted-foreground">
                 <Link href="/" className="hover:text-primary transition-colors">Home</Link>
@@ -66,12 +74,21 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
             <Separator className="mt-4" />
         </div>
 
+        {/* Mobile Hero */}
+        <section className="md:hidden relative h-64 w-full">
+            <Image src={service.imageUrl} alt={service.title} fill className="object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            <div className="absolute bottom-0 p-6">
+                 <h1 className="text-3xl font-medium text-white font-body uppercase">{service.title}</h1>
+            </div>
+        </section>
+
         <section className="py-12 md:py-20">
           <div className="container mx-auto px-4 md:px-6">
             <div className="grid lg:grid-cols-3 gap-8 md:gap-12">
               
-              {/* Left Sidebar */}
-              <aside className="lg:col-span-1 space-y-6 sticky top-24 self-start">
+              {/* Desktop Left Sidebar */}
+              <aside className="hidden lg:block lg:col-span-1 space-y-6 sticky top-24 self-start">
                 <div className="aspect-video relative overflow-hidden">
                     <Image src={service.imageUrl} alt={service.title} fill className="object-cover"/>
                 </div>
@@ -81,14 +98,20 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
                 </Button>
               </aside>
 
-              {/* Right Content */}
+              {/* Main Content Area */}
               <article className="lg:col-span-2 space-y-10">
-                <div>
+                <div className='hidden md:block'>
                   <h1 className="text-3xl md:text-4xl font-medium text-foreground font-body uppercase">{service.title}</h1>
-                  <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-                    {service.longDescription}
-                  </p>
                 </div>
+
+                {/* Mobile Short Description */}
+                <p className="text-lg text-muted-foreground leading-relaxed lg:hidden">
+                    {service.description}
+                </p>
+
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  {service.longDescription}
+                </p>
 
                 <Separator/>
 
