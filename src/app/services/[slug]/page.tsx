@@ -55,14 +55,6 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
   return (
     <PublicLayout>
       <main>
-         {/* Mobile-only Sticky Header */}
-        <div className="md:hidden sticky top-20 z-30 flex items-center justify-between p-3 bg-background border-b">
-            <h1 className="text-lg font-medium truncate pr-2">{service.title}</h1>
-            <Button asChild size="sm">
-                <Link href="/contact">Get Service</Link>
-            </Button>
-        </div>
-
         <div className="container mx-auto px-4 md:px-6 pt-8">
             <nav aria-label="Breadcrumb" className="flex items-center text-xs text-muted-foreground">
                 <Link href="/" className="hover:text-primary transition-colors">Home</Link>
@@ -71,8 +63,17 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
                 <ChevronRight className="h-4 w-4 mx-1" />
                 <span className="font-medium text-foreground capitalize">{service.title}</span>
             </nav>
-            <Separator className="mt-4" />
+            <Separator className="mt-4 md:hidden" />
         </div>
+        
+         {/* Mobile-only Sticky Header */}
+        <div className="md:hidden sticky top-20 z-30 flex items-center justify-between p-3 bg-background border-b">
+            <h1 className="text-lg font-medium truncate pr-2">{service.title}</h1>
+            <Button asChild size="sm">
+                <Link href="/contact">Get Service</Link>
+            </Button>
+        </div>
+
 
         {/* Mobile Hero */}
         <section className="md:hidden relative h-64 w-full">
