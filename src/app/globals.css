@@ -5,6 +5,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
+  letter-spacing: -.04em;
 }
 html{
   font-size: 85%;

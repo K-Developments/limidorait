@@ -89,27 +89,7 @@ const MobileProgressIndicator = ({ scrollYProgress }: { scrollYProgress: any }) 
   );
 };
 
-const MobileScrollIndicator = ({ scrollYProgress }: { scrollYProgress: any }) => {
-  const indicatorOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
 
-  return (
-    <motion.div
-      style={{ opacity: indicatorOpacity }}
-      className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-20 text-center"
-    >
-      <motion.div
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-        className="flex flex-col items-center gap-2"
-      >
-        <p className="text-xs text-muted-foreground">
-          Scroll to explore
-        </p>
-        <ArrowDown className="h-4 w-4 text-foreground" />
-      </motion.div>
-    </motion.div>
-  );
-};
 
 const MobileCircle = ({ scrollYProgress }: { scrollYProgress: any }) => {
   const smoothProgress = useSpring(scrollYProgress, {
@@ -265,11 +245,7 @@ const ProgressIndicator = ({ scrollYProgress }: { scrollYProgress: any }) => {
   );
 };
 
-const ScrollIndicator = ({ scrollYProgress }: { scrollYProgress: any }) => {
-  const indicatorOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
 
-
-};
 
 const Circle = ({ scrollYProgress }: { scrollYProgress: any }) => {
   const smoothProgress = useSpring(scrollYProgress, {
@@ -434,15 +410,15 @@ export const WorkProcess = () => {
       ref={containerRef}
       id="work-process"
       className={cn(
-        "relative py-12 sm:py-16 md:py-20 lg:py-28 bg-background overflow-x-hidden overflow-hidden",
-        isMobile ? "min-h-[350vh]" : "min-h-[400vh]"
+        "relative py-12 sm:py-16 md:py-20 lg:py-28 md:px-[6rem] bg-background overflow-x-hidden overflow-hidden",
+        isMobile ? "min-h-[85rem]" : "min-h-[15rem]"
       )}
     >
       {/* Mobile overlays */}
       {isMobile && (
         <>
           <MobileProgressIndicator scrollYProgress={scrollYProgress} />
-          <MobileScrollIndicator scrollYProgress={scrollYProgress} />
+   
         </>
       )}
 
@@ -502,7 +478,7 @@ export const WorkProcess = () => {
 
             <Circle scrollYProgress={scrollYProgress} />
 
-            <div className="md:absolute md:inset-0 flex flex-col items-center justify-around gap-12 md:gap-0 mt-8 md:mt-0">
+            <div className="md:absolute md:inset-0 flex flex-col items-center justify-around gap-12 md:gap-0 mt-8 md:mt-0 p-[5rem]">
               {processSteps.map((step, index) => (
                 <DesktopStep key={step.title} step={step} index={index} />
               ))}

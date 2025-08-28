@@ -47,7 +47,7 @@ export default async function AboutPage() {
             </div>
             <PageHero title={aboutContent.heroTitle} subtitle={aboutContent.heroSubtitle} />
             <About content={aboutContent} />
-            <WhyUs />
+            <WhyUs content={aboutContent.whyUsSection} />
             <WorkProcess />
             {heroContent && <Testimonials testimonials={heroContent.testimonials} />}
             {ctaContent && <HomepageCta ctaSection={ctaContent} />}

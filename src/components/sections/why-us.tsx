@@ -7,15 +7,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Lightbulb, Users, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { WhyUsSection } from "@/services/firestore";
+import Image from "next/image";
+import { Skeleton } from "../ui/skeleton";
 
 interface WhyUsCardProps {
-  icon: ReactNode;
+  iconUrl: string;
   title: string;
   description: string;
   delay: number;
 }
 
-const WhyUsCard = ({ icon, title, description, delay }: WhyUsCardProps) => (
+const WhyUsCard = ({ iconUrl, title, description, delay }: WhyUsCardProps) => (
   <motion.div
     initial={{ opacity: 0, y: 50 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -25,8 +28,12 @@ const WhyUsCard = ({ icon, title, description, delay }: WhyUsCardProps) => (
   >
     <Card className="h-full text-center bg-transparent border-none shadow-none p-4">
       <CardHeader>
-        <div className="mx-auto bg-primary/10 p-4 rounded-full w-fit">
-          {icon}
+        <div className="mx-auto bg-primary/10 p-4 rounded-full w-fit relative h-16 w-16 flex items-center justify-center">
+            {iconUrl ? (
+                <Image src={iconUrl} alt={title} width={32} height={32} className="object-contain" />
+            ): (
+                <Lightbulb className="h-8 w-8 text-primary" />
+            )}
         </div>
         <CardTitle className="pt-4 text-xl font-semibold text-foreground">{title}</CardTitle>
       </CardHeader>
@@ -37,24 +44,29 @@ const WhyUsCard = ({ icon, title, description, delay }: WhyUsCardProps) => (
   </motion.div>
 );
 
-export function WhyUs() {
-  const features = [
-    {
-      icon: <Lightbulb className="h-8 w-8 text-primary" />,
-      title: "Innovative Solutions",
-      description: "We leverage the latest technologies to build cutting-edge solutions that give you a competitive edge."
-    },
-    {
-      icon: <Users className="h-8 w-8 text-primary" />,
-      title: "Client-Centric Approach",
-      description: "Your success is our priority. We work closely with you to understand your needs and deliver tailored results."
-    },
-    {
-      icon: <ShieldCheck className="h-8 w-8 text-primary" />,
-      title: "Quality & Reliability",
-      description: "We are committed to delivering high-quality, reliable, and scalable solutions that stand the test of time."
+export function WhyUs({ content }: { content?: WhyUsSection }) {
+    const isLoading = !content;
+
+    if (isLoading) {
+        return (
+            <section id="why-us" className="py-20 md:py-28 bg-background">
+              <div className="container mx-auto px-4 md:px-6">
+                 <div className="text-center mb-16">
+                     <Skeleton className="h-7 w-24 mx-auto mb-4" />
+                     <Skeleton className="h-10 w-1/2 mx-auto mb-4" />
+                     <Skeleton className="h-6 w-3/4 mx-auto" />
+                 </div>
+                 <div className="md:grid md:grid-cols-3 md:gap-8 flex gap-4 overflow-x-auto pb-4 scrollbar-accent">
+                    {[...Array(3)].map((_, index) => (
+                        <div key={index} className="w-72 md:w-auto flex-shrink-0">
+                            <Skeleton className="h-64 w-full" />
+                        </div>
+                    ))}
+                 </div>
+              </div>
+            </section>
+        )
     }
-  ];
 
   return (
     <section id="why-us" className="py-20 md:py-28 bg-background">
@@ -68,17 +80,17 @@ export function WhyUs() {
         >
           <Badge variant="outline" className="mb-4">Why Choose Us</Badge>
           <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-4 font-body">
-            Our Core Values
+            {content?.title}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            We are defined by our commitment to excellence, innovation, and our clients' success.
+            {content?.subtitle}
           </p>
         </motion.div>
         <div className="md:grid md:grid-cols-3 md:gap-8 flex gap-4 overflow-x-auto pb-4 scrollbar-accent">
-          {features.map((feature, index) => (
+          {content?.cards.map((feature, index) => (
             <WhyUsCard 
-              key={index}
-              icon={feature.icon}
+              key={feature.id}
+              iconUrl={feature.iconUrl}
               title={feature.title}
               description={feature.description}
               delay={index * 0.15}
@@ -89,5 +101,3 @@ export function WhyUs() {
     </section>
   );
 }
-
-    

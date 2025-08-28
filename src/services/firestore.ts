@@ -69,12 +69,24 @@ export interface HeroContent {
   contactEmail?: string;
   contactPhone?: string;
 }
+export interface WhyUsCard {
+  id: string;
+  iconUrl: string;
+  title: string;
+  description: string;
+}
+export interface WhyUsSection {
+  title: string;
+  subtitle: string;
+  cards: WhyUsCard[];
+}
 export interface AboutContent {
   heroTitle: string;
   heroSubtitle: string;
   aboutTitle: string;
   aboutDescription: string;
   ctaSection?: HomepageCtaSection;
+  whyUsSection?: WhyUsSection;
 }
 export interface ClientLogo {
   name: string;
@@ -312,6 +324,15 @@ const defaultAboutContent: AboutContent = {
     aboutTitle: "Our Vision", 
     aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.",
     ctaSection: { ...defaultCtaSection },
+    whyUsSection: {
+      title: "Our Core Values",
+      subtitle: "We are defined by our commitment to excellence, innovation, and our clients' success.",
+      cards: [
+        { id: "1", iconUrl: "", title: "Innovative Solutions", description: "We leverage the latest technologies to build cutting-edge solutions that give you a competitive edge." },
+        { id: "2", iconUrl: "", title: "Client-Centric Approach", description: "Your success is our priority. We work closely with you to understand your needs and deliver tailored results." },
+        { id: "3", iconUrl: "", title: "Quality & Reliability", description: "We are committed to delivering high-quality, reliable, and scalable solutions that stand the test of time." },
+      ]
+    }
 };
 
 const defaultPortfolioContent: PortfolioContent = { 
@@ -413,7 +434,11 @@ export const getHeroContent = cache(async (): Promise<HeroContent> => {
 
 export const getAboutContent = cache(async (): Promise<AboutContent> => {
     const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/aboutContent`);
-    return fetchedData ? deepMerge(defaultAboutContent, fetchedData) : defaultAboutContent;
+    const merged = fetchedData ? deepMerge(defaultAboutContent, fetchedData) : defaultAboutContent;
+    if (merged.whyUsSection) {
+        merged.whyUsSection.cards = (merged.whyUsSection.cards || []).map((card, index) => ({ ...card, id: card.id || `why-us-${index}` }));
+    }
+    return merged;
 });
 
 export const getPortfolioContent = cache(async (): Promise<PortfolioContent> => {
