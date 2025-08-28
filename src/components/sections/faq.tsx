@@ -4,8 +4,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { useState, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import React, { useState, useMemo } from "react";
 import { FaqContent, FaqItem } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -28,6 +27,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { cn } from "@/lib/utils";
+import { Separator } from "../ui/separator";
 
 
 const QuestionFormSchema = z.object({
@@ -58,6 +58,7 @@ export function Faq({ content }: { content: FaqContent | null }) {
 
   const categories = useMemo(() => {
     if (!content || !content.faqs || content.faqs.length === 0) return [];
+    // Filter out any falsy category values before creating the Set
     const cats = new Set(content.faqs.map(faq => faq.category).filter(Boolean));
     return ["All", ...Array.from(cats)];
   }, [content]);
@@ -129,22 +130,35 @@ export function Faq({ content }: { content: FaqContent | null }) {
         </motion.div>
 
         {categories.length > 1 && (
-          <motion.div
+           <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
-              className="flex justify-center flex-wrap gap-2 mb-12"
+              className="mb-12"
           >
-            {categories.map(category => (
-              <Button
-                key={category}
-                variant={activeCategory === category ? "default" : "outline"}
-                onClick={() => setActiveCategory(category)}
-              >
-                {category}
-              </Button>
-            ))}
+            <div className="flex justify-center overflow-x-auto whitespace-nowrap pb-2 scrollbar-accent">
+                <div className="flex items-center gap-4">
+                    {categories.map((category, index) => (
+                        <React.Fragment key={category}>
+                            <button
+                                onClick={() => setActiveCategory(category)}
+                                className={cn(
+                                    "text-base font-medium transition-colors pb-1",
+                                    activeCategory === category
+                                    ? "text-accent border-b-2 border-accent"
+                                    : "text-muted-foreground hover:text-foreground"
+                                )}
+                                >
+                                {category}
+                            </button>
+                            {index < categories.length - 1 && (
+                                <Separator orientation="vertical" className="h-4 w-px bg-border" />
+                            )}
+                        </React.Fragment>
+                    ))}
+                </div>
+            </div>
           </motion.div>
         )}
 
@@ -229,4 +243,3 @@ export function Faq({ content }: { content: FaqContent | null }) {
     </section>
   );
 }
-
