@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRef, useState, useEffect } from "react";
@@ -128,14 +129,6 @@ const MobileStoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
                   <step.storyIcon className="h-6 w-6 text-foreground" />
                 </div>
               </motion.div>
-
-              <motion.h3 className="text-xl font-bold text-foreground mb-3 text-center">
-                {step.storyTitle}
-              </motion.h3>
-
-              <motion.p className="text-sm text-muted-foreground text-center font-light">
-                {step.storyDescription}
-              </motion.p>
             </motion.div>
           );
         })}
@@ -381,14 +374,6 @@ const StoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
                   <step.storyIcon className="h-10 w-10 text-foreground" />
                 </div>
               </motion.div>
-
-              <motion.h3 className="text-3xl md:text-5xl font-bold text-foreground mb-4 text-center">
-                {step.storyTitle}
-              </motion.h3>
-
-              <motion.p className="text-lg md:text-xl text-muted-foreground text-center font-light max-w-lg">
-                {step.storyDescription}
-              </motion.p>
             </motion.div>
           );
         })}
