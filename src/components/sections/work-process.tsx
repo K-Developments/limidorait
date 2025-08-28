@@ -67,75 +67,6 @@ const processSteps = [
 /* -------------------- */
 /* MOBILE COMPONENTS    */
 /* -------------------- */
-const MobileStoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
-  const overlayOpacity = useTransform(
-    scrollYProgress,
-    [0.1, 0.2, 0.8, 0.9],
-    [0, 1, 1, 0]
-  );
-
-  return (
-    <motion.div
-      style={{ opacity: overlayOpacity }}
-      className="fixed inset-0 pointer-events-none z-20 flex items-center justify-center"
-    >
-      <div className="text-center max-w-xs mx-auto px-4">
-        {processSteps.map((step, index) => {
-          const isLastStep = index === processSteps.length - 1;
-
-          // Modified opacity for last step - stays visible after appearing
-          const stepOpacity = useTransform(
-            scrollYProgress,
-            isLastStep
-              ? [0.1 + index * 0.2, 0.2 + index * 0.2] // Remove fade out points
-              : [
-                  0.1 + index * 0.2,
-                  0.2 + index * 0.2,
-                  0.3 + index * 0.2,
-                  0.4 + index * 0.2,
-                ],
-            isLastStep ? [0, 1] : [0, 1, 1, 0] // Keep at opacity 1 for last step
-          );
-
-          // Modified Y position for last step - stays in place after appearing
-          const stepY = useTransform(
-            scrollYProgress,
-            isLastStep
-              ? [0.1 + index * 0.2, 0.2 + index * 0.2] // Remove movement points
-              : [
-                  0.1 + index * 0.2,
-                  0.2 + index * 0.2,
-                  0.3 + index * 0.2,
-                  0.4 + index * 0.2,
-                ],
-            isLastStep
-              ? ["20px", "0px"] // Stay at 0px after appearing
-              : ["20px", "0px", "0px", "-20px"]
-          );
-
-          return (
-            <motion.div
-              key={step.storyTitle}
-              style={{ opacity: stepOpacity, y: stepY }}
-              className="absolute inset-0 flex flex-col items-center justify-center"
-            >
-              <motion.div
-                className="mb-4"
-                initial={{ rotate: 0 }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-              >
-                <div className="bg-background/90 backdrop-blur-sm p-3 rounded-full border shadow-xl">
-                  <step.storyIcon className="h-6 w-6 text-foreground" />
-                </div>
-              </motion.div>
-            </motion.div>
-          );
-        })}
-      </div>
-    </motion.div>
-  );
-};
 
 const MobileProgressIndicator = ({ scrollYProgress }: { scrollYProgress: any }) => {
   const progressWidth = useTransform(scrollYProgress, [0.05, 0.95], ["0%", "100%"]);
@@ -312,75 +243,6 @@ const MobileStep = ({ step, index }: { step: any; index: number }) => {
 /* -------------------- */
 /* DESKTOP COMPONENTS   */
 /* -------------------- */
-const StoryOverlay = ({ scrollYProgress }: { scrollYProgress: any }) => {
-  const overlayOpacity = useTransform(
-    scrollYProgress,
-    [0.15, 0.25, 0.85, 0.95, 1 ],
-    [0, 1, 1, 1, 0 ]
-  );
-
-  return (
-    <motion.div
-      style={{ opacity: overlayOpacity }}
-      className="fixed inset-0 pointer-events-none z-20 flex items-center justify-center"
-    >
-      <div className="text-center max-w-2xl mx-auto px-4 md:px-[6rem]">
-        {processSteps.map((step, index) => {
-          const isLastStep = index === processSteps.length - 1;
-
-          // Modified opacity for last step - stays visible after appearing
-          const stepOpacity = useTransform(
-            scrollYProgress,
-            isLastStep
-              ? [0.15 + index * 0.15, 0.25 + index * 0.15] // Remove fade out points
-              : [
-                  0.15 + index * 0.15,
-                  0.25 + index * 0.15,
-                  0.35 + index * 0.15,
-                  0.45 + index * 0.15,
-                ],
-            isLastStep ? [0, 1] : [0, 1, 1, 0] // Keep at opacity 1 for last step
-          );
-
-          // Modified Y position for last step - stays in place after appearing
-          const stepY = useTransform(
-            scrollYProgress,
-            isLastStep
-              ? [0.15 + index * 0.15, 0.25 + index * 0.15] // Remove movement points
-              : [
-                  0.15 + index * 0.15,
-                  0.25 + index * 0.15,
-                  0.35 + index * 0.15,
-                  0.45 + index * 0.15,
-                ],
-            isLastStep
-              ? ["30px", "0px"] // Stay at 0px after appearing
-              : ["30px", "0px", "0px", "-30px"]
-          );
-
-          return (
-            <motion.div
-              key={step.storyTitle}
-              style={{ opacity: stepOpacity, y: stepY }}
-              className="absolute inset-0 flex flex-col items-center justify-center"
-            >
-              <motion.div
-                className="mb-6"
-                initial={{ rotate: 0 }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-              >
-                <div className="bg-background/90 backdrop-blur-sm p-4 rounded-full border shadow-xl">
-                  <step.storyIcon className="h-10 w-10 text-foreground" />
-                </div>
-              </motion.div>
-            </motion.div>
-          );
-        })}
-      </div>
-    </motion.div>
-  );
-};
 
 const ProgressIndicator = ({ scrollYProgress }: { scrollYProgress: any }) => {
   const progressWidth = useTransform(scrollYProgress, [0.1, 0.9], ["0%", "100%"]);
@@ -580,7 +442,6 @@ export const WorkProcess = () => {
       {isMobile && (
         <>
           <MobileProgressIndicator scrollYProgress={scrollYProgress} />
-          <MobileStoryOverlay scrollYProgress={scrollYProgress} />
           <MobileScrollIndicator scrollYProgress={scrollYProgress} />
         </>
       )}
@@ -589,8 +450,6 @@ export const WorkProcess = () => {
       {!isMobile && (
         <>
           <ProgressIndicator scrollYProgress={scrollYProgress} />
-          <StoryOverlay scrollYProgress={scrollYProgress} />
-         
         </>
       )}
 
