@@ -66,5 +66,3 @@ export default async function PortfolioPage() {
       </PublicLayout>
     );
 }
-
-    

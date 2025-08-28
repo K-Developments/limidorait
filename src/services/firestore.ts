@@ -253,10 +253,10 @@ const fetchFirestoreDoc = cache(async (path: string) => {
     return parseFirestoreResponse(json);
 });
 
-const fetchFirestoreCollection = cache(async (path: string) => {
+const fetchFirestoreCollection = cache(async (path: string, options?: { revalidate: number | false | undefined }) => {
     const url = `${API_BASE_URL}/${path}?key=${API_KEY}`;
     
-    const res = await fetch(url, { next: { revalidate: false } }); // No revalidation
+    const res = await fetch(url, { next: { revalidate: options?.revalidate ?? false } });
     
     if (!res.ok) {
         const errorText = await res.text();
@@ -474,7 +474,7 @@ export const getTermsOfServiceContent = cache(async (): Promise<TermsOfServiceCo
 });
 
 export const getServices = cache(async (): Promise<Service[]> => {
-    const services = (await fetchFirestoreCollection(SERVICES_COLLECTION_ID) as Service[]) || [];
+    const services = (await fetchFirestoreCollection(SERVICES_COLLECTION_ID, { revalidate: false }) as Service[]) || [];
     return services.map(s => {
       const slug = s.slug || s.title.toLowerCase().replace(/\s+/g, '-');
       return { ...s, slug, link: `/services/${slug}` };
@@ -489,7 +489,7 @@ export const getServiceBySlug = cache(async (slug: string): Promise<Service | nu
 
 
 export const getProjects = cache(async (): Promise<(Project & { link: string })[]> => {
-    const projects = (await fetchFirestoreCollection(PORTFOLIO_COLLECTION_ID) as Project[]) || [];
+    const projects = (await fetchFirestoreCollection(PORTFOLIO_COLLECTION_ID, { revalidate: false }) as Project[]) || [];
     return projects.map(p => {
         const slug = p.slug || p.title.toLowerCase().replace(/\s+/g, '-');
         return { ...p, slug, link: `/portfolio/${slug}`};

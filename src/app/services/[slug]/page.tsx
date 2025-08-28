@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ChevronRight, CheckCircle, HelpCircle } from 'lucide-react';
+import { ChevronRight, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getServiceBySlug, getServices, getFaqContent } from '@/services/firestore';
@@ -160,5 +160,3 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
     </PublicLayout>
   );
 }
-
-    
