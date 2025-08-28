@@ -135,7 +135,7 @@ export function Faq({ content }: { content: FaqContent | null }) {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
-              className="mb-12"
+              className="sticky top-20 z-30 bg-background/95 backdrop-blur-sm py-4 -mx-4 md:-mx-6 px-4 md:px-6 mb-8"
           >
             <div className="flex justify-center overflow-x-auto whitespace-nowrap pb-2 scrollbar-accent">
                 <div className="flex items-center gap-4">
