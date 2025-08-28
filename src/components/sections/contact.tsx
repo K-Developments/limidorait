@@ -166,7 +166,7 @@ export function Contact({ content, socialLinks }: ContactProps) {
 
         <div className="relative z-10 w-full max-w-md space-y-6">
           <div className="inline-block border border-white/20 px-3 py-1 text-sm text-white/80">Contact Us</div>
-          <h2 id="contact-heading" className="text-4xl font-medium tracking-tighter sm:text-5xl font-body uppercase">{content?.title}</h2>
+          <h2 id="contact-heading" className="text-4xl font-semibold tracking-tighter sm:text-5xl font-body">{content?.title}</h2>
           <p className="max-w-[600px] text-white/70 md:text-xl/relaxed">
             {content?.description}
           </p>
@@ -190,7 +190,7 @@ export function Contact({ content, socialLinks }: ContactProps) {
       >
         <div className="w-full max-w-md space-y-8">
           <div>
-            <h2 className="text-3xl font-medium tracking-tighter sm:text-4xl font-body uppercase">Get in Touch</h2>
+            <h2 className="text-3xl font-semibold tracking-tighter sm:text-4xl font-body">Get in Touch</h2>
             <p className="mt-2 text-muted-foreground">Fill out the form and we'll get back to you as soon as possible.</p>
           </div>
           <Form {...form}>
@@ -285,3 +285,5 @@ export function Contact({ content, socialLinks }: ContactProps) {
     </section>
   );
 }
+
+    

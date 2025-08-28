@@ -30,7 +30,7 @@ export function About({ content }: { content: AboutContent | null }) {
             className="grid md:grid-cols-3 gap-8 md:gap-16 items-start"
           >
             <div className="md:col-span-1 md:text-right">
-              <h2 className="text-3xl font-medium uppercase text-foreground tracking-tight">
+              <h2 className="text-3xl font-semibold text-foreground tracking-tight">
                 {content?.aboutTitle}
               </h2>
             </div>
@@ -53,3 +53,5 @@ export function About({ content }: { content: AboutContent | null }) {
     </section>
   );
 }
+
+    

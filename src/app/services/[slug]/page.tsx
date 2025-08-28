@@ -61,14 +61,14 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
                 <ChevronRight className="h-4 w-4 mx-1" />
                 <Link href="/services" className="hover:text-primary transition-colors">Services</Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
-                <span className="font-medium text-foreground capitalize">{service.title}</span>
+                <span className="font-medium text-foreground">{service.title}</span>
             </nav>
             <Separator className="mt-4 md:hidden" />
         </div>
         
          {/* Mobile-only Sticky Header */}
         <div className="md:hidden sticky top-20 z-30 flex items-center justify-between p-3 bg-background border-b">
-            <h1 className="text-lg font-medium truncate pr-2">{service.title}</h1>
+            <h1 className="text-lg font-semibold truncate pr-2">{service.title}</h1>
             <Button asChild size="sm">
                 <Link href="/contact">Get Service</Link>
             </Button>
@@ -80,7 +80,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
             <Image src={service.imageUrl} alt={service.title} fill className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             <div className="absolute bottom-0 p-6">
-                 <h1 className="text-3xl font-medium text-white font-body uppercase">{service.title}</h1>
+                 <h1 className="text-3xl font-semibold text-white font-body">{service.title}</h1>
             </div>
         </section>
 
@@ -102,7 +102,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
               {/* Main Content Area */}
               <article className="lg:col-span-2 space-y-10">
                 <div className='hidden md:block'>
-                  <h1 className="text-3xl md:text-4xl font-medium text-foreground font-body uppercase">{service.title}</h1>
+                  <h1 className="text-3xl md:text-4xl font-semibold text-foreground font-body">{service.title}</h1>
                 </div>
 
                 {/* Mobile Short Description */}
@@ -117,7 +117,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
                 <Separator/>
 
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-medium text-foreground flex items-center gap-3">
+                  <h2 className="text-2xl md:text-3xl font-semibold text-foreground flex items-center gap-3">
                       What You Get
                   </h2>
                   <ul className="mt-6 space-y-3 text-muted-foreground list-none pl-2">
@@ -134,7 +134,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
                     <>
                         <Separator/>
                         <div>
-                            <h2 className="text-2xl md:text-3xl font-medium text-foreground flex items-center gap-3">
+                            <h2 className="text-2xl md:text-3xl font-semibold text-foreground flex items-center gap-3">
                                 <HelpCircle className="h-7 w-7 text-primary" />
                                 Frequently Asked Questions
                             </h2>
@@ -160,3 +160,5 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
     </PublicLayout>
   );
 }
+
+    

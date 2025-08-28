@@ -37,7 +37,7 @@ export default async function PrivacyPolicyPage() {
                     <div className="relative max-w-4xl mx-auto px-8 md:px-12 py-12 bg-card border-x">
                         
                         <header className="text-center mb-12">
-                            <h1 className="text-3xl md:text-5xl font-medium text-foreground uppercase tracking-tight">
+                            <h1 className="text-3xl md:text-5xl font-semibold text-foreground tracking-tight">
                                 {policyContent.pageTitle}
                             </h1>
                             <p className="text-muted-foreground mt-2">Last updated: {lastUpdated}</p>
@@ -57,3 +57,5 @@ export default async function PrivacyPolicyPage() {
         </PublicLayout>
     );
 }
+
+    

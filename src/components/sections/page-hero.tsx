@@ -1,3 +1,4 @@
+
 "use client";
 import * as React from "react";
 import { motion } from "framer-motion";
@@ -147,7 +148,7 @@ export function PageHero({ title, subtitle }: PageHeroProps) {
             <>
               <motion.h1
                 id="page-hero-title"
-                className="text-4xl md:text-5xl lg:text-6xl font-medium uppercase mb-4 font-headline bg-gradient-to-r from-foreground to-accent bg-clip-text text-transparent"
+                className="text-4xl md:text-5xl lg:text-6xl font-semibold mb-4 font-headline bg-gradient-to-r from-foreground to-accent bg-clip-text text-transparent"
                 style={{ lineHeight: 1.2 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -170,3 +171,5 @@ export function PageHero({ title, subtitle }: PageHeroProps) {
     </section>
   );
 }
+
+    

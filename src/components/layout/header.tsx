@@ -53,7 +53,7 @@ export function Header({ content, services }: HeaderProps) {
               <Image src={content.logoUrl} alt={content.logoText || "Limidora Logo"} fill className="object-contain" />
             ) : (
               <span 
-                className="font-medium uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 text-2xl"
+                className="font-semibold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 text-2xl"
                 style={{
                   textShadow: '0 2px 10px hsla(var(--primary), 0.3)',
                 }}
@@ -93,4 +93,4 @@ export function Header({ content, services }: HeaderProps) {
   );
 }
 
-
+    

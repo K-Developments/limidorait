@@ -1,3 +1,4 @@
+
 "use client";
 import * as React from "react";
 import Image from "next/image";
@@ -182,7 +183,7 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
           className="text-center mb-12"
         >
           <Badge variant="outline" className="mb-4">Testimonials</Badge>
-          <h2 className="text-3xl md:text-4xl font-medium text-foreground font-body uppercase mb-4">
+          <h2 className="text-3xl md:text-4xl font-semibold text-foreground font-body mb-4">
             What Our Clients Say
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -293,3 +294,5 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
     </section>
   );
 }
+
+    

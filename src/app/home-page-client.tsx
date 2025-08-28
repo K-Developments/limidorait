@@ -262,7 +262,7 @@ const HeroSection = ({ content }: { content: HeroContent | null }) => {
         </div>
         
         <div className="relative">
-          <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-medium uppercase mb-4 font-headline" style={{lineHeight:1.2}}>
+          <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-semibold mb-4 font-headline" style={{lineHeight:1.2}}>
             {content.title}
           </h1>
           <Button asChild size="lg">
@@ -300,3 +300,5 @@ export default function HomePageClient({ content }: HomePageClientProps) {
     </div>
   );
 }
+
+    

@@ -121,7 +121,7 @@ export function Faq({ content }: { content: FaqContent | null }) {
             className="text-center mb-12"
         >
             <Badge variant="outline" className="mb-4">FAQs</Badge>
-            <h1 id="faq-heading" className="text-3xl md:text-4xl font-medium text-foreground mb-4 font-body uppercase">
+            <h1 id="faq-heading" className="text-3xl md:text-4xl font-semibold text-foreground mb-4 font-body">
               {content?.title}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -194,7 +194,7 @@ export function Faq({ content }: { content: FaqContent | null }) {
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle className="uppercase">Ask Your Question</DialogTitle>
+                  <DialogTitle>Ask Your Question</DialogTitle>
                   <DialogDescription>
                     Can't find the answer you're looking for? Fill out the form below and we'll get back to you.
                   </DialogDescription>
@@ -243,3 +243,5 @@ export function Faq({ content }: { content: FaqContent | null }) {
     </section>
   );
 }
+
+    

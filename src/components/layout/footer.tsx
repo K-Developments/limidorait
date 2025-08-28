@@ -38,7 +38,7 @@ export function Footer({ content }: FooterProps) {
               {footerLogo ? (
                 <Image src={footerLogo} alt={logoText} fill className="object-contain object-left" />
               ) : (
-                <span className="text-2xl font-medium uppercase tracking-wider">{logoText}</span>
+                <span className="text-2xl font-semibold tracking-wider">{logoText}</span>
               )}
               <span className="sr-only">Limidora Home</span>
             </Link>
@@ -58,7 +58,7 @@ export function Footer({ content }: FooterProps) {
           
           {/* Column 2: Company Links */}
           <div>
-            <h4 className="font-semibold uppercase tracking-wider mb-4">Company</h4>
+            <h4 className="font-semibold tracking-wider mb-4">Company</h4>
             <ul className="space-y-3">
               {companyLinks.map(link => (
                 <li key={link.name}>
@@ -72,7 +72,7 @@ export function Footer({ content }: FooterProps) {
           
           {/* Column 3: Contact Us */}
           <div>
-            <h4 className="font-semibold uppercase tracking-wider mb-4">Contact Us</h4>
+            <h4 className="font-semibold tracking-wider mb-4">Contact Us</h4>
             <ul className="space-y-3">
               {content?.contactEmail && (
                 <li>
@@ -100,7 +100,7 @@ export function Footer({ content }: FooterProps) {
 
           {/* Column 4: Legal */}
            <div>
-            <h4 className="font-semibold uppercase tracking-wider mb-4">Legal</h4>
+            <h4 className="font-semibold tracking-wider mb-4">Legal</h4>
             <ul className="space-y-3">
               {legalLinks.map(link => (
                 <li key={link.name}>
@@ -123,3 +123,5 @@ export function Footer({ content }: FooterProps) {
     </footer>
   );
 }
+
+    

@@ -24,7 +24,7 @@ export function ServicesList({ services }: { services: Service[] }) {
             className="text-center mb-16"
         >
             <Badge variant="outline" className="mb-4">Our Expertise</Badge>
-            <h1 id="faq-heading" className="text-3xl md:text-4xl font-medium text-foreground mb-4 font-body uppercase">
+            <h1 id="faq-heading" className="text-3xl md:text-4xl font-semibold text-foreground mb-4 font-body">
               Services We Offer
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -64,7 +64,7 @@ export function ServicesList({ services }: { services: Service[] }) {
                   />
                 </div>
                 <div className="bg-neutral-900 text-white p-8 md:p-16 h-full flex flex-col justify-center md:order-2">
-                  <h3 className="text-3xl md:text-4xl font-medium mb-4 font-body uppercase">
+                  <h3 className="text-3xl md:text-4xl font-semibold mb-4 font-body">
                     {service.title}
                   </h3>
                   <p className="text-lg mb-8 text-white/80">

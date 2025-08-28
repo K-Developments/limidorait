@@ -70,7 +70,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                 <div className="absolute top-0 left-3/4 h-full w-[1px] bg-gradient-to-t from-transparent to-white/10" />
             </div>
             
-            <h1 id="project-hero-title" className="text-4xl md:text-6xl font-medium uppercase font-body tracking-tight capitalize">
+            <h1 id="project-hero-title" className="text-4xl md:text-6xl font-semibold font-body tracking-tight">
               {project.title}
             </h1>
           </div>
@@ -99,7 +99,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                   <ChevronRight className="h-4 w-4 mx-1" />
                   <Link href="/portfolio" className="hover:text-primary transition-colors">Portfolio</Link>
                   <ChevronRight className="h-4 w-4 mx-1" />
-                  <span className="font-medium text-foreground capitalize">{project.title}</span>
+                  <span className="font-medium text-foreground">{project.title}</span>
               </nav>
               <Separator className="mb-8" />
 
@@ -107,7 +107,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                   {/* Left Column - Meta Info */}
                   <aside className="md:col-span-1 space-y-6">
                   <div>
-                      <h3 className="font-semibold text-foreground uppercase tracking-wider">Services</h3>
+                      <h3 className="font-semibold text-foreground tracking-wider">Services</h3>
                       <div className="flex flex-wrap gap-2 mt-2">
                           {(project.services || []).map(service => (
                              <Badge key={service} variant="secondary">{service}</Badge>
@@ -115,7 +115,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                       </div>
                   </div>
                   <div>
-                      <h3 className="font-semibold text-foreground uppercase tracking-wider">Date</h3>
+                      <h3 className="font-semibold text-foreground tracking-wider">Date</h3>
                       <p className="text-muted-foreground">{project.date}</p>
                   </div>
                   </aside>
@@ -123,7 +123,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                   {/* Right Column - Project Details */}
                   <article className="md:col-span-2 space-y-8">
                   <div className="space-y-4">
-                      <h2 className="text-2xl md:text-3xl font-medium text-foreground flex items-center gap-3">
+                      <h2 className="text-2xl md:text-3xl font-semibold text-foreground flex items-center gap-3">
                       <GanttChartSquare className="h-7 w-7 text-primary" />
                       About the Project
                       </h2>
@@ -135,7 +135,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                   <Separator />
 
                   <div className="space-y-4">
-                      <h2 className="text-2xl md:text-3xl font-medium text-foreground flex items-center gap-3">
+                      <h2 className="text-2xl md:text-3xl font-semibold text-foreground flex items-center gap-3">
                       <CheckSquare className="h-7 w-7 text-primary" />
                       Features
                       </h2>
@@ -152,7 +152,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                   <Separator />
 
                   <div className="space-y-4">
-                      <h2 className="text-2xl md:text-3xl font-medium text-foreground flex items-center gap-3">
+                      <h2 className="text-2xl md:text-3xl font-semibold text-foreground flex items-center gap-3">
                       <Star className="h-7 w-7 text-primary" />
                       Highlights
                       </h2>
@@ -175,3 +175,5 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
     </PublicLayout>
   );
 }
+
+    

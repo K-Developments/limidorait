@@ -28,7 +28,7 @@ export function HomepageAbout({ aboutSection }: HomepageAboutProps) {
             <Badge variant="secondary" className="mb-4 self-start bg-white/10 text-white hover:bg-white/20">
               {aboutSection.badge}
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-medium mb-4 font-body uppercase">
+            <h2 className="text-3xl md:text-4xl font-semibold mb-4 font-body">
               {aboutSection.title}
             </h2>
             <p className="text-lg mb-8 text-white/80">

@@ -46,7 +46,7 @@ export function HomepageWorks({ works }: HomepageWorksProps) {
           className="text-center mb-8 sm:mb-12"
         >
           <Badge variant="outline" className="mb-4">Our Portfolio</Badge>
-          <h2 className="text-3xl md:text-4xl font-medium text-foreground mb-4 font-body uppercase">
+          <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-4 font-body">
             Our Recent Works
           </h2>
           <p className="text-base sm:text-lg max-w-2xl mx-auto text-muted-foreground px-4">
@@ -183,8 +183,8 @@ const WorkCard = ({ work, className }: { work: HomepageWork, className?: string 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent hidden sm:block" />
                     <div className="absolute inset-0 hidden sm:flex flex-col justify-end p-4 md:p-6 text-white">
                         <div className="transform transition-transform duration-300 ease-in-out group-hover:-translate-y-2">
-                            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-white/80">{work.category}</p>
-                            <h3 className="text-lg sm:text-xl md:text-2xl font-medium mt-1 font-body uppercase">{work.title}</h3>
+                            <p className="text-xs sm:text-sm font-semibold tracking-wider text-white/80">{work.category}</p>
+                            <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mt-1 font-body">{work.title}</h3>
                         </div>
                         <div className="mt-3 md:mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <Button variant="secondary" size="sm" className="sm:size-default">View Project</Button>
@@ -195,8 +195,8 @@ const WorkCard = ({ work, className }: { work: HomepageWork, className?: string 
             
             {/* Mobile Content */}
             <div className="sm:hidden mt-3 px-1">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{work.category}</p>
-                <h3 className="text-lg font-medium mt-1 font-body uppercase text-foreground">{work.title}</h3>
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground">{work.category}</p>
+                <h3 className="text-lg font-semibold mt-1 font-body text-foreground">{work.title}</h3>
                 <Link href={work.link} className="inline-flex items-center gap-1 mt-3 text-sm text-foreground hover:text-primary transition-colors duration-200 animate-arrow-on-hover">
                     <ArrowRight className="h-4 w-4" />
                     View Project

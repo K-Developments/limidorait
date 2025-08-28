@@ -466,7 +466,7 @@ export const WorkProcess = () => {
             Our Approach
           </Badge>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium text-foreground mb-4 font-body uppercase">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-foreground mb-4 font-body">
             Our Workflow
           </h2>
 
@@ -523,3 +523,5 @@ export const WorkProcess = () => {
     </section>
   );
 };
+
+    

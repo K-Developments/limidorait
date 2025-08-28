@@ -177,7 +177,7 @@ function AdminDashboard() {
   if (isLoading) {
     return (
       <div className="space-y-8">
-        <h1 className="text-3xl font-medium uppercase">Content Management</h1>
+        <h1 className="text-3xl font-semibold">Content Management</h1>
         {[...Array(6)].map((_, i) => (
           <Card key={i}>
             <CardHeader>
@@ -195,7 +195,7 @@ function AdminDashboard() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-medium uppercase">Homepage Content Management</h1>
+      <h1 className="text-3xl font-semibold">Homepage Content Management</h1>
       <form onSubmit={handleSubmit} className="space-y-8">
         <Card>
           <CardHeader>
@@ -500,3 +500,5 @@ export default function AdminHomePage() {
     </div>
   );
 }
+
+    

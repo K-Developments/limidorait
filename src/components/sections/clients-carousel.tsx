@@ -39,7 +39,7 @@ export function ClientsCarousel({ title, subtitle, logos }: ClientsCarouselProps
                 className="text-center mb-12"
             >
                 <Badge variant="outline" className="mb-4">Our Clients</Badge>
-                <h2 className="text-3xl md:text-4xl font-medium text-foreground mb-4 font-body uppercase">
+                <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-4 font-body">
                     {title}
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -63,3 +63,5 @@ export function ClientsCarousel({ title, subtitle, logos }: ClientsCarouselProps
     </section>
   );
 }
+
+    

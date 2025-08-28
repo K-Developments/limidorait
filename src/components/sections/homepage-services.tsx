@@ -27,7 +27,7 @@ export function HomepageServices({ services }: HomepageServicesProps) {
           className="text-center mb-12"
         >
           <Badge variant="outline" className="mb-4">Our Services</Badge>
-          <h2 className="text-3xl md:text-4xl font-medium text-foreground mb-4 font-body uppercase">
+          <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-4 font-body">
             What We Do
           </h2>
           <p className="text-lg max-w-2xl mx-auto text-muted-foreground">
@@ -55,7 +55,7 @@ export function HomepageServices({ services }: HomepageServicesProps) {
                       </div>
                       <CardContent className="p-6 flex flex-col flex-grow">
                           <div className="flex-grow">
-                              <h3 className="text-2xl font-medium mb-2 font-body uppercase text-foreground">{service.title}</h3>
+                              <h3 className="text-2xl font-semibold mb-2 font-body text-foreground">{service.title}</h3>
                               <Separator className="my-4" />
                               <p className="mb-4 text-foreground">{service.description}</p>
                           </div>

@@ -28,7 +28,7 @@ const WhyUsCard = ({ icon, title, description, delay }: WhyUsCardProps) => (
         <div className="mx-auto bg-primary/10 p-4 rounded-full w-fit">
           {icon}
         </div>
-        <CardTitle className="pt-4 text-xl font-medium text-foreground">{title}</CardTitle>
+        <CardTitle className="pt-4 text-xl font-semibold text-foreground">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground">{description}</p>
@@ -67,7 +67,7 @@ export function WhyUs() {
           className="text-center mb-16"
         >
           <Badge variant="outline" className="mb-4">Why Choose Us</Badge>
-          <h2 className="text-3xl md:text-4xl font-medium text-foreground mb-4 font-body uppercase">
+          <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-4 font-body">
             Our Core Values
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -89,3 +89,5 @@ export function WhyUs() {
     </section>
   );
 }
+
+    
