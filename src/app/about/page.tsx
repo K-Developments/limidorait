@@ -33,6 +33,8 @@ export async function generateMetadata(
 export default async function AboutPage() {
     const heroContent = await getHeroContent();
     const aboutContent = await getAboutContent();
+    const ctaContent = aboutContent.ctaSection || heroContent.ctaSection;
+
     return (
         <PublicLayout>
             <div className="container mx-auto px-4 md:px-6 pt-8">
@@ -48,7 +50,7 @@ export default async function AboutPage() {
             <WhyUs />
             <WorkProcess />
             {heroContent && <Testimonials testimonials={heroContent.testimonials} />}
-            {heroContent && <HomepageCta ctaSection={heroContent.ctaSection} />}
+            {ctaContent && <HomepageCta ctaSection={ctaContent} />}
         </PublicLayout>
     );
 }

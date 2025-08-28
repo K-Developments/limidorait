@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { FaqContent, FaqItem, SubmittedQuestion } from '@/services/firestore';
+import { FaqContent, FaqItem, SubmittedQuestion, HomepageCtaSection } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { X, PlusCircle, Trash2 } from 'lucide-react';
 import { Sidebar } from '@/components/layout/admin-sidebar';
@@ -17,7 +17,7 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc, setDoc, getDocs, collection, query, orderBy, deleteDoc, serverTimestamp, addDoc } from 'firebase/firestore';
 
 
-const defaultFaqContent: FaqContent = { heroTitle: "Help Center", heroSubtitle: "Your questions, answered. Find the information you need about our services.", title: "Frequently Asked Questions", description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", faqs: [ { id: "1", category: "General", question: "What services do you offer?", answer: "We offer a wide range of services including custom web development, UI/UX design, brand strategy, and mobile application development. Our goal is to provide comprehensive digital solutions tailored to your business needs." }, { id: "2", category: "Technical", question: "How long does a typical project take?", answer: "The timeline for a project varies depending on its scope and complexity. A simple website might take 4-6 weeks, while a complex web application could take several months. We provide a detailed project timeline after our initial discovery phase." }, { id: "3", category: "General", question: "What is your development process?", answer: "Our process is collaborative and transparent. We start with a discovery phase to understand your goals, followed by strategy, design, development, testing, and deployment. We maintain open communication throughout the project to ensure we're aligned with your vision." }, { id: "4", category: "Billing", question: "How much does a project cost?", answer: "Project costs are based on the specific requirements and complexity of the work. We provide a detailed proposal and quote after discussing your needs. We offer flexible pricing models to accommodate various budgets." }, { id: "5", category: "Technical", question: "Do you provide support after the project is launched?", answer: "Yes, we offer ongoing support and maintenance packages to ensure your website or application remains secure, up-to-date, and performs optimally. We're here to be your long-term technology partner." } ] };
+const defaultFaqContent: FaqContent = { heroTitle: "Help Center", heroSubtitle: "Your questions, answered. Find the information you need about our services.", title: "Frequently Asked Questions", description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", faqs: [] };
 const isObject = (item: any) => (item && typeof item === 'object' && !Array.isArray(item));
 const deepMerge = (target: any, source: any) => { const output = { ...target }; if (isObject(target) && isObject(source)) { Object.keys(source).forEach(key => { if (isObject(source[key])) { if (!(key in target)) Object.assign(output, { [key]: source[key] }); else output[key] = deepMerge(target[key], source[key]); } else { Object.assign(output, { [key]: source[key] }); } }); } return output; }
 
@@ -78,6 +78,18 @@ function AdminDashboard() {
     const { name, value } = e.target;
     if (faqContent) {
       setFaqContent({ ...faqContent, [name]: value });
+    }
+  };
+
+  const handleCtaSectionChange = (field: keyof HomepageCtaSection, value: string) => {
+    if (faqContent) {
+      setFaqContent({ 
+        ...faqContent, 
+        ctaSection: { 
+            ...(faqContent.ctaSection || { title: '', description: '', buttonText: '', buttonLink: '' }), 
+            [field]: value 
+        } 
+      });
     }
   };
 
@@ -197,6 +209,31 @@ function AdminDashboard() {
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
               <Textarea id="description" name="description" value={faqContent?.description || ''} onChange={handleInputChange} className="min-h-[100px]" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Call to Action Section</CardTitle>
+            <CardDescription>Update the content for the CTA section on this page.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="cta-title">Title</Label>
+              <Input id="cta-title" value={faqContent?.ctaSection?.title || ''} onChange={(e) => handleCtaSectionChange('title', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cta-description">Description</Label>
+              <Textarea id="cta-description" value={faqContent?.ctaSection?.description || ''} onChange={(e) => handleCtaSectionChange('description', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cta-button-text">Button Text</Label>
+              <Input id="cta-button-text" value={faqContent?.ctaSection?.buttonText || ''} onChange={(e) => handleCtaSectionChange('buttonText', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cta-button-link">Button Link</Label>
+              <Input id="cta-button-link" value={faqContent?.ctaSection?.buttonLink || ''} onChange={(e) => handleCtaSectionChange('buttonLink', e.target.value)} />
             </div>
           </CardContent>
         </Card>

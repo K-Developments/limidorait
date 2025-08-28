@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { AboutContent } from '@/services/firestore';
+import { AboutContent, HomepageCtaSection } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Sidebar } from '@/components/layout/admin-sidebar';
 import { cn } from '@/lib/utils';
@@ -60,6 +60,18 @@ function AdminDashboard() {
         setAboutContent({ ...aboutContent, [name]: value });
     }
   };
+
+  const handleCtaSectionChange = (field: keyof HomepageCtaSection, value: string) => {
+    if (aboutContent) {
+      setAboutContent({ 
+        ...aboutContent, 
+        ctaSection: { 
+            ...(aboutContent.ctaSection || { title: '', description: '', buttonText: '', buttonLink: '' }), 
+            [field]: value 
+        } 
+      });
+    }
+  };
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,7 +96,7 @@ function AdminDashboard() {
     return (
       <div className="space-y-8">
         <h1 className="text-3xl font-medium">About Page Management</h1>
-        {[...Array(2)].map((_, i) => (
+        {[...Array(3)].map((_, i) => (
           <Card key={i}>
             <CardHeader>
               <Skeleton className="h-8 w-1/2" />
@@ -157,6 +169,31 @@ function AdminDashboard() {
                 onChange={handleInputChange}
                 className="min-h-[150px]"
               />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Call to Action Section</CardTitle>
+            <CardDescription>Update the content for the CTA section on this page.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="cta-title">Title</Label>
+              <Input id="cta-title" value={aboutContent?.ctaSection?.title || ''} onChange={(e) => handleCtaSectionChange('title', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cta-description">Description</Label>
+              <Textarea id="cta-description" value={aboutContent?.ctaSection?.description || ''} onChange={(e) => handleCtaSectionChange('description', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cta-button-text">Button Text</Label>
+              <Input id="cta-button-text" value={aboutContent?.ctaSection?.buttonText || ''} onChange={(e) => handleCtaSectionChange('buttonText', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cta-button-link">Button Link</Label>
+              <Input id="cta-button-link" value={aboutContent?.ctaSection?.buttonLink || ''} onChange={(e) => handleCtaSectionChange('buttonLink', e.target.value)} />
             </div>
           </CardContent>
         </Card>

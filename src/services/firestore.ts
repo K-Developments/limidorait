@@ -74,6 +74,7 @@ export interface AboutContent {
   heroSubtitle: string;
   aboutTitle: string;
   aboutDescription: string;
+  ctaSection?: HomepageCtaSection;
 }
 export interface ClientLogo {
   name: string;
@@ -87,6 +88,7 @@ export interface PortfolioContent {
     subtitle: string;
     logos: ClientLogo[];
   };
+  ctaSection?: HomepageCtaSection;
 }
 export interface Project {
     id: string;
@@ -113,6 +115,7 @@ export interface FaqContent {
   title: string;
   description: string;
   faqs: FaqItem[];
+  ctaSection?: HomepageCtaSection;
 }
 export interface SubmittedQuestion {
     id: string;
@@ -254,6 +257,13 @@ const fetchFirestoreCollection = cache(async (path: string) => {
 
 // --- Data Default Values ---
 
+const defaultCtaSection: HomepageCtaSection = { 
+    title: "Let's Build Something Great", 
+    description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas.", 
+    buttonText: "Get in Touch", 
+    buttonLink: "/contact" 
+};
+
 const defaultHeroContent: Omit<HeroContent, 'services'> = { 
     title: "Creative Agency", 
     logoText: "Limidora", 
@@ -285,12 +295,7 @@ const defaultHeroContent: Omit<HeroContent, 'services'> = {
         { quote: "From start to finish, the process was seamless. The team at Limidora was always available to answer our questions and provided valuable insights that helped shape our project.", author: "Emily White", company: "Creative Minds", avatarUrl: "https://placehold.co/100x100.png" }, 
         { quote: "An absolutely stellar experience. The final product was not only beautiful but also highly functional and user-friendly. We couldn't be happier with the results.", author: "Michael Brown", company: "Future Enterprises", avatarUrl: "https://placehold.co/100x100.png" } 
     ], 
-    ctaSection: { 
-        title: "Let's Build Something Great", 
-        description: "Have a project in mind or just want to say hello? We're excited to hear from you and learn about your ideas.", 
-        buttonText: "Get in Touch", 
-        buttonLink: "/contact" 
-    }, 
+    ctaSection: { ...defaultCtaSection }, 
     aboutSection: { 
         badge: "Who We Are", 
         title: "About Limidora", 
@@ -305,7 +310,8 @@ const defaultAboutContent: AboutContent = {
     heroTitle: "Building Brands With Purpose", 
     heroSubtitle: "We are a team of passionate creators, thinkers, and innovators dedicated to building exceptional digital experiences that drive success and inspire change.", 
     aboutTitle: "Our Vision", 
-    aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.", 
+    aboutDescription: "At Limidora, we are always trying to innovate new things with next-level ideas. In this time, everyone needs to touch the technology, and we are making solutions with technology to improve the lives and businesses of our clients.",
+    ctaSection: { ...defaultCtaSection },
 };
 
 const defaultPortfolioContent: PortfolioContent = { 
@@ -323,7 +329,8 @@ const defaultPortfolioContent: PortfolioContent = {
             { name: 'Mail Services', logoUrl: 'https://placehold.co/144x80.png?text=Mail' }, 
             { name: 'Chainlink Co', logoUrl: 'https://placehold.co/144x80.png?text=Chain' }, 
         ] 
-    } 
+    },
+    ctaSection: { ...defaultCtaSection },
 };
 
 const defaultFaqContent: FaqContent = { 
@@ -331,7 +338,8 @@ const defaultFaqContent: FaqContent = {
     heroSubtitle: "Your questions, answered. Find the information you need about our services.", 
     title: "Frequently Asked Questions", 
     description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", 
-    faqs: []
+    faqs: [],
+    ctaSection: { ...defaultCtaSection },
 };
 
 const defaultContactContent: ContactContent = { 

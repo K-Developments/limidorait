@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { PortfolioContent, Project, ClientLogo } from '@/services/firestore';
+import { PortfolioContent, Project, ClientLogo, HomepageCtaSection } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import Image from 'next/image';
@@ -132,6 +132,18 @@ function AdminDashboard() {
                 [field]: value,
             }
         });
+    }
+  };
+
+  const handleCtaSectionChange = (field: keyof HomepageCtaSection, value: string) => {
+    if (portfolioContent) {
+      setPortfolioContent({ 
+        ...portfolioContent, 
+        ctaSection: { 
+            ...(portfolioContent.ctaSection || { title: '', description: '', buttonText: '', buttonLink: '' }), 
+            [field]: value 
+        } 
+      });
     }
   };
 
@@ -347,6 +359,31 @@ function AdminDashboard() {
         </Card>
 
         <Card>
+          <CardHeader>
+            <CardTitle>Call to Action Section</CardTitle>
+            <CardDescription>Update the content for the CTA section on this page.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="cta-title">Title</Label>
+              <Input id="cta-title" value={portfolioContent?.ctaSection?.title || ''} onChange={(e) => handleCtaSectionChange('title', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cta-description">Description</Label>
+              <Textarea id="cta-description" value={portfolioContent?.ctaSection?.description || ''} onChange={(e) => handleCtaSectionChange('description', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cta-button-text">Button Text</Label>
+              <Input id="cta-button-text" value={portfolioContent?.ctaSection?.buttonText || ''} onChange={(e) => handleCtaSectionChange('buttonText', e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cta-button-link">Button Link</Label>
+              <Input id="cta-button-link" value={portfolioContent?.ctaSection?.buttonLink || ''} onChange={(e) => handleCtaSectionChange('buttonLink', e.target.value)} />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
             <CardHeader>
                 <div className="flex justify-between items-center">
                     <div>
@@ -472,5 +509,3 @@ export default function AdminPortfolioPage() {
     </div>
   );
 }
-
-    

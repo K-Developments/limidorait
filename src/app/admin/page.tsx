@@ -417,7 +417,7 @@ function AdminDashboard() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Call to Action Section</CardTitle>
+            <CardTitle>Homepage Call to Action</CardTitle>
             <CardDescription>Update the content for the CTA section on the homepage.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">

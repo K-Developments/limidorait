@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { ChevronRight, GanttChartSquare, CheckSquare, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { getProjectBySlug, getProjects } from '@/services/firestore';
+import { getProjectBySlug, getProjects, getPortfolioContent } from '@/services/firestore';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { HomepageCta } from '@/components/sections/homepage-cta';
 import { getHeroContent } from '@/services/firestore';
@@ -45,7 +45,9 @@ export async function generateMetadata(
 export default async function ProjectDetailPage({ params }: { params: { slug: string } }) {
   const project = await getProjectBySlug(params.slug);
   const heroContent = await getHeroContent();
-  
+  const portfolioContent = await getPortfolioContent();
+  const ctaContent = portfolioContent.ctaSection || heroContent.ctaSection;
+
   if (!project) {
     notFound();
   }
@@ -168,7 +170,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
               </div>
           </div>
         </section>
-        {heroContent && heroContent.ctaSection && <HomepageCta ctaSection={heroContent.ctaSection} />}
+        {ctaContent && <HomepageCta ctaSection={ctaContent} />}
       </main>
     </PublicLayout>
   );
