@@ -362,7 +362,7 @@ export const WorkProcess = ({ steps }: { steps?: WorkProcessStep[] }) => {
         )}
       </div>
 
-      {/* Background decoration */}
+      {/* Background decoration ***/}
       <motion.div
         className="absolute inset-0 pointer-events-none overflow-hidden"
         initial={{ opacity: 0 }}
