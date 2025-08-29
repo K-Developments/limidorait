@@ -211,7 +211,7 @@ function AdminDashboard() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label>Current Header Logo</Label>
-              <div className="relative h-16 w-48 bg-muted rounded-md flex items-center justify-center overflow-hidden">
+              <div className="relative h-12 w-40 bg-muted rounded-md flex items-center justify-center overflow-hidden">
                 {heroContent?.logoUrl ? (
                   <img src={heroContent.logoUrl} alt="Current Logo" className="h-full w-full object-contain p-2" onError={(e) => { const target = e.target as HTMLImageElement; target.style.display = 'none'; const parent = target.parentElement; if (parent) { parent.innerHTML = `<p class="text-sm text-muted-foreground">${heroContent?.logoText || 'Limidora'}</p>`; } }} />
                 ) : (
@@ -348,12 +348,12 @@ function AdminDashboard() {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="services-title">Title</Label>
-              <Input id="services-title" value={heroContent?.servicesSectionTitle || ''} onChange={(e) => handleServicesSectionChange('servicesSectionTitle', e.target.value)} />
+              <Label htmlFor="servicesSectionTitle">Title</Label>
+              <Input id="servicesSectionTitle" value={heroContent?.servicesSectionTitle || ''} onChange={(e) => handleServicesSectionChange('servicesSectionTitle', e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="services-description">Description</Label>
-              <Textarea id="services-description" value={heroContent?.servicesSectionDescription || ''} onChange={(e) => handleServicesSectionChange('servicesSectionDescription', e.target.value)} />
+              <Label htmlFor="servicesSectionDescription">Description</Label>
+              <Textarea id="servicesSectionDescription" value={heroContent?.servicesSectionDescription || ''} onChange={(e) => handleServicesSectionChange('servicesSectionDescription', e.target.value)} />
             </div>
           </CardContent>
         </Card>
@@ -522,3 +522,5 @@ export default function AdminHomePage() {
     </div>
   );
 }
+
+    
