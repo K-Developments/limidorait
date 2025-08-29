@@ -32,7 +32,7 @@ export default async function TermsOfServicePage() {
                 <Separator className="mt-4" />
             </div>
 
-            <main className="py-16 md:py-24 bg-background">
+            <section className="py-16 md:py-24 bg-background">
                 <div className="container mx-auto">
                     <div className="relative max-w-4xl mx-auto px-8 md:px-12 py-12 bg-card border-x">
                         
@@ -53,7 +53,7 @@ export default async function TermsOfServicePage() {
                         </article>
                     </div>
                 </div>
-            </main>
+            </section>
         </PublicLayout>
     );
 }
