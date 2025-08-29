@@ -84,18 +84,20 @@ function AdminDashboard() {
 
   const handleFeaturedServiceChange = (serviceId: string, checked: boolean) => {
     if (heroContent) {
-      let currentFeatured = heroContent.featuredServices || [];
+      const currentFeatured = heroContent.featuredServices || [];
+      let updatedFeatured;
+
       if (checked) {
         if (currentFeatured.length < 4) {
-          currentFeatured.push(serviceId);
+          updatedFeatured = [...currentFeatured, serviceId];
         } else {
           toast({ title: "Limit Reached", description: "You can only feature up to 4 services on the homepage.", variant: "destructive" });
           return;
         }
       } else {
-        currentFeatured = currentFeatured.filter(id => id !== serviceId);
+        updatedFeatured = currentFeatured.filter(id => id !== serviceId);
       }
-      setHeroContent({ ...heroContent, featuredServices: currentFeatured });
+      setHeroContent({ ...heroContent, featuredServices: updatedFeatured });
     }
   };
 
@@ -522,5 +524,3 @@ export default function AdminHomePage() {
     </div>
   );
 }
-
-    
