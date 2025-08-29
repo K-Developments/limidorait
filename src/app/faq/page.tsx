@@ -12,6 +12,8 @@ import { Separator } from "@/components/ui/separator";
 
 export const dynamic = 'force-static';
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://limidora.com';
+
 export async function generateMetadata(
   {},
   parent: ResolvingMetadata
@@ -21,6 +23,22 @@ export async function generateMetadata(
   return {
     title: faqContent.heroTitle ? `${faqContent.heroTitle} | Limidora Digital` : 'FAQs | Limidora Digital',
     description: faqContent.heroSubtitle || 'Find answers to frequently asked questions about our services, development process, project costs, and more. Get the information you need from Limidora.',
+    alternates: {
+        canonical: `${BASE_URL}/faq`,
+    },
+    openGraph: {
+        url: `${BASE_URL}/faq`,
+        title: faqContent.heroTitle ? `${faqContent.heroTitle} | Limidora Digital` : 'FAQs | Limidora Digital',
+        description: faqContent.heroSubtitle || 'Find answers to frequently asked questions about our services, development process, project costs, and more. Get the information you need from Limidora.',
+        images: [
+            {
+                url: 'https://cdn.jsdelivr.net/gh/K-Developments/media@main/og-image.png',
+                width: 1200,
+                height: 630,
+                alt: 'Limidora Digital Agency FAQs',
+            },
+        ],
+    },
   }
 }
 

@@ -13,6 +13,8 @@ import { PublicLayout } from '../../public-layout';
 
 export const dynamic = 'force-static';
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://limidora.com';
+
 type Props = {
   params: { slug: string }
 }
@@ -35,10 +37,30 @@ export async function generateMetadata(
   if (!project) {
     notFound();
   }
+  
+  const previousImages = (await parent).openGraph?.images || [];
+  const projectImageUrl = project.heroImageUrl || project.imageUrl;
 
   return {
     title: `${project.title} | Limidora Digital`,
     description: project.about?.substring(0, 160) || 'Limidora Digital Project',
+    alternates: {
+        canonical: `${BASE_URL}/portfolio/${project.slug}`,
+    },
+    openGraph: {
+        url: `${BASE_URL}/portfolio/${project.slug}`,
+        title: `${project.title} | Limidora Digital`,
+        description: project.about?.substring(0, 160) || 'Limidora Digital Project',
+        images: [
+            {
+              url: projectImageUrl,
+              width: 1200,
+              height: 630,
+              alt: project.title,
+            },
+            ...previousImages,
+        ],
+    },
   }
 }
 
