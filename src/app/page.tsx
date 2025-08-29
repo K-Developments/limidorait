@@ -7,8 +7,8 @@ export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Limidora Digital',
-    default: 'Limidora Digital | Creative IT Solutions',
+    template: '%s | Limidora ',
+    default: 'Limidora | Creative IT Solutions',
   },
   description: 'Limidora is a creative agency offering modern IT solutions including web development, UI/UX design, and brand strategy.',
   keywords: ['web development', 'ui/ux design', 'creative agency', 'it solutions', 'limidora'],
