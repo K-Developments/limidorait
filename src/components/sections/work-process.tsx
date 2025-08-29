@@ -7,62 +7,11 @@ import {
   useScroll,
   useTransform,
   useSpring,
-  useInView,
-  useMotionValue,
 } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import {
-  GanttChartSquare,
-  PencilRuler,
-  Code,
-  Rocket,
-  ArrowDown,
-  Lightbulb,
-  Users,
-  Target,
-  Zap,
-} from "lucide-react";
-
-const processSteps = [
-  {
-    icon: GanttChartSquare,
-    title: "1. Discovery & Strategy",
-    description:
-      "We start by understanding your goals, audience, and challenges to create a tailored roadmap for success.",
-    storyTitle: "Every Great Journey Begins...",
-    storyDescription:
-      "With understanding your vision and mapping the path to success",
-    storyIcon: Lightbulb,
-  },
-  {
-    icon: PencilRuler,
-    title: "2. Design & Prototyping",
-    description:
-      "Our team designs intuitive UI/UX and creates interactive prototypes to visualize the end product.",
-    storyTitle: "Bringing Ideas to Life",
-    storyDescription: "Where creativity meets functionality in perfect harmony",
-    storyIcon: Users,
-  },
-  {
-    icon: Code,
-    title: "3. Development & Testing",
-    description:
-      "We write clean, efficient code and rigorously test every feature to ensure a flawless final product.",
-    storyTitle: "Crafting Excellence",
-    storyDescription: "Building robust solutions with precision and care",
-    storyIcon: Target,
-  },
-  {
-    icon: Rocket,
-    title: "4. Launch & Optimization",
-    description:
-      "After a successful launch, we monitor performance and provide ongoing support to ensure continued growth.",
-    storyTitle: "Ready for Takeoff",
-    storyDescription: "Launching your success story into the world",
-    storyIcon: Zap,
-  },
-];
+import { WorkProcessStep } from "@/services/firestore";
+import Image from "next/image";
 
 /* -------------------- */
 /* MOBILE COMPONENTS    */
@@ -88,8 +37,6 @@ const MobileProgressIndicator = ({ scrollYProgress }: { scrollYProgress: any }) 
     </motion.div>
   );
 };
-
-
 
 const MobileCircle = ({ scrollYProgress }: { scrollYProgress: any }) => {
   const smoothProgress = useSpring(scrollYProgress, {
@@ -168,9 +115,9 @@ const MobileCircle = ({ scrollYProgress }: { scrollYProgress: any }) => {
   );
 };
 
-const MobileStep = ({ step, index }: { step: any; index: number }) => {
+const MobileStep = ({ step, index, totalSteps }: { step: WorkProcessStep; index: number; totalSteps: number }) => {
   const ref = useRef(null);
-  const isLastStep = index === processSteps.length - 1;
+  const isLastStep = index === totalSteps - 1;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start 0.9", "end 0.1"],
@@ -205,7 +152,9 @@ const MobileStep = ({ step, index }: { step: any; index: number }) => {
           className="bg-muted p-4 rounded-xl w-fit mx-auto relative overflow-hidden group-hover:shadow-lg transition-shadow duration-300"
           whileHover={{ scale: 1.1 }}
         >
-          <step.icon className="h-7 w-7 text-foreground relative z-10" />
+          <div className="relative h-7 w-7">
+            <Image src={step.iconUrl} alt={step.title} fill className="object-contain" />
+          </div>
         </motion.div>
       </motion.div>
 
@@ -244,8 +193,6 @@ const ProgressIndicator = ({ scrollYProgress }: { scrollYProgress: any }) => {
     </motion.div>
   );
 };
-
-
 
 const Circle = ({ scrollYProgress }: { scrollYProgress: any }) => {
   const smoothProgress = useSpring(scrollYProgress, {
@@ -324,9 +271,9 @@ const Circle = ({ scrollYProgress }: { scrollYProgress: any }) => {
   );
 };
 
-const DesktopStep = ({ step, index }: { step: any; index: number }) => {
+const DesktopStep = ({ step, index, totalSteps }: { step: WorkProcessStep; index: number; totalSteps: number; }) => {
   const ref = useRef(null);
-  const isLastStep = index === processSteps.length - 1;
+  const isLastStep = index === totalSteps - 1;
   
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -367,7 +314,9 @@ const DesktopStep = ({ step, index }: { step: any; index: number }) => {
           className="bg-muted p-3 rounded-md w-fit mx-auto relative overflow-hidden group-hover:shadow-lg transition-shadow duration-300"
           whileHover={{ scale: 1.1 }}
         >
-          <step.icon className="h-6 w-6 text-foreground relative z-10" />
+          <div className="relative h-6 w-6">
+            <Image src={step.iconUrl} alt={step.title} fill className="object-contain" />
+          </div>
         </motion.div>
       </motion.div>
 
@@ -386,7 +335,7 @@ const DesktopStep = ({ step, index }: { step: any; index: number }) => {
 /* -------------------- */
 /* MAIN COMPONENT       */
 /* -------------------- */
-export const WorkProcess = () => {
+export const WorkProcess = ({ steps }: { steps?: WorkProcessStep[] }) => {
   const containerRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -405,28 +354,29 @@ export const WorkProcess = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  if (!steps || steps.length === 0) {
+    return null;
+  }
+
+  const sectionHeightClass = isMobile ? `min-h-[${steps.length * 20}rem]` : `min-h-[${steps.length * 15}rem]`;
+
   return (
     <section
       ref={containerRef}
       id="work-process"
       className={cn(
-        "relative py-12 sm:py-16 md:py-20 lg:py-28 md:px-[6rem] bg-background overflow-x-hidden overflow-hidden",
-        isMobile ? "min-h-[85rem]" : "min-h-[15rem]"
+        "relative py-12 sm:py-16 md:py-20 lg:py-28 bg-background overflow-x-hidden",
+        sectionHeightClass
       )}
     >
       {/* Mobile overlays */}
       {isMobile && (
-        <>
-          <MobileProgressIndicator scrollYProgress={scrollYProgress} />
-   
-        </>
+        <MobileProgressIndicator scrollYProgress={scrollYProgress} />
       )}
 
       {/* Desktop overlays */}
       {!isMobile && (
-        <>
-          <ProgressIndicator scrollYProgress={scrollYProgress} />
-        </>
+        <ProgressIndicator scrollYProgress={scrollYProgress} />
       )}
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -457,9 +407,9 @@ export const WorkProcess = () => {
           <div className="relative flex flex-col items-center">
             <MobileCircle scrollYProgress={scrollYProgress} />
             
-            <div className="absolute inset-0 flex flex-col items-center justify-around gap-16 mt-8">
-              {processSteps.map((step, index) => (
-                <MobileStep key={step.title} step={step} index={index} />
+            <div className="absolute inset-0 flex flex-col items-center justify-around mt-8">
+              {steps.map((step, index) => (
+                <MobileStep key={step.id || index} step={step} index={index} totalSteps={steps.length} />
               ))}
             </div>
           </div>
@@ -478,9 +428,9 @@ export const WorkProcess = () => {
 
             <Circle scrollYProgress={scrollYProgress} />
 
-            <div className="md:absolute md:inset-0 flex flex-col items-center justify-around gap-12 md:gap-0 mt-8 md:mt-0 p-[5rem]">
-              {processSteps.map((step, index) => (
-                <DesktopStep key={step.title} step={step} index={index} />
+            <div className="absolute inset-0 flex flex-col items-center justify-around gap-12 md:gap-0 mt-8 md:mt-0">
+              {steps.map((step, index) => (
+                <DesktopStep key={step.id || index} step={step} index={index} totalSteps={steps.length}/>
               ))}
             </div>
           </div>
@@ -499,5 +449,3 @@ export const WorkProcess = () => {
     </section>
   );
 };
-
-    

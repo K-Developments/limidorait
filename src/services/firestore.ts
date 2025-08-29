@@ -69,6 +69,12 @@ export interface HeroContent {
   contactEmail?: string;
   contactPhone?: string;
 }
+export interface WorkProcessStep {
+    id: string;
+    iconUrl: string;
+    title: string;
+    description: string;
+}
 export interface WhyUsCard {
   id: string;
   iconUrl: string;
@@ -87,6 +93,7 @@ export interface AboutContent {
   aboutDescription: string;
   ctaSection?: HomepageCtaSection;
   whyUsSection?: WhyUsSection;
+  workProcessSection?: WorkProcessStep[];
 }
 export interface ClientLogo {
   name: string;
@@ -332,7 +339,13 @@ const defaultAboutContent: AboutContent = {
         { id: "2", iconUrl: "", title: "Client-Centric Approach", description: "Your success is our priority. We work closely with you to understand your needs and deliver tailored results." },
         { id: "3", iconUrl: "", title: "Quality & Reliability", description: "We are committed to delivering high-quality, reliable, and scalable solutions that stand the test of time." },
       ]
-    }
+    },
+    workProcessSection: [
+        { id: "1", iconUrl: "", title: "1. Discovery & Strategy", description: "We start by understanding your goals, audience, and challenges to create a tailored roadmap for success." },
+        { id: "2", iconUrl: "", title: "2. Design & Prototyping", description: "Our team designs intuitive UI/UX and creates interactive prototypes to visualize the end product." },
+        { id: "3", iconUrl: "", title: "3. Development & Testing", description: "We write clean, efficient code and rigorously test every feature to ensure a flawless final product." },
+        { id: "4", iconUrl: "", title: "4. Launch & Optimization", description: "After a successful launch, we monitor performance and provide ongoing support to ensure continued growth." }
+    ]
 };
 
 const defaultPortfolioContent: PortfolioContent = { 
@@ -436,7 +449,10 @@ export const getAboutContent = cache(async (): Promise<AboutContent> => {
     const fetchedData = await fetchFirestoreDoc(`${CONTENT_COLLECTION_ID}/aboutContent`);
     const merged = fetchedData ? deepMerge(defaultAboutContent, fetchedData) : defaultAboutContent;
     if (merged.whyUsSection) {
-        merged.whyUsSection.cards = (merged.whyUsSection.cards || []).map((card, index) => ({ ...card, id: card.id || `why-us-${index}` }));
+        merged.whyUsSection.cards = (merged.whyUsSection.cards || []).map((card, index) => ({ ...card, id: card.id || `why-us-${Date.now()}-${index}` }));
+    }
+    if (merged.workProcessSection) {
+        merged.workProcessSection = (merged.workProcessSection || []).map((step, index) => ({ ...step, id: step.id || `work-step-${Date.now()}-${index}` }));
     }
     return merged;
 });

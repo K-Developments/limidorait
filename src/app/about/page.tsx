@@ -48,7 +48,7 @@ export default async function AboutPage() {
             <PageHero title={aboutContent.heroTitle} subtitle={aboutContent.heroSubtitle} />
             <About content={aboutContent} />
             <WhyUs content={aboutContent.whyUsSection} />
-            <WorkProcess />
+            <WorkProcess steps={aboutContent.workProcessSection} />
             {heroContent && <Testimonials testimonials={heroContent.testimonials} />}
             {ctaContent && <HomepageCta ctaSection={ctaContent} />}
         </PublicLayout>
