@@ -8,13 +8,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { FaqContent, FaqItem, SubmittedQuestion, HomepageCtaSection } from '@/services/firestore';
+import { FaqContent, FaqItem, HomepageCtaSection } from '@/services/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
-import { X, PlusCircle, Trash2 } from 'lucide-react';
+import { X, PlusCircle } from 'lucide-react';
 import { Sidebar } from '@/components/layout/admin-sidebar';
 import { cn } from '@/lib/utils';
 import { db } from '@/lib/firebase';
-import { doc, getDoc, setDoc, getDocs, collection, query, orderBy, deleteDoc, serverTimestamp, addDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 
 const defaultFaqContent: FaqContent = { heroTitle: "Help Center", heroSubtitle: "Your questions, answered. Find the information you need about our services.", title: "Frequently Asked Questions", description: "Find answers to common questions about our services, processes, and how we can help your business succeed.", faqs: [] };
@@ -34,30 +34,17 @@ const updateFaqContent = async (content: Partial<FaqContent>): Promise<void> => 
   await setDoc(docRef, content, { merge: true });
 };
 
-const getSubmittedQuestions = async (): Promise<SubmittedQuestion[]> => {
-    const snapshot = await getDocs(query(collection(db, 'submittedQuestions'), orderBy("submittedAt", "desc")));
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), submittedAt: doc.data().submittedAt?.toDate() } as SubmittedQuestion));
-};
-
-const deleteSubmittedQuestion = async (id: string): Promise<void> => {
-    await deleteDoc(doc(db, 'submittedQuestions', id));
-};
-
 
 function AdminDashboard() {
   const { toast } = useToast();
   const [faqContent, setFaqContent] = useState<FaqContent | null>(null);
-  const [submittedQuestions, setSubmittedQuestions] = useState<SubmittedQuestion[]>([]);
-  const [newAnswers, setNewAnswers] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchContent = async () => {
     setIsLoading(true);
     try {
       const content = await getClientFaqContent();
-      const questions = await getSubmittedQuestions();
       setFaqContent(content);
-      setSubmittedQuestions(questions);
     } catch (error) {
       console.error("Failed to fetch FAQ content:", error);
       toast({
@@ -115,35 +102,6 @@ function AdminDashboard() {
       setFaqContent({ ...faqContent, faqs: updatedFaqs });
     }
   };
-
-  const handleAddToFaqs = async (question: SubmittedQuestion) => {
-    const answer = newAnswers[question.id];
-    if (!answer || !faqContent) {
-        toast({ title: "Error", description: "Please provide an answer before adding.", variant: "destructive" });
-        return;
-    }
-    const newFaqItem: FaqItem = { id: `faq-${Date.now()}`, question: question.question, answer, category: "General" };
-    const updatedFaqs = [...faqContent.faqs, newFaqItem];
-    
-    try {
-        await updateFaqContent({ ...faqContent, faqs: updatedFaqs });
-        await handleDeleteSubmitted(question.id); // Remove from submitted questions
-        toast({ title: "Success!", description: "FAQ added and updated successfully." });
-    } catch (error) {
-        toast({ title: "Error", description: "Could not add FAQ.", variant: "destructive" });
-    }
-  };
-
-  const handleDeleteSubmitted = async (id: string) => {
-    try {
-        await deleteSubmittedQuestion(id);
-        setSubmittedQuestions(prev => prev.filter(q => q.id !== id));
-        toast({ title: "Success", description: "Submitted question has been deleted." });
-    } catch (error) {
-        toast({ title: "Error", description: "Could not delete question.", variant: "destructive" });
-    }
-  };
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -236,40 +194,6 @@ function AdminDashboard() {
               <Input id="cta-button-link" value={faqContent?.ctaSection?.buttonLink || ''} onChange={(e) => handleCtaSectionChange('buttonLink', e.target.value)} />
             </div>
           </CardContent>
-        </Card>
-
-        <Card>
-            <CardHeader>
-                <CardTitle>Submitted Questions</CardTitle>
-                <CardDescription>Review questions submitted by users, answer them, and add them to the FAQ page.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                {submittedQuestions.length > 0 ? (
-                    submittedQuestions.map(q => (
-                        <Card key={q.id} className="p-4 space-y-3">
-                            <div>
-                                <p className="text-sm text-muted-foreground">From: {q.email}</p>
-                                <p className="font-semibold">{q.question}</p>
-                            </div>
-                            <Textarea
-                                placeholder="Write your answer here..."
-                                value={newAnswers[q.id] || ''}
-                                onChange={e => setNewAnswers({ ...newAnswers, [q.id]: e.target.value })}
-                            />
-                            <div className="flex justify-end gap-2">
-                                <Button type="button" size="sm" onClick={() => handleAddToFaqs(q)} disabled={!newAnswers[q.id]}>
-                                    Add to FAQs
-                                </Button>
-                                <Button type="button" variant="destructive" size="icon" onClick={() => handleDeleteSubmitted(q.id)} aria-label="Delete submitted question">
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                            </div>
-                        </Card>
-                    ))
-                ) : (
-                    <p className="text-muted-foreground">No new questions have been submitted.</p>
-                )}
-            </CardContent>
         </Card>
 
         <Card>

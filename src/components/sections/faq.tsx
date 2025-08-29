@@ -7,55 +7,13 @@ import { motion } from "framer-motion";
 import React, { useState, useMemo } from "react";
 import { FaqContent, FaqItem } from "@/services/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogClose,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { cn } from "@/lib/utils";
 import { Separator } from "../ui/separator";
 
-
-const QuestionFormSchema = z.object({
-    email: z.string().email({ message: "Please enter a valid email address." }),
-    question: z.string().min(10, { message: "Question must be at least 10 characters long." }),
-});
-
-type QuestionFormValues = z.infer<typeof QuestionFormSchema>;
-
-const submitQuestion = async (data: { email: string; question: string }): Promise<void> => {
-    await addDoc(collection(db, 'submittedQuestions'), { ...data, submittedAt: serverTimestamp(), status: 'new' });
-};
-
-
 export function Faq({ content }: { content: FaqContent | null }) {
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeCategory, setActiveCategory] = useState("All");
   const isLoading = !content;
   
-  const form = useForm<QuestionFormValues>({
-    resolver: zodResolver(QuestionFormSchema),
-    defaultValues: {
-      email: "",
-      question: "",
-    },
-  });
-
   const categories = useMemo(() => {
     if (!content || !content.faqs || content.faqs.length === 0) return [];
     // Filter out any falsy category values before creating the Set
@@ -69,27 +27,6 @@ export function Faq({ content }: { content: FaqContent | null }) {
     return content.faqs.filter(faq => faq.category === activeCategory);
   }, [content, activeCategory]);
 
-  const handleQuestionSubmit = async (data: QuestionFormValues) => {
-    setIsSubmitting(true);
-    try {
-        await submitQuestion(data);
-        toast({
-            title: "Question Sent!",
-            description: "Thanks for reaching out. We'll review your question and may add it to our FAQs.",
-        });
-        form.reset();
-        // Manually close dialog if needed, assuming DialogClose is used inside the form.
-    } catch (error) {
-        const errorMessage = (error instanceof Error) ? error.message : "There was a problem sending your question. Please try again.";
-        toast({
-            title: "Submission Error",
-            description: errorMessage,
-            variant: "destructive",
-        });
-    } finally {
-        setIsSubmitting(false);
-    }
-  };
 
   if (isLoading) {
     return (
@@ -187,61 +124,7 @@ export function Faq({ content }: { content: FaqContent | null }) {
             </div>
           )}
         </motion.div>
-        <div className="text-center mt-12">
-           <Dialog onOpenChange={(open) => !open && form.reset()}>
-              <DialogTrigger asChild>
-                <Button size="lg">Ask a Question</Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Ask Your Question</DialogTitle>
-                  <DialogDescription>
-                    Can't find the answer you're looking for? Fill out the form below and we'll get back to you.
-                  </DialogDescription>
-                </DialogHeader>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleQuestionSubmit)} className="space-y-4">
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="your@email.com" {...field} autoComplete="email" />
-                                </FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="question"
-                            render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Question</FormLabel>
-                                <FormControl>
-                                    <Textarea placeholder="What would you like to know?" {...field} className="min-h-[120px]" />
-                                </FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <div className="flex justify-end">
-                            <DialogClose asChild>
-                                <Button type="submit" disabled={isSubmitting}>
-                                    {isSubmitting ? 'Submitting...' : 'Submit Question'}
-                                </Button>
-                            </DialogClose>
-                        </div>
-                    </form>
-                </Form>
-              </DialogContent>
-            </Dialog>
-        </div>
       </div>
     </section>
   );
 }
-
-    
