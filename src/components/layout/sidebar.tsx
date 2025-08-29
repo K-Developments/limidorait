@@ -80,7 +80,7 @@ export function Sidebar() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 * index, duration: 0.4, ease: 'easeOut' }}
                   >
-                    <Link href={service.link} onClick={onClose} className="block p-3 rounded-md text-sm font-semibold text-foreground transition-colors hover:bg-muted hover:text-primary">
+                    <Link href={service.link} onClick={onClose} className="block p-3 rounded-md text-sm font-semibold text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
                       {service.title}
                     </Link>
                   </motion.div>
@@ -101,7 +101,7 @@ export function Sidebar() {
                       <Link
                         href={item.href || '#'}
                         onClick={onClose}
-                        className="block py-4 text-xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b"
+                        className="block py-4 text-xl font-semibold text-foreground transition-colors hover:text-accent-foreground hover:bg-accent w-full border-b"
                       >
                         {item.name}
                       </Link>
