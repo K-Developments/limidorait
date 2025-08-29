@@ -4,10 +4,11 @@
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { X, ChevronRight, ChevronLeft } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useSidebar } from './sidebar-provider';
 import { Separator } from '../ui/separator';
+import Image from 'next/image';
 
 export function Sidebar() {
   const { isOpen, setOpen, navItems, services } = useSidebar();
@@ -45,7 +46,7 @@ export function Sidebar() {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm md:hidden"
           initial="hidden"
           animate="visible"
           exit="exit"
@@ -65,7 +66,7 @@ export function Sidebar() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className='flex justify-end mb-8'>
-                <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close menu" className="bg-black text-white hover:bg-zinc-800">
+                <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close menu">
                     <X className="h-6 w-6" />
                 </Button>
             </div>
@@ -80,7 +81,10 @@ export function Sidebar() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 * index, duration: 0.4, ease: 'easeOut' }}
                   >
-                    <Link href={service.link} onClick={onClose} className="block p-3 rounded-md text-sm font-semibold text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                    <Link href={service.link} onClick={onClose} className="block p-3 rounded-md text-sm font-semibold text-center text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                      <div className="relative w-full h-16 rounded-md overflow-hidden mb-2">
+                          <Image src={service.imageUrl} alt={service.title} fill className="object-cover" />
+                      </div>
                       {service.title}
                     </Link>
                   </motion.div>
@@ -101,7 +105,7 @@ export function Sidebar() {
                       <Link
                         href={item.href || '#'}
                         onClick={onClose}
-                        className="block py-4 text-xl font-semibold text-foreground transition-colors hover:text-accent-foreground hover:bg-accent w-full border-b"
+                        className="block py-4 text-xl font-semibold text-foreground transition-colors hover:text-accent-foreground hover:bg-accent w-full border-b px-4"
                       >
                         {item.name}
                       </Link>
