@@ -91,6 +91,12 @@ export function Sidebar() {
                 ))}
               </div>
 
+               <div className="px-2 py-2">
+                <Link href="/services" onClick={onClose} className="block py-4 text-xl font-semibold text-foreground transition-colors hover:text-accent-foreground hover:bg-accent w-full border-b px-4">
+                  View All Services
+                </Link>
+              </div>
+
               <Separator className="my-4" />
 
               <ul className="flex flex-col items-start">
