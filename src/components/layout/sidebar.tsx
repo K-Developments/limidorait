@@ -7,18 +7,16 @@ import { Button } from '@/components/ui/button';
 import { X, ChevronRight, ChevronLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useSidebar } from './sidebar-provider';
+import { Separator } from '../ui/separator';
 
 export function Sidebar() {
-  const { isOpen, setOpen, navItems } = useSidebar();
-  const [menu, setMenu] = useState<'main' | 'services'>('main');
+  const { isOpen, setOpen, navItems, services } = useSidebar();
 
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('sidebar-open');
     } else {
       document.body.classList.remove('sidebar-open');
-      // Reset to main menu when sidebar is closed
-      setTimeout(() => setMenu('main'), 300);
     }
 
     return () => {
@@ -39,26 +37,9 @@ export function Sidebar() {
     visible: { x: 0 },
     exit: { x: '100%' }
   };
-
-  const menuVariants = {
-    initial: { x: '100%', opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: '-100%', opacity: 0 },
-  };
-
-  const servicesVariants = {
-    initial: { x: '100%', opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: '100%', opacity: 0 },
-  };
   
-  const servicesNavItems = [
-      { name: 'Web Developments', href: '/services'},
-      { name: 'Mobile App Developments', href: '/services'},
-      { name: 'Software Developments', href: '/services'},
-      { name: 'Web App Developments', href: '/services'},
-      { name: 'Need Help?', href: '/contact'}
-  ]
+  const featuredServices = services.slice(0, 4);
+  const mainNavItems = navItems.filter(item => item.name !== 'Services');
 
   return (
     <AnimatePresence>
@@ -75,7 +56,7 @@ export function Sidebar() {
           role="dialog"
         >
           <motion.div
-            className="fixed top-0 right-0 h-full w-full max-w-sm bg-background p-6 shadow-2xl overflow-x-hidden"
+            className="fixed top-0 right-0 h-full w-full max-w-sm bg-background p-6 shadow-2xl overflow-y-auto"
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -88,99 +69,60 @@ export function Sidebar() {
                     <X className="h-6 w-6" />
                 </Button>
             </div>
-             <AnimatePresence initial={false} mode="wait">
-                {menu === 'main' && (
-                    <motion.div
-                        key="main"
-                        variants={menuVariants}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="h-full"
-                    >
-                        <nav aria-label="Main Navigation">
-                          <ul className="flex flex-col items-start gap-y-2">
-                              {navItems.map((item, index) => (
-                              <motion.li
-                                  key={item.name}
-                                  initial={{ opacity: 0, x: 50 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: 0.1 * index + 0.2, duration: 0.5, ease: 'easeOut' }}
-                                  className="w-full"
-                              >
-                                  {item.name === 'Services' ? (
-                                      <button onClick={() => setMenu('services')} className="flex justify-between items-center py-4 text-2xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b text-left">
-                                          {item.name}
-                                          <ChevronRight className="h-7 w-7" />
-                                      </button>
-                                  ) : (
-                                      <Link
-                                      href={item.href || '#'}
-                                      onClick={onClose}
-                                      className="block py-4 text-2xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b"
-                                      >
-                                      {item.name}
-                                      </Link>
-                                  )}
-                              </motion.li>
-                              ))}
-                          </ul>
-                        </nav>
-                         <motion.div 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.5, ease: 'easeOut' }}
-                            className='mt-12 flex flex-col gap-4'
-                        >
-                            <Button asChild size="lg" className="w-full" onClick={onClose}>
-                                <Link href="/contact">Get in Touch</Link>
-                            </Button>
-                        </motion.div>
-                    </motion.div>
-                )}
+            
+            <nav aria-label="Main Navigation">
+              <h3 className="px-4 py-2 text-sm font-semibold text-muted-foreground">Services</h3>
+              <div className="grid grid-cols-2 gap-2 p-2">
+                {featuredServices.map((service, index) => (
+                  <motion.div
+                    key={service.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 * index, duration: 0.4, ease: 'easeOut' }}
+                  >
+                    <Link href={service.link} onClick={onClose} className="block p-3 rounded-md text-sm font-semibold text-foreground transition-colors hover:bg-muted hover:text-primary">
+                      {service.title}
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
 
-                {menu === 'services' && (
-                    <motion.div
-                        key="services"
-                        variants={servicesVariants}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="h-full"
-                    >
-                        <Button variant="ghost" onClick={() => setMenu('main')} className="mb-4 font-semibold text-lg pl-0 hover:bg-transparent">
-                            <ChevronLeft className="mr-2 h-5 w-5"/> Back to Main Menu
-                        </Button>
-                        <nav aria-label="Services Navigation">
-                          <ul className="flex flex-col items-start gap-y-2">
-                              {servicesNavItems.map((item, index) => (
-                                  <motion.li
-                                      key={item.name}
-                                      initial={{ opacity: 0, x: 50 }}
-                                      animate={{ opacity: 1, x: 0 }}
-                                      transition={{ delay: 0.1 * index, duration: 0.5, ease: 'easeOut' }}
-                                      className="w-full"
-                                  >
-                                      <Link
-                                      href={item.href}
-                                      onClick={onClose}
-                                      className="block py-4 text-xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b"
-                                      >
-                                      {item.name}
-                                      </Link>
-                                  </motion.li>
-                              ))}
-                          </ul>
-                        </nav>
-                    </motion.div>
-                )}
-             </AnimatePresence>
+              <Separator className="my-4" />
+
+              <ul className="flex flex-col items-start">
+                  {mainNavItems.map((item, index) => (
+                  <motion.li
+                      key={item.name}
+                      initial={{ opacity: 0, x: 50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 * index + 0.2, duration: 0.5, ease: 'easeOut' }}
+                      className="w-full"
+                  >
+                      <Link
+                        href={item.href || '#'}
+                        onClick={onClose}
+                        className="block py-4 text-xl font-semibold text-foreground transition-colors hover:text-primary w-full border-b"
+                      >
+                        {item.name}
+                      </Link>
+                  </motion.li>
+                  ))}
+              </ul>
+            </nav>
+            
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, ease: 'easeOut' }}
+                className='mt-12 flex flex-col gap-4'
+            >
+                <Button asChild size="lg" className="w-full" onClick={onClose}>
+                    <Link href="/contact">Get in Touch</Link>
+                </Button>
+            </motion.div>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
   );
 }
-

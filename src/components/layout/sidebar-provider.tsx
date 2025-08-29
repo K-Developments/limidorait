@@ -3,6 +3,7 @@
 
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { Sidebar } from './sidebar';
+import { Service } from '@/services/firestore';
 
 interface NavItem {
   name: string;
@@ -13,6 +14,7 @@ interface SidebarContextType {
   isOpen: boolean;
   setOpen: (isOpen: boolean) => void;
   navItems: NavItem[];
+  services: Service[];
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
@@ -28,13 +30,14 @@ export function useSidebar() {
 interface SidebarProviderProps {
   children: ReactNode;
   navItems: NavItem[];
+  services: Service[];
 }
 
-export function SidebarProvider({ children, navItems }: SidebarProviderProps) {
+export function SidebarProvider({ children, navItems, services }: SidebarProviderProps) {
   const [isOpen, setOpen] = useState(false);
 
   return (
-    <SidebarContext.Provider value={{ isOpen, setOpen, navItems }}>
+    <SidebarContext.Provider value={{ isOpen, setOpen, navItems, services }}>
       {children}
       <Sidebar />
     </SidebarContext.Provider>

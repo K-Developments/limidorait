@@ -24,7 +24,7 @@ export async function PublicLayout({
   ];
 
   return (
-    <SidebarProvider navItems={navItems}>
+    <SidebarProvider navItems={navItems} services={services}>
         <div className="flex min-h-screen flex-col pt-20">
             <Header content={heroContent} services={services} />
             <main className="flex-1">{children}</main>
