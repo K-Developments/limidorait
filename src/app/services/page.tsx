@@ -12,9 +12,27 @@ import { Metadata } from "next";
 
 export const dynamic = 'force-static';
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://limidora.com';
+
 export const metadata: Metadata = {
     title: 'Our Services | Limidora Digital',
     description: 'Explore the range of digital services offered by Limidora, including web development, UI/UX design, mobile apps, and more. Crafting digital excellence for your brand.',
+    alternates: {
+      canonical: `${BASE_URL}/services`,
+    },
+    openGraph: {
+      url: `${BASE_URL}/services`,
+      title: 'Our Services | Limidora Digital',
+      description: 'Explore the range of digital services offered by Limidora, including web development, UI/UX design, and more.',
+      images: [
+        {
+          url: 'https://cdn.jsdelivr.net/gh/K-Developments/media@main/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: 'Limidora Digital Agency Services',
+        },
+      ],
+    },
 };
 
 export default async function ServicesPage() {

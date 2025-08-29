@@ -12,7 +12,7 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive:
-          "bg-destructive text-destructive-foreground ]",
+          "bg-destructive text-destructive-foreground",
         outline:
           "relative btn-cinematic bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground",
         secondary:

@@ -11,12 +11,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const projects = await getProjects();
   const services = await getServices();
 
-  const projectUrls = projects.map((project) => ({
+  const projectUrls: MetadataRoute.Sitemap = projects.map((project) => ({
     url: `${BASE_URL}${project.link}`,
     lastModified,
   }));
 
-  const serviceUrls = services.map((service) => ({
+  const serviceUrls: MetadataRoute.Sitemap = services.map((service) => ({
     url: `${BASE_URL}${service.link}`,
     lastModified,
   }));
@@ -33,7 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/terms-of-service',
   ];
 
-  const staticUrls = staticRoutes.map((route) => ({
+  const staticUrls: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
     url: `${BASE_URL}${route}`,
     lastModified,
   }));

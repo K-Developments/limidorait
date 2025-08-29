@@ -12,6 +12,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 
 export const dynamic = 'force-static';
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://limidora.com';
+
 type Props = {
   params: { slug: string }
 }
@@ -34,10 +36,30 @@ export async function generateMetadata(
   if (!service) {
     notFound();
   }
+  
+  const previousImages = (await parent).openGraph?.images || [];
+  const serviceImageUrl = service.imageUrl;
 
   return {
     title: `${service.title} | Limidora Digital`,
-    description: service.description?.substring(0, 160) || 'Limidora Digital Service Details',
+    description: service.description?.substring(0, 160) || `Learn more about our ${service.title} services.`,
+    alternates: {
+        canonical: `${BASE_URL}/services/${service.slug}`,
+    },
+    openGraph: {
+        url: `${BASE_URL}/services/${service.slug}`,
+        title: `${service.title} Service | Limidora Digital`,
+        description: service.description?.substring(0, 160) || `Explore the details of our ${service.title} service.`,
+        images: [
+            {
+              url: serviceImageUrl,
+              width: 1200,
+              height: 630,
+              alt: service.title,
+            },
+            ...previousImages,
+        ],
+    },
   }
 }
 

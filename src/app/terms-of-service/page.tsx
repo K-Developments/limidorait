@@ -4,20 +4,22 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Metadata } from 'next';
-import { getHeroContent, getTermsOfServiceContent } from "@/services/firestore";
+import { getTermsOfServiceContent } from "@/services/firestore";
 
 export const dynamic = 'force-static';
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://limidora.com';
 
 export const metadata: Metadata = {
     title: 'Terms of Service | Limidora Digital',
     description: 'Read the Terms of Service for Limidora Digital to understand the rules and guidelines for using our website and services.',
+    alternates: {
+        canonical: `${BASE_URL}/terms-of-service`,
+    },
 };
 
 export default async function TermsOfServicePage() {
-    const [heroContent, termsContent] = await Promise.all([
-        getHeroContent(),
-        getTermsOfServiceContent()
-    ]);
+    const termsContent = await getTermsOfServiceContent();
     
     const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 

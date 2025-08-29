@@ -3,7 +3,10 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://limidora.com';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: {
     template: '%s | Limidora Digital',
     default: 'Limidora Digital | Creative IT Solutions',
@@ -13,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Limidora Digital | Creative IT Solutions',
     description: 'Limidora is a creative agency offering modern IT solutions including web development, UI/UX design, and brand strategy.',
-    url: 'https://limidora.com',
+    url: BASE_URL,
     siteName: 'Limidora Digital',
     locale: 'en_US',
     type: 'website',
@@ -22,7 +25,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Limidora Digital | Creative IT Solutions',
     description: 'Limidora is a creative agency offering modern IT solutions including web development, UI/UX design, and brand strategy.',
-  }
+  },
+  manifest: `${BASE_URL}/site.webmanifest`,
 };
 
 export default async function RootLayout({

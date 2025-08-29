@@ -12,9 +12,27 @@ import { Separator } from "@/components/ui/separator";
 
 export const dynamic = 'force-static';
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://limidora.com';
+
 export const metadata: Metadata = {
   title: 'Portfolio | Limidora Digital',
   description: 'Explore our portfolio of web development, UI/UX design, and mobile app projects. See how we help businesses achieve their goals with creative solutions.',
+  alternates: {
+    canonical: `${BASE_URL}/portfolio`,
+  },
+  openGraph: {
+    url: `${BASE_URL}/portfolio`,
+    title: 'Portfolio | Limidora Digital',
+    description: 'Explore our portfolio of web development, UI/UX design, and mobile app projects.',
+    images: [
+      {
+        url: 'https://cdn.jsdelivr.net/gh/K-Developments/media@main/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Limidora Digital Agency Portfolio',
+      },
+    ],
+  },
 };
 
 export default async function PortfolioPage() {

@@ -8,16 +8,18 @@ import { getHeroContent, getPrivacyPolicyContent } from "@/services/firestore";
 
 export const dynamic = 'force-static';
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://limidora.com';
+
 export const metadata: Metadata = {
     title: 'Privacy Policy | Limidora Digital',
     description: 'Read the privacy policy for Limidora Digital to understand how we collect, use, and protect your personal information.',
+    alternates: {
+        canonical: `${BASE_URL}/privacy-policy`,
+    },
 };
 
 export default async function PrivacyPolicyPage() {
-    const [heroContent, policyContent] = await Promise.all([
-        getHeroContent(),
-        getPrivacyPolicyContent()
-    ]);
+    const policyContent = await getPrivacyPolicyContent();
     
     const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
