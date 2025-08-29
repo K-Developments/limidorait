@@ -68,6 +68,8 @@ export interface HeroContent {
   footerLogoUrl?: string;
   contactEmail?: string;
   contactPhone?: string;
+  servicesSectionTitle?: string;
+  servicesSectionDescription?: string;
 }
 export interface WorkProcessStep {
     id: string;
@@ -322,7 +324,9 @@ const defaultHeroContent: Omit<HeroContent, 'services'> = {
         buttonText: "More About Limidora", 
         buttonLink: "/about", 
         imageUrl: "https://placehold.co/800x600.png",
-    } 
+    },
+    servicesSectionTitle: "What We Do",
+    servicesSectionDescription: "We deliver high-quality digital solutions to help your business grow and succeed in the modern world."
 };
 
 const defaultAboutContent: AboutContent = { 

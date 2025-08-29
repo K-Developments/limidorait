@@ -13,9 +13,11 @@ import type { Service } from "@/services/firestore";
 
 interface HomepageServicesProps {
   services: Service[];
+  title?: string;
+  description?: string;
 }
 
-export function HomepageServices({ services }: HomepageServicesProps) {
+export function HomepageServices({ services, title, description }: HomepageServicesProps) {
   return (
     <section id="services" className="py-16 md:py-24 bg-card">
       <div className="container mx-auto">
@@ -28,10 +30,10 @@ export function HomepageServices({ services }: HomepageServicesProps) {
         >
           <Badge variant="outline" className="mb-4">Our Services</Badge>
           <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-4 font-body">
-            What We Do
+            {title || "What We Do"}
           </h2>
           <p className="text-lg max-w-2xl mx-auto text-muted-foreground">
-            We deliver high-quality digital solutions to help your business grow and succeed in the modern world.
+            {description || "We deliver high-quality digital solutions to help your business grow and succeed in the modern world."}
           </p>
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
@@ -76,5 +78,3 @@ export function HomepageServices({ services }: HomepageServicesProps) {
     </section>
   );
 }
-
-    

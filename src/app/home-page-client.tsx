@@ -292,7 +292,7 @@ export default function HomePageClient({ content }: HomePageClientProps) {
   return (
     <div>
       <HeroSection content={content} />
-      {content.services && <HomepageServices services={content.services} />}
+      {content.services && <HomepageServices services={content.services} title={content.servicesSectionTitle} description={content.servicesSectionDescription} />}
       {content && <HomepageWorks works={content.works} />}
       {content && <Testimonials testimonials={content.testimonials} />}
       {content && <HomepageAbout aboutSection={content.aboutSection} />}
@@ -300,5 +300,3 @@ export default function HomePageClient({ content }: HomePageClientProps) {
     </div>
   );
 }
-
-    
