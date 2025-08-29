@@ -83,22 +83,23 @@ function AdminDashboard() {
   };
 
   const handleFeaturedServiceChange = (serviceId: string, checked: boolean) => {
-    if (heroContent) {
-      const currentFeatured = heroContent.featuredServices || [];
-      let updatedFeatured;
+    if (!heroContent) return;
 
-      if (checked) {
+    const currentFeatured = heroContent.featuredServices || [];
+    let updatedFeatured;
+
+    if (checked) {
         if (currentFeatured.length < 4) {
-          updatedFeatured = [...currentFeatured, serviceId];
+            updatedFeatured = [...currentFeatured, serviceId];
         } else {
-          toast({ title: "Limit Reached", description: "You can only feature up to 4 services on the homepage.", variant: "destructive" });
-          return;
+            toast({ title: "Limit Reached", description: "You can only feature up to 4 services on the homepage.", variant: "destructive" });
+            return; // Important: return here to prevent state update
         }
-      } else {
+    } else {
         updatedFeatured = currentFeatured.filter(id => id !== serviceId);
-      }
-      setHeroContent({ ...heroContent, featuredServices: updatedFeatured });
     }
+
+    setHeroContent({ ...heroContent, featuredServices: updatedFeatured });
   };
 
   const handleWorkChange = (index: number, field: keyof HomepageWork, value: string) => {
@@ -365,14 +366,29 @@ function AdminDashboard() {
             <CardDescription>Select up to 4 services to feature on the homepage. Manage all services on the <Link href="/admin/services" className="underline text-primary">Services page</Link>.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {allServices.map(service => (
-              <div key={service.id} className="flex items-center space-x-2">
-                <Checkbox id={`service-${service.id}`} checked={heroContent?.featuredServices?.includes(service.id)} onCheckedChange={(checked) => handleFeaturedServiceChange(service.id, checked as boolean)} disabled={!heroContent?.featuredServices?.includes(service.id) && (heroContent?.featuredServices?.length ?? 0) >= 4} />
-                <label htmlFor={`service-${service.id}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" >
-                  {service.title}
-                </label>
-              </div>
-            ))}
+            {allServices.map(service => {
+              const isChecked = heroContent?.featuredServices?.includes(service.id) ?? false;
+              const isDisabled = !isChecked && (heroContent?.featuredServices?.length ?? 0) >= 4;
+              return (
+                <div key={service.id} className="flex items-center space-x-2">
+                  <Checkbox 
+                    id={`service-${service.id}`} 
+                    checked={isChecked} 
+                    onCheckedChange={(checked) => handleFeaturedServiceChange(service.id, checked as boolean)} 
+                    disabled={isDisabled} 
+                  />
+                  <label 
+                    htmlFor={`service-${service.id}`} 
+                    className={cn(
+                      "text-sm font-medium leading-none",
+                      isDisabled ? "cursor-not-allowed opacity-70" : "peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    )}
+                  >
+                    {service.title}
+                  </label>
+                </div>
+              );
+            })}
           </CardContent>
         </Card>
         <Card>
