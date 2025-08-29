@@ -38,82 +38,7 @@ const MobileProgressIndicator = ({ scrollYProgress }: { scrollYProgress: any }) 
   );
 };
 
-const MobileCircle = ({ scrollYProgress }: { scrollYProgress: any }) => {
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 25,
-  });
 
-  const scale = useTransform(smoothProgress, [0, 0.05, 0.95, 1], [0.7, 1, 1, 1.2]);
-  const opacity = useTransform(smoothProgress, [0, 0.05], [0, 1]);
-  const pathLength = useTransform(smoothProgress, [0.05, 0.95], [0, 1]);
-  const dashOffset = useTransform(pathLength, [0, 1], [942, 0]); // Smaller circle circumference
-
-  return (
-    <motion.div
-      style={{ scale, opacity }}
-      className="sticky top-1/3 w-64 h-64 mx-auto"
-    >
-      <motion.svg
-        viewBox="0 0 320 320"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full"
-      >
-        <motion.circle
-          cx="160"
-          cy="160"
-          r="145"
-          stroke="hsl(var(--border))"
-          strokeWidth="1.5"
-          strokeDasharray="3 6"
-          fill="none"
-          opacity={0.3}
-        />
-
-        <motion.circle
-          cx="160"
-          cy="160"
-          r="145"
-          stroke="hsl(var(--primary))"
-          strokeWidth="2.5"
-          fill="none"
-          strokeLinecap="round"
-          strokeDasharray="911"
-          style={{
-            strokeDashoffset: dashOffset,
-            rotate: -90,
-            transformOrigin: "center",
-          }}
-          className="drop-shadow-lg"
-        />
-
-        {[0, 1].map((ring, index) => (
-          <motion.circle
-            key={ring}
-            cx="160"
-            cy="160"
-            r={110 - index * 20}
-            stroke="hsl(var(--primary))"
-            strokeWidth="0.8"
-            fill="none"
-            opacity={0.1}
-            animate={{
-              scale: [0.8, 1.2, 0.8],
-              opacity: [0, 0.15, 0],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              delay: index * 0.5,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </motion.svg>
-    </motion.div>
-  );
-};
 
 const MobileStep = ({ step, index, totalSteps }: { step: WorkProcessStep; index: number; totalSteps: number }) => {
   const ref = useRef(null);
@@ -405,7 +330,7 @@ export const WorkProcess = ({ steps }: { steps?: WorkProcessStep[] }) => {
         {/* Mobile Layout */}
         {isMobile && (
           <div className="relative flex flex-col items-center">
-            <MobileCircle scrollYProgress={scrollYProgress} />
+           
             
             <div className="absolute inset-0 flex flex-col items-center justify-around mt-8">
               {steps.map((step, index) => (
